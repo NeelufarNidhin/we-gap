@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
+import ToastNotify from "../Helper/ToastNotify";
+
 
 function SignUp() {
+  const navigate = useNavigate();
   const [registerUser] = useRegisterUserMutation();
   const [selectedRole, setSelectedRole] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,17 +19,6 @@ function SignUp() {
     setSelectedRole(role);
   };
 
-  // const handleUserInput = (e : any ) =>{
-
-  //     setUserInput(e.target.value);
-  // }
-
-  // const[userInput,setUserInput] = useState({
-  //     email : "",
-  //      password : "",
-  //     role : selectedRole
-
-  //  })
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -41,9 +33,11 @@ function SignUp() {
     console.log(selectedRole, email);
     console.log(response.data);
     if (response.data) {
-      console.log(response.data);
+     ToastNotify("User Registration done , Please sign in to continue");
+     navigate("/Login");
     } else if (response.error) {
-      console.log(response.error);
+      const errMsg = 
+      ToastNotify(response.error,"error");
     }
 
     setLoading(false);

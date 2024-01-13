@@ -23,7 +23,7 @@ function Login() {
     });
 
     if (response.data) {
-      console.log(response.data);
+      // console.log(response.data);
       const { token } = response.data.result;
       const { id, firstName, email, role }: userModel = jwtDecode(token);
       localStorage.setItem("token", token);
