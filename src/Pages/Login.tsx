@@ -28,16 +28,34 @@ function Login() {
       const { id, firstName, email, role }: userModel = jwtDecode(token);
       localStorage.setItem("token", token);
       dispatch(setLoggedInUser({ id, firstName, email, role }));
-      navigate("/");
-    } else if (response.error) {
-      console.log(response.error);
-    }
+    
 
-    setLoading(false);
-  };
+    switch (role) {
+      case "employee":
+        navigate("/EmployeeForm");
+        break;
+      case "employer":
+        navigate("/Employer");
+        break;
+      case "admin":
+        navigate("/AdminPanel");
+        break;
+      default:
+        // Handle any unexpected roles
+        console.error("Unexpected role:", role);
+        navigate("/"); // Redirect to default page as a fallback
+    }
+  } else if (response.error) {
+    console.log(response.error);
+  }
+
+  setLoading(false);
+};
+
+  
   return (
     <div className="h-screen flex items-center justify-center">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-900 dark:text-gray-100 ">
+      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-violet-900 text-gray-100 ">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Sign in</h1>
           <p className="text-sm dark:text-gray-400">
@@ -54,13 +72,13 @@ function Login() {
                 type="email"
                 name="email"
                 id="email"
-                placeholder="leroy@jenkins.com"
+                placeholder="E-Mail"
                 required
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
                 value={email}
-                className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
               />
             </div>
             <div>
@@ -85,7 +103,7 @@ function Login() {
                 }}
                 value={password}
                 placeholder="*****"
-                className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
               />
             </div>
           </div>
@@ -93,17 +111,17 @@ function Login() {
             <div>
               <button
                 type="submit"
-                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
+                className="w-full px-8 py-3 font-semibold rounded-md bg-violet-400 text-white"
               >
                 Sign in
               </button>
             </div>
-            <p className="px-6 text-sm text-center dark:text-gray-400">
+            <p className="px-6 text-sm text-center text-white">
               Don't have an account yet?
               <Link
                 rel="noopener noreferrer"
-                to="#"
-                className="hover:underline dark:text-violet-400"
+                to="/SignUp"
+                className="hover:underline text-violet-400"
               >
                 Sign up
               </Link>

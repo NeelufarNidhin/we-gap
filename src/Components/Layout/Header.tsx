@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link ,useNavigate} from "react-router-dom";
 import userModel from "../../Interfaces/userModel";
 import { useSelector , useDispatch } from "react-redux";
@@ -11,14 +11,22 @@ function Header() {
   const userData: userModel = useSelector(
     (state: RootState) => state.userAuthStore
   );
-
+ const [status ,setStatus] = useState();
   const handleLogout = () => {
 	localStorage.removeItem("token");
 	dispatch(setLoggedInUser({...emptyUserState}))
 	navigate("/");
   }
+
+  useEffect(() => {
+    // Fetch employee form completion status from the .NET Core API
+    fetch(`/api/Employee/${userData.id}`)
+      .then(response => response.json())
+      .then(data => setStatus(data.createdStatus));
+    
+  }, []);
   return (
-    <header className="p-4 dark:bg-gray-800 dark:text-gray-100">
+    <header className="p-4 bg-violet-100 text-violet-800">
       <div className="container flex justify-between h-16 mx-auto">
         <ul className="items-stretch hidden space-x-3 lg:flex">
           <li className="flex">
@@ -26,34 +34,48 @@ function Header() {
               rel="noopener noreferrer"
               to="/"
               aria-label="Back to homepage"
-              className="flex items-center p-2"
+              className="flex items-center p-2 text-xl font-bold"
             >
               We-GAP
             </Link>
           </li>
           <li className="flex">
-            <Link
-              rel="noopener noreferrer"
-              to="/Employee"
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border-transparent dark:text-violet-400 dark:border-violet-400"
-            >
-              Employee
-            </Link>
-          </li>
-          <li className="flex">
-            <Link
+            
+           
+              <Link
               rel="noopener noreferrer"
               to="/Employer"
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border-transparent"
-            >
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+              >
               Employers
-            </Link>
+              </Link>
+          
+             
+          </li>
+          <li className="flex">
+          {status ? (
+                  <Link
+                    rel="noopener noreferrer"
+                    to="/EmployeeProfile"
+                    className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
+                  >
+                    Employees Profile
+                  </Link>
+                ) : (
+                  <Link
+                    rel="noopener noreferrer"
+                    to="/EmployeeForm"
+                    className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
+                  >
+                    Employees Form
+                  </Link>
+                )}
           </li>
           <li className="flex">
             <Link
               rel="noopener noreferrer"
               to="/AdminPanel"
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border-transparent"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
             >
               Admin Panel
             </Link>
@@ -71,7 +93,7 @@ function Header() {
                 <svg
                   fill="currentColor"
                   viewBox="0 0 512 512"
-                  className="w-4 h-4 dark:text-gray-100"
+                  className="w-4 h-4 text-gray-800"
                 >
                   <path d="M479.6,399.716l-81.084-81.084-62.368-25.767A175.014,175.014,0,0,0,368,192c0-97.047-78.953-176-176-176S16,94.953,16,192,94.953,368,192,368a175.034,175.034,0,0,0,101.619-32.377l25.7,62.2L400.4,478.911a56,56,0,1,0,79.2-79.195ZM48,192c0-79.4,64.6-144,144-144s144,64.6,144,144S271.4,336,192,336,48,271.4,48,192ZM456.971,456.284a24.028,24.028,0,0,1-33.942,0l-76.572-76.572-23.894-57.835L380.4,345.771l76.573,76.572A24.028,24.028,0,0,1,456.971,456.284Z"></path>
                 </svg>
@@ -81,7 +103,7 @@ function Header() {
               type="search"
               name="Search"
               placeholder="Search..."
-              className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none dark:bg-gray-500 dark:text-gray-100 focus:dark:bg-gray-900"
+              className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none bg-violet-150 text-white-900 focus:bg-gray-100"
             />
           </div>
           {/* <button type="button" className="hidden px-6 py-2 font-semibold rounded lg:block dark:bg-violet-400 dark:text-gray-900">Log in</button> */}
@@ -92,7 +114,7 @@ function Header() {
               <li className="flex">
                 <button
                   type="button"
-                  className="px-8 py-3 font-semibold rounded dark:bg-gray-100 dark:text-gray-800"
+                  className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
                 >
                   Welcome , {userData.firstName}
                 </button>
@@ -100,7 +122,7 @@ function Header() {
               <li className="flex">
 			  <button
                   type="button" onClick = {handleLogout}
-                  className="px-8 py-3 font-semibold rounded dark:bg-gray-100 dark:text-gray-800"
+                  className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
                 >
 					
                  Logout
@@ -114,7 +136,7 @@ function Header() {
                 <Link
                   rel="noopener noreferrer"
                   to="/Login"
-                  className="flex items-center px-4 -mb-1 border-b-2 dark:border-transparent"
+                  className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
                 >
                   Login
                 </Link>
@@ -123,7 +145,7 @@ function Header() {
                 <Link
                   rel="noopener noreferrer"
                   to="/SignUp"
-                  className="flex items-center px-4 -mb-1 border-b-2 dark:border-transparent"
+                  className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
                 >
                   SignUp
                 </Link>

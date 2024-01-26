@@ -3,15 +3,16 @@ import '../Container/App'
 import '../index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Footer, Header } from '../Components/Layout';
-import { About, AdminPanel, Home, Login, SignUp } from '../Pages';
+import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
+  GetEmployers,EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,EmployeeCard, NotFound} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
 import { jwtDecode } from 'jwt-decode';
 import { setLoggedInUser } from '../Storage/Redux/userAuthSlice';
-import Employee from '../Pages/Employee';
-import Employer from '../Pages/Employer';
-import AccessDenied from '../Pages/AccessDenied';
+
+
+
 
 
 
@@ -34,12 +35,17 @@ useEffect(()=>{
       
       <Route path="/" element= {<Home/>}> </Route>
       <Route path="/AdminPanel" element= {<AdminPanel/>}> </Route>
-      <Route path="/Employee" element= {<Employee/>}> </Route>
+      <Route path="/EmployeeForm" element= {<EmployeeForm/>}> </Route>
+      <Route path="/EmployeeProfile/:id" element= {<EmployeeProfile/>}> </Route>
+      <Route path="/EmployeeCard" element= {<EmployeeCard/>}> </Route>
+      <Route path='*' element= {<NotFound/>}> </Route>
+      <Route path="/EmployerProfile/:id" element= {<EmployerProfile  />}> </Route>
+      <Route path="/GetEmployers" element= {<GetEmployers/>}> </Route>
       <Route path="/Employer" element= {<Employer/>}> </Route>
       <Route path="/About" element= {<About/>}> </Route>
       <Route path="/Login" element= {<Login/>}> </Route>
       <Route path="/SignUp" element= {<SignUp/>}> </Route>
-      
+      <Route path="/DashBoard" element= {<Dashboard/>}> </Route>
       <Route path="/AccessDenied" element= {<AccessDenied/>}> </Route>
       </Routes>
       {/* <Footer/> */}

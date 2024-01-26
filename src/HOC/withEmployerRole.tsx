@@ -1,9 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-
-
-const withAuthRole = (WrappedComponent:any) =>{
-
+const withEmployerRole = (WrappedComponent:any) =>{
 
     return (props:any)  =>{
 
@@ -17,7 +14,7 @@ const withAuthRole = (WrappedComponent:any) =>{
 
       // console.log(decode.role)
 
-        if(decode.role !== "admin" ){
+        if(decode.role ===  "employee"  ){
            window.location.replace('./AccessDenied')
            return null;
           
@@ -33,4 +30,4 @@ const withAuthRole = (WrappedComponent:any) =>{
     }
 }
 
-export default withAuthRole;
+export default withEmployerRole;

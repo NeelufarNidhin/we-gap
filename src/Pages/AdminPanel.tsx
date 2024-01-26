@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import withAuthRole from '../HOC/withAuthRole'
+import withAdminRole from '../HOC/withAdminRole'
 // import { useGetAllUsersQuery } from '../API/userApi'
 import axios from 'axios'
 // import { confirmAlert } from 'react-confirm-alert';
@@ -24,8 +24,8 @@ useEffect (()=> {
 
   return (
     <div>
-     <div className="container p-2 mx-auto sm:p-4 dark:text-gray-100">
-	<h2 className="mb-4 text-2xl font-semibold leadi dark:text-gray-500 ">User List</h2>
+     <div className="container p-2 mx-auto sm:p-4 bg-violet-300 text-gray-900">
+	<h2 className="mb-4 text-2xl font-semibold leadi text-gray-500 ">User List</h2>
 	<div className="overflow-x-auto">
 		<table className="w-full p-6 text-xs text-left whitespace-nowrap">
 			<colgroup>
@@ -39,7 +39,7 @@ useEffect (()=> {
 			</colgroup>
 			<thead>
 				
-        <tr className="dark:bg-gray-700">
+        <tr className="bg-violet-200">
 					<th className="p-3">Id</th>
           <th className="p-3">Email</th>
 					<th className="p-3">First Name</th>
@@ -51,7 +51,7 @@ useEffect (()=> {
 					</th>
 				</tr>
 			</thead>
-			<tbody className="border-b dark:bg-gray-900 dark:border-gray-700">
+			<tbody className="border-b bg-violet-300 border-gray-700">
 				
       { userDetail &&
       userDetail.map(item => (
@@ -75,7 +75,7 @@ useEffect (()=> {
 					</td>
           <td className="d-flex justify-content-around gap-1">
 									{item.role !== "Admin" && (
-										<button type="button" className="px-6 py-3 font-semibold rounded dark:bg-gray-100 dark:text-gray-800"
+										<button type="button" className="px-6 py-3 font-semibold rounded bg-violet-300 text-gray-800"
 											// onClick={() =>
 											// 	// handleDelete(user.id)
 											// 	{ confirmAlert({
@@ -101,7 +101,7 @@ useEffect (()=> {
           
         )}
         <Link to={`/update/${item.id}`} className="w-100">
-        <button type="button" className="px-6 py-3 font-semibold rounded dark:bg-gray-100 dark:text-gray-800">
+        <button type="button" className="px-6 py-3 font-semibold rounded bg-violet-100 text-gray-800">
           Edit</button>
           
 									</Link>
@@ -117,4 +117,4 @@ useEffect (()=> {
   )
 }
 
-export default withAuthRole(AdminPanel)
+export default withAdminRole(AdminPanel)
