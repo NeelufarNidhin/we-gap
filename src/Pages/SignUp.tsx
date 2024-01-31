@@ -14,6 +14,7 @@ function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const[error,setError] = useState("")
   const handleRoleSelection = (role: any) => {
     setSelectedRole(role);
   };
@@ -34,7 +35,8 @@ function SignUp() {
       ToastNotify("User Registration done , Please sign in to continue");
       navigate("/Login");
     } else if (response.error) {
-      const errMsg = ToastNotify(response.error, "error");
+
+       ToastNotify(response.error, "error");
     }
 
     setLoading(false);
@@ -79,7 +81,7 @@ function SignUp() {
                     name="email"
                     id="email"
                     placeholder="leroy@jenkins.com"
-                    required
+                    required 
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}

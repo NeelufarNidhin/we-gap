@@ -15,7 +15,20 @@ endpoints : (builder) =>  ({
             }),
             providesTags:["users"]
     }),
+
+    blockUser : builder.mutation({
+      query : ({id})=>({
+        url : `/user/block/${id}`,
+        method : "POST",
+        headers : {
+          "Content-type" : "application/json"
+      },
+      body : id
+      })
+    })
 }),
+
+
 });
 
 export const { useGetAllUsersQuery} = userApi;

@@ -6,9 +6,10 @@ import { jwtDecode } from "jwt-decode";
 import userModel from "../Interfaces/userModel";
 import { useDispatch } from "react-redux";
 import { setLoggedInUser } from "../Storage/Redux/userAuthSlice";
+import ToastNotify from "../Helper/ToastNotify";
 
 function Login() {
-  const [loginUser] = useLoginUserMutation();
+ const [loginUser] = useLoginUserMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,41 +17,29 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+   
     setLoading(true);
+   
     const response: apiResponse = await loginUser({
       email: email,
       password: password,
     });
-
     if (response.data) {
-      // console.log(response.data);
-      const { token } = response.data.result;
-      const { id, firstName, email, role }: userModel = jwtDecode(token);
-      localStorage.setItem("token", token);
-      dispatch(setLoggedInUser({ id, firstName, email, role }));
-    
-
-    switch (role) {
-      case "employee":
-        navigate("/EmployeeForm");
-        break;
-      case "employer":
-        navigate("/Employer");
-        break;
-      case "admin":
-        navigate("/AdminPanel");
-        break;
-      default:
-        // Handle any unexpected roles
-        console.error("Unexpected role:", role);
-        navigate("/"); // Redirect to default page as a fallback
-    }
-  } else if (response.error) {
-    console.log(response.error);
+      console.log(response.data);
+      if(response.data.isSuccess ){
+      navigate("/OTP");
+      // const { token } = response.data.result;
+      // const { id, firstName, email, role }: userModel = jwtDecode(token);
+      // localStorage.setItem("token", token);
+      // dispatch(setLoggedInUser({ id, firstName, email, role }));
+      ToastNotify("Otp send to your mail id");
+      }
+      
   }
-
-  setLoading(false);
-};
+  else if(response.error){
+    ToastNotify(response.error, "error");
+  }
+}
 
   
   return (

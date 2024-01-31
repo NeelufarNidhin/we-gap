@@ -4,15 +4,12 @@ import '../index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Footer, Header } from '../Components/Layout';
 import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
-  GetEmployers,EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,EmployeeCard, NotFound} from '../Pages';
+  GetEmployers,EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
 import { jwtDecode } from 'jwt-decode';
 import { setLoggedInUser } from '../Storage/Redux/userAuthSlice';
-
-
-
 
 
 
@@ -38,8 +35,13 @@ useEffect(()=>{
       <Route path="/EmployeeForm" element= {<EmployeeForm/>}> </Route>
       <Route path="/EmployeeProfile/:id" element= {<EmployeeProfile/>}> </Route>
       <Route path="/EmployeeCard" element= {<EmployeeCard/>}> </Route>
+      <Route path="/EmployeeList" element= {<EmployeeList/>}> </Route>
       <Route path='*' element= {<NotFound/>}> </Route>
-      <Route path="/EmployerProfile/:id" element= {<EmployerProfile  />}> </Route>
+      <Route path='/OTP' element= {<OTP/>}> </Route>
+      <Route path='/JobList' element= {<JobList/>}> </Route>
+      <Route path='/Jobskill' element= {<Jobskill  />}> </Route>
+      <Route path='/JobType' element= {<JobType />}> </Route>
+      <Route path="/EmployerProfile/:id" element= {<EmployerProfile/>}> </Route>
       <Route path="/GetEmployers" element= {<GetEmployers/>}> </Route>
       <Route path="/Employer" element= {<Employer/>}> </Route>
       <Route path="/About" element= {<About/>}> </Route>

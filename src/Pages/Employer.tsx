@@ -50,7 +50,7 @@ function Employer() {
 		});
 		console.log(response.data);
 		if (response.data) {
-		 ToastNotify("User Registration done , Please sign in to continue");
+		// ToastNotify("User Registration done , Please sign in to continue");
 		  navigate(`/EmployerProfile/${response.data.id}`);
 	}}
   return (

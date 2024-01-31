@@ -13,5 +13,12 @@ import AccessDenied from "./AccessDenied";
 import GetEmployers from "./GetEmployers"
 import EmployerCard from "./EmployerCard";
 import EmployeeCard from "./EmployeeCard";
+import JobList from '../Pages/JobList';
+import EmployeeList from "./EmployeeList";
+import Jobskill from "./Jobskill";
+import JobType from "./JobType";
+import OTP from "./OTP";
 
-export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeProfile,EmployerProfile ,GetEmployers , Dashboard, Employer , AccessDenied}
+
+export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
+    ,EmployeeProfile,EmployerProfile ,GetEmployers , Dashboard, Employer , AccessDenied,JobList,Jobskill,JobType,OTP}

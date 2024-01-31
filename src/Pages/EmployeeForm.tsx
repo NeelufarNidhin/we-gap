@@ -10,12 +10,17 @@ import { useNavigate } from 'react-router-dom';
 import userModel from '../Interfaces/userModel';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Storage/Redux/store';
+import EmployeeProfile from './EmployeeProfile';
 
 
 //const defaultImageSrc = "../Images/profil-pi2.jpeg"
 
 function EmployeeForm() {
 	const initialValues = {
+
+		firstName :"",
+		lastName: "",
+		email : "",
 		dob : "",
 		gender : "",
 		address : "",
@@ -32,7 +37,7 @@ function EmployeeForm() {
 	
 	const [values ,setValues] = useState(initialValues);
 	const [error ,setErrors] = useState({})
-	
+	const [isFilled, setIsFilled] = useState(false); 
 	const navigate = useNavigate();
 	const userData: userModel = useSelector(
 		(state: RootState) => state.userAuthStore
@@ -72,12 +77,15 @@ function EmployeeForm() {
 			}
 		};
 
-		
+		//const [isFilled, setIsFilled] = useState(false); // state to check if the form is filled
 		const handleSubmit = async (e: any) => {
 			e.preventDefault();
 			
 			const response: apiResponse = await createEmployee({
 			  applicationUserId : userData.id,
+			  firstName : values.firstName,
+			  lastName: values.lastName,
+				email: values.email,
 			  dob : values.dob,
 			  gender : values.gender,
 			  address : values.address,
@@ -88,14 +96,23 @@ function EmployeeForm() {
 			  imageName: values.imageName
 			});
 			console.log(response.data);
+		//	setIsFilled(true);
 			if (response.data) {
-			  ToastNotify("User Registration done , Please sign in to continue");
-			
-			  navigate(`/EmployeeProfile/${response.data.id}`);
-			 // navigate (`/Employer ${values.dob} ${values.gender} `)
+			setIsFilled(true);
+
+				navigate(`/EmployeeProfile/${response.data.id}`);
 			 
-		}}
-	
+		}
+	}
+	if (isFilled) {
+		return(
+			<div>
+		    <EmployeeProfile/>
+			</div>
+			
+		)
+	}
+	else{
   return (
     <div>
      <section className="p-6 bg-violet-300 text-gray-900">
@@ -175,11 +192,14 @@ function EmployeeForm() {
               </button>
             </div>
 	</form>
+
+	
 	
 </section>
 
     </div>
   )
+}
 }
 
 export default EmployeeForm

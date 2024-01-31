@@ -29,8 +29,20 @@ const auth =  createApi({
               body :userCredentials
             }),
           }),
+          otpLoginUser :builder.mutation({
+            query : (otpvalues) =>({
+              url : "auth/login-2FA",
+              method : "POST",
+              headers :{
+                "Content-type" : "application/json",
+              },
+              body :otpvalues
+             
+            }),
+            
+          }),
       }),
   });
   
-export const {useRegisterUserMutation , useLoginUserMutation  } = auth;
+export const {useRegisterUserMutation,useOtpLoginUserMutation , useLoginUserMutation  } = auth;
 export default auth;

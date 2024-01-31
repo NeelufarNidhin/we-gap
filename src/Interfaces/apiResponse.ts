@@ -3,7 +3,7 @@ export default interface apiResponse {
 		[x: string]: any;
         statusCode? : number;
         isSuccess? : boolean;
-        errorMessages?: Array<string>;
+        errorMessages?: string;
         result : {
            [ key : string]: string
         }

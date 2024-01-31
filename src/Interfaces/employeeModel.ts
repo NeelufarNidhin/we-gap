@@ -1,5 +1,5 @@
 export default interface employeeModel{
-        "id"   : "sring",
+        "id"   : "string",
         "firstName" : "string",
         "lastName" : "string",
         "email": "string",

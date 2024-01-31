@@ -7,6 +7,7 @@ const employeeApi = createApi({
     baseQuery : fetchBaseQuery({
         baseUrl : "http://localhost:8000/api/",
     }),
+    tagTypes :["Employees"],
     endpoints : (builder) =>({
         createEmployee : builder.mutation({
             query : (employeeData) =>({
@@ -16,10 +17,26 @@ const employeeApi = createApi({
                 "Content-type" : "application/json",
               },
               body : employeeData
-            })
-        })
+            }),
+        }),
+        getEmployees : builder.query({
+            query : () =>({
+                url : "employee",
+              method : "GET",
+              
+             providesTags : ["Employees"]
+            }),
+        }),
+        getEmployeeById : builder.query({
+            query : (id) =>({
+                url : `employee/${id}`,
+                method : "GET"
+              }),
+              providesTags : ["Employees"]
+            }),
+        }),
     })
-})
 
+    export const {useGetEmployeeByIdQuery,useGetEmployeesQuery }= employeeApi
 export const { useCreateEmployeeMutation} = employeeApi;
 export default employeeApi

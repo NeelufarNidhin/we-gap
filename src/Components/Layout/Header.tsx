@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userModel from "../../Interfaces/userModel";
-import { useSelector , useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Storage/Redux/store";
-import { emptyUserState, setLoggedInUser } from "../../Storage/Redux/userAuthSlice";
+import {
+  emptyUserState,
+  setLoggedInUser,
+} from "../../Storage/Redux/userAuthSlice";
+import axios from "axios";
 
 function Header() {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData: userModel = useSelector(
     (state: RootState) => state.userAuthStore
   );
- const [status ,setStatus] = useState();
+  const [status, setStatus] = useState("");
   const handleLogout = () => {
-	localStorage.removeItem("token");
-	dispatch(setLoggedInUser({...emptyUserState}))
-	navigate("/");
-  }
+    localStorage.removeItem("token");
+    dispatch(setLoggedInUser({ ...emptyUserState }));
+    navigate("/");
+  };
 
-  useEffect(() => {
-    // Fetch employee form completion status from the .NET Core API
-    fetch(`/api/Employee/${userData.id}`)
-      .then(response => response.json())
-      .then(data => setStatus(data.createdStatus));
-    
-  }, []);
+  
   return (
     <header className="p-4 bg-violet-100 text-violet-800">
       <div className="container flex justify-between h-16 mx-auto">
@@ -39,48 +37,75 @@ function Header() {
               We-GAP
             </Link>
           </li>
-          <li className="flex">
-            
-           
-              <Link
-              rel="noopener noreferrer"
-              to="/Employer"
-              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
-              >
-              Employers
-              </Link>
-          
-             
-          </li>
-          <li className="flex">
-          {status ? (
-                  <Link
-                    rel="noopener noreferrer"
-                    to="/EmployeeProfile"
-                    className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
-                  >
-                    Employees Profile
-                  </Link>
-                ) : (
-                  <Link
-                    rel="noopener noreferrer"
-                    to="/EmployeeForm"
-                    className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
-                  >
-                    Employees Form
-                  </Link>
-                )}
-          </li>
+
+         { (userData.role === "admin" ) && (
           <li className="flex">
             <Link
               rel="noopener noreferrer"
               to="/AdminPanel"
-              className="flex items-center px-4 -mb-1 border-b-2 border-transparent"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
             >
-              Admin Panel
+             Users
+            </Link>
+            <Link
+              rel="noopener noreferrer"
+              to="/Jobskill"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+            >
+             JobSkills
+            </Link>
+            <Link
+              rel="noopener noreferrer"
+              to="/Jobtype"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+            >
+            JobTypes
             </Link>
           </li>
-        </ul>
+     )}
+      { (userData.role === "employer" ) && (
+          <li className="flex">
+            <Link
+              rel="noopener noreferrer"
+              to="/EmployerProfile"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+            >
+             Profile
+            </Link>
+            <Link
+              rel="noopener noreferrer"
+              to="/EmployeeList"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+            >
+             Employees
+            </Link>
+          </li>
+          
+     )}
+      { (userData.role === "employee" ) && (
+        <>
+          <li className="flex">
+            <Link
+              rel="noopener noreferrer"
+              to="/EmployeeForm"
+              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+            >
+            Profile
+            </Link>
+          </li>
+           <li className="flex">
+           <Link
+             rel="noopener noreferrer"
+             to="/JobList"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+           Jobs
+           </Link>
+         </li>
+         </>
+     )}
+                 
+        </ul> 
 
         <div className="flex items-center md:space-x-4">
           <div className="relative">
@@ -109,7 +134,7 @@ function Header() {
           {/* <button type="button" className="hidden px-6 py-2 font-semibold rounded lg:block dark:bg-violet-400 dark:text-gray-900">Log in</button> */}
         </div>
         <ul className="items-stretch hidden space-x-3 lg:flex">
-          {userData.id && (
+          {userData.id ? (
             <>
               <li className="flex">
                 <button
@@ -120,18 +145,18 @@ function Header() {
                 </button>
               </li>
               <li className="flex">
-			  <button
-                  type="button" onClick = {handleLogout}
+                <button
+                  type="button"
+                  onClick={handleLogout}
                   className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
                 >
-					
-                 Logout
+                  Logout
                 </button>
               </li>
             </>
-          )}
-          {!userData.id && (
+          ) : (
             <>
+              {" "}
               <li className="flex">
                 <Link
                   rel="noopener noreferrer"

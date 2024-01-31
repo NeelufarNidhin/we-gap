@@ -23,9 +23,9 @@ const employerApi = createApi({
             query : () =>({
                 url : "employer",
               method : "GET",
-              
-             providesTags : ["employers"]
+                     
             }),
+            providesTags : ["employers"]
         }),
         getEmployerById : builder.query({
             query : (id) =>({
