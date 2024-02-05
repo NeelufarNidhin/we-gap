@@ -34,13 +34,13 @@ function JobList() {
       <div className="my-4">
         <h3 className="text-2xl font-medium text-gray-200">{job.jobTitle}</h3>
         <div className="text-sm font-medium">
-          <span className="m-1 ml-0 inline-block text-blue-500">{job.jobSkills[0]?.skillName}</span>
+          <span className="m-1 ml-0 inline-block text-blue-500">{job.jobSkills.map((skill:any) => skill.skillName)}</span>
           
         </div>
         <div className="mt-2 text-sm text-gray-400">{job.description}</div>
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-50">{job.jobTypes[0]?.jobTypeName}</span>
+        <span className="text-sm font-medium text-gray-50">{job.jobTypes.map((type:any) => type.jobTypeName)}</span>
         <a className="font-medium text-blue-500 transition-all duration-300 group-hover:text-blue-500/80">Apply Now</a>
       </div>
     </div>

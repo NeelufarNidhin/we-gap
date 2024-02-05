@@ -10,11 +10,38 @@ export const  userApi =  createApi({
   tagTypes : ["users"],
 endpoints : (builder) =>  ({
     getAllUsers : builder.query({
-            query : ()=> ({
-              url : "user"
+            query : ({id})=> ({
+              url : `user/${id}`
             }),
             providesTags:["users"]
     }),
+    getUserById : builder.query({
+      query : ()=> ({
+        url : "user",
+        method :"GET"
+      }),
+      
+}),
+updateUser: builder.mutation({
+  query : (id) => ({
+    url : `user/${id}`,
+    method : "PUT",
+    headers:{
+      "Content-type" : "application/json",
+    },
+    body : id
+  }),
+}), 
+deleteUser: builder.mutation({
+  query : (id) => ({
+    url : `user/${id}`,
+    method : "DELETE",
+    headers:{
+      "Content-type" : "application/json",
+    },
+    body : id
+  }),
+}), 
 
     blockUser : builder.mutation({
       query : ({id})=>({
@@ -31,4 +58,4 @@ endpoints : (builder) =>  ({
 
 });
 
-export const { useGetAllUsersQuery} = userApi;
+export const { useGetAllUsersQuery,useGetUserByIdQuery,useDeleteUserMutation,useUpdateUserMutation} = userApi;

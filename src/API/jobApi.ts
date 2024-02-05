@@ -26,7 +26,7 @@ const jobApi= createApi({
         }),
         createJob : builder.mutation({
             query : (postJob) =>({
-            url : "jobs",
+            url : "job",
             method : "POST",
             headers :{
                 "content-type" : "application/json"},

@@ -18,7 +18,12 @@ import EmployeeList from "./EmployeeList";
 import Jobskill from "./Jobskill";
 import JobType from "./JobType";
 import OTP from "./OTP";
-
+import Employee from "./Employee";
+import EmployerForm from "./EmployerForm";
+import ProfileCard from "./ProfileCard";
+import JobForm from "./JobForm";
+import JobCard from "./JobCard";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
-    ,EmployeeProfile,EmployerProfile ,GetEmployers , Dashboard, Employer , AccessDenied,JobList,Jobskill,JobType,OTP}
+    ,EmployeeProfile,EmployerProfile ,GetEmployers , Dashboard, Employer , AccessDenied,JobList,Jobskill,
+    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm}

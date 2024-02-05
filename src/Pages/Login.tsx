@@ -2,18 +2,16 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
-import { jwtDecode } from "jwt-decode";
-import userModel from "../Interfaces/userModel";
-import { useDispatch } from "react-redux";
-import { setLoggedInUser } from "../Storage/Redux/userAuthSlice";
 import ToastNotify from "../Helper/ToastNotify";
+import { useGetUserByIdQuery } from "../API/userApi";
 
 function Login() {
  const [loginUser] = useLoginUserMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
+ 
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -28,10 +26,7 @@ function Login() {
       console.log(response.data);
       if(response.data.isSuccess ){
       navigate("/OTP");
-      // const { token } = response.data.result;
-      // const { id, firstName, email, role }: userModel = jwtDecode(token);
-      // localStorage.setItem("token", token);
-      // dispatch(setLoggedInUser({ id, firstName, email, role }));
+      
       ToastNotify("Otp send to your mail id");
       }
       

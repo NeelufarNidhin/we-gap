@@ -4,7 +4,8 @@ import '../index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Footer, Header } from '../Components/Layout';
 import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
-  GetEmployers,EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP} from '../Pages';
+  GetEmployers,EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,
+  EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP, EmployerForm, Employee, ProfileCard, JobForm} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -33,20 +34,25 @@ useEffect(()=>{
       <Route path="/" element= {<Home/>}> </Route>
       <Route path="/AdminPanel" element= {<AdminPanel/>}> </Route>
       <Route path="/EmployeeForm" element= {<EmployeeForm/>}> </Route>
+      <Route path="/EmployerForm" element= {<EmployerForm/>}> </Route>
       <Route path="/EmployeeProfile/:id" element= {<EmployeeProfile/>}> </Route>
       <Route path="/EmployeeCard" element= {<EmployeeCard/>}> </Route>
       <Route path="/EmployeeList" element= {<EmployeeList/>}> </Route>
       <Route path='*' element= {<NotFound/>}> </Route>
       <Route path='/OTP' element= {<OTP/>}> </Route>
       <Route path='/JobList' element= {<JobList/>}> </Route>
+      {/* <Route path='/JobForm' element= {<JobForm/>}> </Route> */}
+      <Route path='/JobList' element= {<JobList/>}> </Route>
       <Route path='/Jobskill' element= {<Jobskill  />}> </Route>
       <Route path='/JobType' element= {<JobType />}> </Route>
       <Route path="/EmployerProfile/:id" element= {<EmployerProfile/>}> </Route>
       <Route path="/GetEmployers" element= {<GetEmployers/>}> </Route>
       <Route path="/Employer" element= {<Employer/>}> </Route>
+      <Route path="/Employee" element= {<Employee/>}> </Route>
       <Route path="/About" element= {<About/>}> </Route>
       <Route path="/Login" element= {<Login/>}> </Route>
       <Route path="/SignUp" element= {<SignUp/>}> </Route>
+      <Route path="/ProfileCard" element= {<ProfileCard/>}> </Route>
       <Route path="/DashBoard" element= {<Dashboard/>}> </Route>
       <Route path="/AccessDenied" element= {<AccessDenied/>}> </Route>
       </Routes>

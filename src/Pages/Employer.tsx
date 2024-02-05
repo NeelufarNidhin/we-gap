@@ -1,102 +1,36 @@
-import React, { useState } from 'react'
-import withAuthRole from '../HOC/withAdminRole'
-import withEmployerRole from '../HOC/withEmployerRole';
+
+
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import userModel from '../Interfaces/userModel';
-import { RootState } from '../Storage/Redux/store';
-import { useCreateEmployerMutation } from '../API/employerApi';
-import apiResponse from '../Interfaces/apiResponse';
-import ToastNotify from '../Helper/ToastNotify';
+import withEmployerRole from '../HOC/withEmployerRole';
+import layout from "../Assets/Images/Layout.png";
 
 function Employer() {
 
+  const navigate = useNavigate()
 
-	const initialValues = {
-		companyName : "",
-		location : "",
-		description : "",
-		website: "",
-		
+  const handleSubmit = async (e: any) => {
+      e.preventDefault();
+          navigate('/EmployerForm')
+  }
 	
-	}
-	const [values ,setValues] = useState(initialValues);
-
-	const navigate = useNavigate();
-	const userData: userModel = useSelector(
-		(state: RootState) => state.userAuthStore
-	  );
-	const [createEmployer] = useCreateEmployerMutation();
-
-
-	const handleInputChange = (e : any) => {
-		const {name , value} = e.target;
-		setValues ({
-			...values,
-			[name] : value
-		})
-	}
-
-	const handleSubmit = async (e: any) => {
-		e.preventDefault();
-		
-		const response: apiResponse = await createEmployer({
-		  applicationUserId : userData.id,
-		  companyName : values.companyName,
-		  location : values.location,
-		  description : values.description,
-		  website : values.website
-		  
-		});
-		console.log(response.data);
-		if (response.data) {
-		// ToastNotify("User Registration done , Please sign in to continue");
-		  navigate(`/EmployerProfile/${response.data.id}`);
-	}}
   return (
     <div>
-      <section className="p-6 bg-violet-300 text-gray-900">
-	<form method="post" onSubmit={handleSubmit} className="container flex flex-col mx-auto space-y-12">
-		<fieldset className="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-violet-100">
-			<div className="space-y-2 col-span-full lg:col-span-1">
-				<p className="font-medium">Company Profile</p>
-				
+		<div className="p-5 mx-auto sm:p-10 md:p-16 bg-gray-100 text-gray-800">
+	<div className="flex flex-col max-w-3xl mx-auto overflow-hidden rounded">
+		<img src={layout} alt="" className="w-full h-60 sm:h-96 bg-gray-500" />
+		<div className="p-6 pb-12 m-4 mx-auto -mt-16 space-y-6 lg:max-w-2xl sm:px-10 sm:mx-12 lg:rounded-md bg-gray-50">
+			<div className="space-y-2">
+				<a rel="noopener noreferrer" href="#" className="inline-block text-2xl font-semibold sm:text-3xl">Create a company Profile and and start Posting Jobs</a>
+				<p className="text-xs text-gray-600">
+					<a rel="noopener noreferrer" href="#" className="text-xs hover:underline"></a>
+				</p>
 			</div>
-			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
-				<div className="col-span-full sm:col-span-3">
-					<label htmlFor="companyName" className="text-sm">Company Name </label>
-					<input id="companyName" type="text" placeholder="Company name"  value={values.companyName} name='companyName' onChange={handleInputChange}
-					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
-				</div>
-				<div className="col-span-full sm:col-span-3">
-					<label htmlFor="location" className="text-sm">Location</label>
-					<input id="location" type="text" placeholder="Location"  value={values.location} name='location' onChange={handleInputChange}
-					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
-				</div>
-				
-				<div className="col-span-full">
-					<label htmlFor="description" className="text-sm">Description</label>
-					<input id="description" type="text" placeholder=""  value={values.description} name='description' onChange={handleInputChange}
-					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
-				</div>
-				<div className="col-span-full sm:col-span-2">
-					<label htmlFor="website" className="text-sm">Website</label>
-					<input id="website" type="text" placeholder=""  value={values.website} name='website' onChange={handleInputChange}
-					className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
-				</div>
-				
+			<div className="text-gray-800">
+            <button type="button" onClick={handleSubmit} className="px-8 py-3 font-semibold rounded-full bg-gray-800 text-gray-100">Add Personal Info</button>
 			</div>
-		</fieldset>
-		<div>
-              <button
-                type="submit"
-                className="w-full px-8 py-3 font-semibold rounded-md bg-violet-400 text-white"
-              >
-               Submit
-              </button>
-            </div>
-	</form>
-</section>
+		</div>
+	</div>
+</div>
     </div>
   )
 }

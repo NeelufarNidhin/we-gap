@@ -4,7 +4,7 @@ export default interface employeeModel{
         "lastName" : "string",
         "email": "string",
         "applicationUserId": "string",
-        "dob": "dateTime",
+        "dob": "Date",
         "gender": "string",
         "address": "string",
         "state": "string",

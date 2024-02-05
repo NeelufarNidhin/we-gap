@@ -41,8 +41,20 @@ const auth =  createApi({
             }),
             
           }),
+          resendOtp :builder.mutation({
+            query : (otpvalue) =>({
+              url : "Auth/resend-otp",
+              method : "POST",
+              headers :{
+                "Content-type" : "application/json",
+              },
+              body :otpvalue
+             
+            }),
+            
+          }),
       }),
   });
   
-export const {useRegisterUserMutation,useOtpLoginUserMutation , useLoginUserMutation  } = auth;
+export const {useRegisterUserMutation,useOtpLoginUserMutation , useLoginUserMutation ,useResendOtpMutation } = auth;
 export default auth;

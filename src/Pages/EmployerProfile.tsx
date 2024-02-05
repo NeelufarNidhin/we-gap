@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import employerModel from "../Interfaces/employerModel";
 import { useGetEmployerByIdQuery } from "../API/employerApi";
 import JobForm from "./JobForm";
+import JobCard from "./JobCard";
+import axios from "axios";
 
 interface Props {
   employerItem?: employerModel;
@@ -16,7 +18,19 @@ function EmployerProfile(props: Props) {
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
-  
+  const [jobs, setJobs] = useState([]);
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/job');
+      setJobs(response.data);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    }
+  };
 
   const handleInputChange = (e: any) => {
     // setJobSkill(e.target.value);
@@ -101,6 +115,14 @@ function EmployerProfile(props: Props) {
         )}
             </div>
           </div>
+
+
+           <div className="container flex flex-col mx-auto space-y-12">
+          {jobs.map((job:any) => (
+            <JobCard key={job.id} job={job} />
+          ))}
+        </div> 
+
         </div>
       </div>
     );

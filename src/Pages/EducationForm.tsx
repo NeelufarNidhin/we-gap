@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAddEducationMutation } from '../API/educationApi';
+import apiResponse from '../Interfaces/apiResponse';
+import ToastNotify from '../Helper/ToastNotify';
+
 
 function EducationForm() {
     const initialValues = {
@@ -12,9 +16,10 @@ function EducationForm() {
     completionDate:"",
     employeeId:""
     }
+	const {id} = useParams();
     const [values ,setValues] = useState(initialValues);
     const navigate = useNavigate();
-
+	const [addEducation] = useAddEducationMutation();
     const handleInputChange = (e : any) => {
         const {name , value} = e.target;
         setValues ({
@@ -25,6 +30,31 @@ function EducationForm() {
     
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+
+		const response: apiResponse = await addEducation({
+			
+			degree:values.degree,
+			subject:values.subject,
+			university:values.university,
+			percentage:values.percentage,
+			starting_Date:values.starting_Date,
+			completionDate:values.completionDate,
+			employeeId:id
+		});
+
+		console.log(response.data);
+
+		setValues({
+			id:"",
+			degree: "",
+			subject: "",
+			university: "",
+			percentage:"",
+			starting_Date: "",
+			completionDate: "",
+			employeeId: ""
+		});
+		ToastNotify("Education Added");
     }
   return (
     <div>
@@ -38,7 +68,7 @@ function EducationForm() {
 			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 				<div className="col-span-full sm:col-span-3">
 					<label htmlFor="degree" className="text-sm">Degree </label>
-					<input id="degree" type="text" placeholder=""  value=""name='degree' onChange={handleInputChange}
+					<input id="degree" type="text" placeholder=""  value={values.degree}name='degree' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				<div className="col-span-full sm:col-span-3">
@@ -59,12 +89,12 @@ function EducationForm() {
 				</div>
                 <div className="col-span-full sm:col-span-2">
 					<label htmlFor="starting_Date" className="text-sm">Start Date</label>
-					<input id="starting_Date" type="text" placeholder=""  value={values.starting_Date} name='starting_Date' onChange={handleInputChange}
+					<input id="starting_Date" type="date" placeholder=""  value={values.starting_Date} name='starting_Date' onChange={handleInputChange}
 					className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
                 <div className="col-span-full sm:col-span-2">
 					<label htmlFor="completionDate" className="text-sm">Completion Date</label>
-					<input id="completionDate" type="text" placeholder=""  value={values.completionDate} name='completionDate' onChange={handleInputChange}
+					<input id="completionDate" type="date" placeholder=""  value={values.completionDate} name='completionDate' onChange={handleInputChange}
 					className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				

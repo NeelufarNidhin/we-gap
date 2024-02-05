@@ -6,6 +6,7 @@ import { useGetEmployeeByIdQuery } from "../API/employeeApi";
 import defaultImageSrc from "../Assets/Images/profil-pic2.jpeg";
 import ExperienceForm from "./ExperienceForm";
 import EducationForm from "./EducationForm";
+import { useGetExperienceByIdQuery } from "../API/experienceApi";
 interface Props {
   employeeItem?: employeeModel;
 }
@@ -33,6 +34,7 @@ function EmployeeProfile(props: Props) {
     //    ToastNotify("Skill Added");
     //     setJobSkill("")
   };
+
 
   const { data, isLoading, isSuccess, isError, error } =
     useGetEmployeeByIdQuery(id);
