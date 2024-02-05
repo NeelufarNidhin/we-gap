@@ -9,7 +9,7 @@ function Employee() {
 
 const handleSubmit = async (e: any) => {
     e.preventDefault();
-        navigate('/EmployeeForm')
+        navigate('/EmployeeProfile')
 }
 
   return (

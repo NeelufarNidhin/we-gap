@@ -8,10 +8,17 @@ import { useDeleteUserMutation, useUpdateUserMutation } from "../API/userApi";
 
 function AdminPanel() {
   //const { data  } = useGetAllUsersQuery("");
+  const [updatedUser, setUpdatedUser] = useState({
+    id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    role: "",
+  });
 
   const [userDetail, setUserDetail] = useState<any[]>([]);
   const [deleteUser] = useDeleteUserMutation()
-  // const [updateUser] = useUpdateUserMutation()
+  const [updateUser] = useUpdateUserMutation()
   const [isUpdating,setIsUpdating] = useState(false)
   useEffect(() => {
     let usertoken = localStorage.getItem("token");
@@ -25,10 +32,37 @@ function AdminPanel() {
   });
   
 
-  // const handleUpdateUser = (id) => {
-  //   // Implement update user logic
-  //   // You may navigate to a different page/component for updating user details
-  // };
+  const handleUpdateUser = () => {
+    // Send update request to the server
+    updateUser(updatedUser)
+      .unwrap()
+      .then((response) => {
+        console.log("User updated successfully:", response);
+        // Clear updated user details
+        setUpdatedUser({
+          id: "",
+          email: "",
+          firstName: "",
+          lastName: "",
+          role: "",
+        });
+        // Toggle updating state
+        setIsUpdating(false);
+      })
+      .catch((error) => {
+        console.error("Error updating user:", error);
+      });
+  };
+
+  // //const [values ,setValues] = useState(initialValues);
+  // const handleInputChange = (e : any) => {
+	// 	const {name , value} = e.target;
+	// 	setValues ({
+	// 		...values,
+	// 		[name] : value
+	// 	})
+	// }
+
   return (
     <div>
       <div className="container p-2 mx-auto sm:p-4 bg-violet-300 text-gray-900">
@@ -54,7 +88,7 @@ function AdminPanel() {
                 <th className="p-3">Last Name</th>
                 <th className="p-3">Role</th>
                 {/* <th className="p-3"></th> */}
-                <th className="p-3">Actions</th>
+                {/* <th className="p-3">Actions</th> */}
 			
 			
               </tr>
@@ -73,6 +107,7 @@ function AdminPanel() {
                     </td>
                     <td className="px-3 py-2">
                       <p>{item.firstName}</p>
+                     
                     </td>
                     <td className="px-3 py-2">
                       <p>{item.lastName}</p>
@@ -95,13 +130,13 @@ function AdminPanel() {
                         Update
                         {isUpdating ? 'Cancel' : 'Edit'}
                       </button>
-                      {isUpdating ? <button className="items-center py-2 px-4 m-1 bg-gray-400 text-black" onClick={() => handleUpdateUser({id:item.id})} >Update</button> : ""} */}
+                      {isUpdating ? <button className="items-center py-2 px-4 m-1 bg-gray-400 text-black" onClick={() => handleUpdateUser()} >Update</button> : ""}
                       <button
                         onClick={() =>()=> deleteUser({id:item.id})}
                         className="text-sm bg-red-500 text-white px-2 py-1 rounded"
                       >
                         Delete
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))}

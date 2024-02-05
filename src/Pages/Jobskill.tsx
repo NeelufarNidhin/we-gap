@@ -106,15 +106,15 @@ function Jobskill() {
                   </div>
                   <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
                     <div className="col-span-full sm:col-span-3">
-                      <label htmlFor="companyName" className="text-sm">
+                      <label htmlFor="jobSkill" className="text-sm">
                         Job Skill{" "}
                       </label>
                       <input
-                        id="companyName"
+                        id="jobSkill"
                         type="text"
                         placeholder=""
                         value={jobSkill}
-                        name="companyName"
+                        name="jobSkill"
                         onChange={handleInputChange}
                         className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900"
                       />

@@ -30,9 +30,6 @@ const [selectedJobType,setSelectedJobType] = useState("")
 const [jobTypeOptions, setJobTypeOptions] = useState([]);
 
 
- 
-
-
 useEffect(() => {
 	// Fetch job skills data from the API when the component mounts
 	
