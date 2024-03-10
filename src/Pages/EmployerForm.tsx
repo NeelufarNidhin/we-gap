@@ -25,7 +25,7 @@ function EmployerForm() {
 	const [createEmployer] = useCreateEmployerMutation();
 
 
-	const handleInputChange = (e : any) => {
+	const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
 		const {name , value} = e.target;
 		setValues ({
 			...values,
@@ -33,7 +33,7 @@ function EmployerForm() {
 		})
 	}
 
-	const handleSubmit = async (e: any) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		
 		const response: apiResponse = await createEmployer({
@@ -48,7 +48,7 @@ function EmployerForm() {
 		if (response.data) {
 		// ToastNotify("User Registration done , Please sign in to continue");
 		setValues(initialValues)
-		  navigate(`/EmployerProfile/${response.data.id}`);
+		  navigate(`/EmployeeProfile/${response.data.id}`);
 	}}
 
   return (

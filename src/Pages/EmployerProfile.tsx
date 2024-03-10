@@ -32,12 +32,12 @@ function EmployerProfile(props: Props) {
     }
   };
 
-  const handleInputChange = (e: any) => {
-    // setJobSkill(e.target.value);
-  };
+  // const handleInputChange = (e: any) => {
+  //   // setJobSkill(e.target.value);
+  // };
 
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 //     addJobskill({
 //         skillName : jobSkill

@@ -8,9 +8,9 @@ function Employer() {
 
   const navigate = useNavigate()
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-          navigate('/EmployerForm')
+    navigate('/EmployerForm')
   }
 	
   return (

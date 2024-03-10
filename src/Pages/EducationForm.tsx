@@ -20,7 +20,7 @@ function EducationForm() {
     const [values ,setValues] = useState(initialValues);
     const navigate = useNavigate();
 	const [addEducation] = useAddEducationMutation();
-    const handleInputChange = (e : any) => {
+    const handleInputChange = (e :  React.ChangeEvent<HTMLInputElement>) => {
         const {name , value} = e.target;
         setValues ({
             ...values,
@@ -28,7 +28,7 @@ function EducationForm() {
         })
     }
     
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
 		const response: apiResponse = await addEducation({

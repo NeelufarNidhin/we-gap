@@ -14,14 +14,25 @@ function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const[error,setError] = useState("")
   const handleRoleSelection = (role: any) => {
     setSelectedRole(role);
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      setLoading(false);
+      return;
+  }
+
+  // Reset confirm password error if they match
+  setConfirmPasswordError("");
+
     const response: apiResponse = await registerUser({
       firstName: firstName,
       lastName: lastName,
@@ -29,6 +40,7 @@ function SignUp() {
       userName: email,
       role: selectedRole,
     });
+    
     console.log(selectedRole, email);
     console.log(response.data);
     if (response.data) {
@@ -159,6 +171,28 @@ function SignUp() {
                     className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
                   />
                 </div>
+                <div>
+                <div className="flex justify-between mb-2">
+                    <label htmlFor="password" className="text-sm">
+                        Confirm Password
+                    </label>
+                </div>
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    placeholder="*****"
+                    required
+                    onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                    }}
+                    value={confirmPassword}
+                    className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
+                />
+                {confirmPasswordError && (
+                    <p className="text-red-500 text-xs mt-1">{confirmPasswordError}</p>
+                )}
+            </div>
               </div>
               <div className="space-y-2">
                 <div>

@@ -12,11 +12,12 @@ import jobTypeApi from "../../API/jobTypeApi";
 import experienceApi from "../../API/experienceApi";
 import educationApi from "../../API/educationApi";
 
+
 const store = configureStore({
     reducer :{
         userAuthStore : userAuthReducer,
         usersStore : usersReducer,
-      //  employeeAuthStore : employeeAuthReducer,
+    
         [userApi.reducerPath] : userApi.reducer,
         [employeeApi.reducerPath] : employeeApi.reducer,
         [employerApi.reducerPath] : employerApi.reducer,

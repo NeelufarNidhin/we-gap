@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import layout1 from "../Assets/Images/Layout1.png";
 import { useNavigate } from 'react-router-dom';
 
 
-function Employee() {
 
+function Employee() {
+	const [profileCreated, setProfileCreated] =useState(false);
     const navigate = useNavigate()
 
-const handleSubmit = async (e: any) => {
+const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-        navigate('/EmployeeProfile')
+        navigate('/EmployeeForm')
 }
 
   return (
@@ -24,6 +25,7 @@ const handleSubmit = async (e: any) => {
 				</p>
 			</div>
 			<div className="text-gray-800">
+				
             <button type="button" onClick={handleSubmit} className="px-8 py-3 font-semibold rounded-full bg-gray-800 text-gray-100">Add Personal Info</button>
 			</div>
 		</div>

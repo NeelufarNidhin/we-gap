@@ -39,7 +39,7 @@ function EmployeeForm() {
   );
   const [createEmployee] = useCreateEmployeeMutation();
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setValues({
       ...values,
@@ -70,7 +70,7 @@ function EmployeeForm() {
   };
 
   //const [isFilled, setIsFilled] = useState(false); // state to check if the form is filled
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const response: apiResponse = await createEmployee({
@@ -87,12 +87,13 @@ function EmployeeForm() {
       bio: values.bio,
       imageName: values.imageName,
     });
+ 
     console.log(response.data);
-    //	setIsFilled(true);
+  
     if (response.data) {
-      setIsFilled(true);
+      setValues(initialValues)
 
-      navigate(`/EmployeeProfile/${response.data.id}`);
+      navigate(`/EmployerProfile/${response.data.id}`);
     }
   };
 
@@ -124,19 +125,21 @@ function EmployeeForm() {
                 />
               </div>
               <div className="col-span-full sm:col-span-3">
-                <label htmlFor="gender" className="text-sm">
-                  Gender
-                </label>
-                <input
-                  id="gender"
-                  type="text"
-                  placeholder="Gender"
-                  value={values.gender}
-                  name="gender"
-                  onChange={handleInputChange}
-                  className="w-full rounded-md focus:ring focus:ri focus:ri border-gray-300 text-gray-500"
-                />
-              </div>
+    <label htmlFor="gender" className="text-sm">
+        Gender
+    </label>
+    <select
+        id="gender"
+        name="gender"
+        value={values.gender}
+        onChange={handleInputChange}
+        className="w-full rounded-md focus:ring focus:ri focus:ri border-gray-300 text-gray-500"
+    >
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+</div>
               <div className="col-span-full sm:col-span-3">
                 <label htmlFor="mobileNumber" className="text-sm">
                   Mobile Number
@@ -218,14 +221,17 @@ function EmployeeForm() {
                 <label htmlFor="bio" className="text-sm">
                   Bio
                 </label>
-                <textarea
+                {/* <textarea */}
+                <input
                   id="bio"
                   placeholder=""
                   value={values.bio}
                   name="bio"
                   onChange={handleInputChange}
                   className="w-full rounded-md focus:ring focus:ri focus:ri border-gray-300 dark:text-gray-900"
-                ></textarea>
+                
+                  ></input>
+                {/* </textarea> */}
               </div>
               <div className="col-span-full">
                 <label htmlFor="bio" className="text-sm">
@@ -256,7 +262,7 @@ function EmployeeForm() {
               Next
             </button>
             <button
-              type="submit"
+            
               className="float-right w-100 px-8 py-3 font-semibold rounded-md bg-violet-500 text-white "
             >
               Back

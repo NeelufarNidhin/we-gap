@@ -60,5 +60,5 @@ const educationApi = createApi({
 })
 
 
-export const {useGetEducationByIdQuery, useGetAllEducationQuery,useAddEducationMutation,useUpdateEducationMutation,useDeleteEducationMutation} = educationApi
+export const {useGetEducationByIdQuery,useLazyGetAllEducationQuery, useGetAllEducationQuery,useAddEducationMutation,useUpdateEducationMutation,useDeleteEducationMutation} = educationApi
 export default educationApi

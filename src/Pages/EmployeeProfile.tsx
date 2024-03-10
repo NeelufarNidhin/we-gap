@@ -44,6 +44,7 @@ function EmployeeProfile() {
     setIsEducationFormOpen(!isEducationFormOpen);
   };
 
+
   const { data, isLoading, isSuccess, isError } = useGetEmployeeByIdQuery(id);
 
   let content;

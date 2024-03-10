@@ -29,7 +29,7 @@ function ExperienceForm() {
 	  // );
    
 
-    const handleInputChange = (e : any) => {
+    const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         const {name , value} = e.target;
         setValues ({
             ...values,
@@ -37,7 +37,7 @@ function ExperienceForm() {
         })
     }
     
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		
 		const response: apiResponse = await addExperience({

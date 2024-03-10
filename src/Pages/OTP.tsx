@@ -70,13 +70,16 @@ function OTP() {
         const { id, firstName, email, role }: userModel = jwtDecode(token);
         localStorage.setItem("token", token);
         dispatch(setLoggedInUser({ id, firstName, email, role }));
+       
 
         switch (role) {
           case "employer":
+           
             navigate("/Employer");
 
             break;
           case "employee":
+          
             navigate("/Employee");
             break;
           case "admin":

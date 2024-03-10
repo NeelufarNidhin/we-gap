@@ -2,20 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 import employeeModel from "../../Interfaces/employeeModel";
 
 export const emptyEmployeeState: employeeModel = {
-  id   : "string",
-  firstName : "string",
-  lastName : "string",
-  email: "string",
-  applicationUserId: "string",
-  dob: "Date",
-  gender: "string",
-  address: "string",
-  state: "string",
-  city: "string",
-  pincode: "int",
-  mobileNumber: "int",
-  bio: "string",
-  imageName: "string"
+  id   : "",
+  firstName : "",
+  lastName : "",
+  email: "",
+  applicationUserId: "",
+  dob: new Date(),
+  gender: "",
+  address: "",
+  state: "",
+  city: "",
+  pincode: 0,
+  mobileNumber: 0,
+  bio: "",
+  imageName: ""
 }
 
 
