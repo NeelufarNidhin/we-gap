@@ -4,7 +4,7 @@ import withAdminRole from "../HOC/withAdminRole";
 import axios from "axios";
 // import { confirmAlert } from 'react-confirm-alert';
 import { Link } from "react-router-dom";
-import { useDeleteUserMutation, useUpdateUserMutation } from "../API/userApi";
+import { useBlockUserMutation, useDeleteUserMutation, useUpdateUserMutation } from "../API/userApi";
 
 function AdminPanel() {
   //const { data  } = useGetAllUsersQuery("");
@@ -18,7 +18,7 @@ function AdminPanel() {
 
   const [userDetail, setUserDetail] = useState<any[]>([]);
   const [deleteUser] = useDeleteUserMutation()
-  const [updateUser] = useUpdateUserMutation()
+  const [blockUser] = useBlockUserMutation()
   const [isUpdating,setIsUpdating] = useState(false)
   useEffect(() => {
     let usertoken = localStorage.getItem("token");
@@ -32,26 +32,23 @@ function AdminPanel() {
   });
   
 
-  const handleUpdateUser = () => {
-    // Send update request to the server
-    updateUser(updatedUser)
-      .unwrap()
-      .then((response) => {
-        console.log("User updated successfully:", response);
-        // Clear updated user details
-        setUpdatedUser({
-          id: "",
-          email: "",
-          firstName: "",
-          lastName: "",
-          role: "",
-        });
-        // Toggle updating state
-        setIsUpdating(false);
-      })
-      .catch((error) => {
-        console.error("Error updating user:", error);
-      });
+  const handleUpdateUser = (id:string) => {
+     // Toggle user's block status
+     const updatedUser = userDetail.find((user) => user.id === id);
+     updatedUser.isBlocked = !updatedUser.isBlocked;
+ 
+     // Send update request to the server
+     blockUser(updatedUser)
+       .unwrap()
+       .then((response) => {
+         console.log("User Blocked successfully:", response);
+         if(response)
+         // Toggle updating state
+         setIsUpdating(false);
+       })
+       .catch((error) => {
+         console.error("Error updating user:", error);
+       });
   };
 
   // //const [values ,setValues] = useState(initialValues);
@@ -115,28 +112,17 @@ function AdminPanel() {
                     <td className="px-3 py-2">
                       <p>{item.role}</p>
                     </td>
-                    {/* <td className="d-flex justify-content-around gap-1">
-                      
-                    </td> */}
+                    <td className="px-3 py-2">
+                      <button
+                        onClick={() => handleUpdateUser(item.id)}
+                        className={item.isBlocked ? "bg-red-500" : "bg-green-500"}
+                      >
+                        {item.isBlocked ? "Unblock User" : "Block User"}
+                      </button>
+                    </td>
 
                     <td className="d-flex justify-content-around gap-1">
-                      {/* <button
-                      onClick={()=>{
-                        setIsUpdating(!isUpdating)
-                      }}
-                       
-                        className="text-sm bg-green-500 text-white px-2 py-1 rounded"
-                      >
-                        Update
-                        {isUpdating ? 'Cancel' : 'Edit'}
-                      </button>
-                      {isUpdating ? <button className="items-center py-2 px-4 m-1 bg-gray-400 text-black" onClick={() => handleUpdateUser()} >Update</button> : ""}
-                      <button
-                        onClick={() =>()=> deleteUser({id:item.id})}
-                        className="text-sm bg-red-500 text-white px-2 py-1 rounded"
-                      >
-                        Delete
-                      </button> */}
+                      
                     </td>
                   </tr>
                 ))}

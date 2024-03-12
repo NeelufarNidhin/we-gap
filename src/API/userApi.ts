@@ -58,4 +58,4 @@ deleteUser: builder.mutation({
 
 });
 
-export const { useGetAllUsersQuery,useGetUserByIdQuery,useDeleteUserMutation,useUpdateUserMutation} = userApi;
+export const { useGetAllUsersQuery,useGetUserByIdQuery,useDeleteUserMutation,useUpdateUserMutation,useBlockUserMutation} = userApi;

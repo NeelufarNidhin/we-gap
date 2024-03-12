@@ -93,7 +93,7 @@ function EmployeeForm() {
     if (response.data) {
       setValues(initialValues)
 
-      navigate(`/EmployerProfile/${response.data.id}`);
+      navigate(`/EmployeeProfile/${response.data.result.id}`);
     }
   };
 

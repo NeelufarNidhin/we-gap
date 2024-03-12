@@ -22,18 +22,15 @@ function Login() {
       email: email,
       password: password,
     });
-    if (response.data) {
-      console.log(response.data);
-      if(response.data.isSuccess ){
+    if (response.error && response.error.status === 404) {
+      // Display Toastify message for 404 errors
+      ToastNotify(`User not found/Blocked", ${response.error.status}`);
+    } else if (response.data && response.data.isSuccess) {
       navigate("/OTP");
-      
       ToastNotify("Otp send to your mail id");
-      }
-      
-  }
-  else if(response.error){
-    ToastNotify(response.error, "error");
-  }
+    } else if (response.error) {
+      ToastNotify(response.error, "error");
+    }
 }
 
   

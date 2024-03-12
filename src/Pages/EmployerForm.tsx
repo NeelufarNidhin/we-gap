@@ -48,7 +48,7 @@ function EmployerForm() {
 		if (response.data) {
 		// ToastNotify("User Registration done , Please sign in to continue");
 		setValues(initialValues)
-		  navigate(`/EmployeeProfile/${response.data.id}`);
+		  navigate(`/EmployerProfile/${response.data.id}`);
 	}}
 
   return (
