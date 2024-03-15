@@ -34,9 +34,16 @@ const employeeApi = createApi({
               }),
               providesTags : ["Employees"]
             }),
+            getEmployeeExists : builder.query({
+                query : (userId) =>({
+                    url : `employee/exists/${userId}`,
+                    method : "GET"
+                  }),
+                  providesTags : ["Employees"]
+                }),
         }),
     })
 
-    export const {useGetEmployeeByIdQuery,useGetEmployeesQuery }= employeeApi
+    export const {useGetEmployeeByIdQuery,useGetEmployeesQuery,useGetEmployeeExistsQuery }= employeeApi
 export const { useCreateEmployeeMutation} = employeeApi;
 export default employeeApi

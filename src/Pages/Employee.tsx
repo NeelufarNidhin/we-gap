@@ -1,17 +1,32 @@
-import React, { useState } from 'react'
+import React from 'react'
 import layout1 from "../Assets/Images/Layout1.png";
 import { useNavigate } from 'react-router-dom';
+import {  useSelector } from 'react-redux';
+import userModel from '../Interfaces/userModel';
+import { RootState } from '../Storage/Redux/store';
+import { useGetEmployeeExistsQuery } from '../API/employeeApi';
 
 
 
 function Employee() {
-	const [profileCreated, setProfileCreated] =useState(false);
+	
     const navigate = useNavigate()
-
+	const userData: userModel = useSelector(
+		(state: RootState) => state.userAuthStore
+	  );
+	
+	console.log(userData)
+	const {data,isLoading} = useGetEmployeeExistsQuery(userData.id)
 const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-        navigate('/EmployeeForm')
-}
+	if(data){
+		console.log(data)
+		navigate(`/EmployeeProfile/${data.id}`)
+	}else if(!data){
+		navigate('/EmployeeForm')
+	}	
+	}
+       
 
   return (
     <div className="p-5 mx-auto sm:p-10 md:p-16 bg-gray-100 text-gray-800">
