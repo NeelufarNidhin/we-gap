@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useGetJobsQuery } from '../API/jobApi'
-import axios from 'axios';
-
-
+import { useNavigate } from 'react-router-dom';
 
 function JobList() {
+  const navigate = useNavigate()
   const [jobTypeName, setJobTypeName] = useState('');
   const [jobSkillNames, setJobSkillNames] = useState([]);
 
@@ -68,6 +67,26 @@ function JobList() {
       </div>
     </div>
   </div>
+  <button
+            onClick={() => navigate(-1)}
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>{" "}
+            Back
+          </button>
         </article>
      )
      })

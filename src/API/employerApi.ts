@@ -34,11 +34,19 @@ const employerApi = createApi({
               }),
               providesTags : ["employers"]
             }),
+
+            getEmployerExists : builder.query({
+              query : (userId) =>({
+                  url : `employer/exists/${userId}`,
+                  method : "GET"
+                }),
+                providesTags : ["employers"]
+              }),
         }),
 
        
     })
 
-export const {useGetEmployerByIdQuery,useGetEmployersQuery }= employerApi
+export const {useGetEmployerByIdQuery,useGetEmployersQuery,useGetEmployerExistsQuery }= employerApi
 export const { useCreateEmployerMutation} = employerApi;
 export default employerApi

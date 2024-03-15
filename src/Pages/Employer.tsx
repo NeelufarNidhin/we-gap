@@ -1,16 +1,30 @@
 
-
+import { RootState } from '../Storage/Redux/store';
 import { useNavigate } from 'react-router-dom';
 import withEmployerRole from '../HOC/withEmployerRole';
 import layout from "../Assets/Images/Layout.png";
+import { useGetEmployerExistsQuery } from '../API/employerApi';
+import userModel from '../Interfaces/userModel';
+import { useSelector } from 'react-redux';
 
 function Employer() {
 
   const navigate = useNavigate()
-
+const userData : userModel = useSelector(
+	(state: RootState) => state.userAuthStore
+)
+console.log(userData)
+ const {data,isLoading} = useGetEmployerExistsQuery(userData.id)
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-    navigate('/EmployerForm')
+	  if(data){
+		console.log(data)
+		navigate(`/EmployerProfile/${data.id}`)
+	  }
+	  else if(!data){
+		navigate('/EmployerForm')
+	  }
+   
   }
 	
   return (

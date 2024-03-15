@@ -7,7 +7,7 @@ import {
   emptyUserState,
   setLoggedInUser,
 } from "../../Storage/Redux/userAuthSlice";
-import axios from "axios";
+
 
 function Header() {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ function Header() {
   const userData: userModel = useSelector(
     (state: RootState) => state.userAuthStore
   );
-  const [status, setStatus] = useState("");
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(setLoggedInUser({ ...emptyUserState }));
@@ -67,7 +67,7 @@ function Header() {
           <li className="flex">
             <Link
               rel="noopener noreferrer"
-              to="/EmployerProfile"
+              to="/Employer"
               className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
             >
              Profile
@@ -87,7 +87,7 @@ function Header() {
           <li className="flex">
             <Link
               rel="noopener noreferrer"
-              to="/EmployeeForm"
+              to="/Employee"
               className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
             >
             Profile
