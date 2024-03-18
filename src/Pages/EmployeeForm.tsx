@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import userModel from "../Interfaces/userModel";
 import { useSelector } from "react-redux";
 import { RootState } from "../Storage/Redux/store";
-import EmployeeProfile from "./EmployeeProfile";
 
-//const defaultImageSrc = "../Images/profil-pi2.jpeg"
+
+//const defaultImageSrc = "../"
 
 function EmployeeForm() {
   const initialValues = {
@@ -25,15 +25,13 @@ function EmployeeForm() {
     pincode: "",
     mobileNumber: "",
     bio: "",
-    imageName: "",
-   
-    imageFile: null,
+    
   };
 
   const [values, setValues] = useState(initialValues);
   const [error, setErrors] = useState({});
   const [imageToStore,setImageToStore] = useState<any>();
-  const [imageToDisplay,setImageToDisplay] = useState<string>("");
+  const [imageToDisplay,setImageToDisplay] = useState<string>(defaultImageSrc);
   const navigate = useNavigate();
   const userData: userModel = useSelector(
     (state: RootState) => state.userAuthStore
@@ -84,14 +82,14 @@ function EmployeeForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(!imageToStore){
-      ToastNotify("pleease upload an image")
+      ToastNotify("please upload an image")
       return;
     }
 
     const formData = new FormData();
     formData.append("ApplicationUserId",userData.id);
     formData.append("DOB",values.dob);
-    formData.append("Gender",values.dob);
+    formData.append("Gender",values.gender);
     formData.append("Address",values.address);
     formData.append("State",values.state);
     formData.append("City",values.city);
@@ -103,21 +101,8 @@ function EmployeeForm() {
    
     const response :apiResponse = await createEmployee(formData);
 
-    // const response: apiResponse = await createEmployee({
-    //   applicationUserId: userData.id,
-    //   firstName: values.firstName,
-    //   lastName: values.lastName,
-    //   email: values.email,
-    //   dob: values.dob,
-    //   gender: values.gender,
-    //   address: values.address,
-    //   state: values.state,
-    //   city: values.city,
-    //   pincode: values.pincode,
-    //   bio: values.bio,
-    //   imageName: values.imageName,
-    // });
- console.log(response)
+    
+
     console.log(response.data);
   
     if (response.data) {
@@ -193,6 +178,7 @@ function EmployeeForm() {
                   id="address"
                   type="text"
                   placeholder=""
+                  required
                   value={values.address}
                   name="address"
                   onChange={handleInputChange}
@@ -206,6 +192,7 @@ function EmployeeForm() {
                 <input
                   id="city"
                   type="text"
+                  required
                   placeholder=""
                   value={values.city}
                   name="city"
@@ -215,13 +202,14 @@ function EmployeeForm() {
               </div>
               <div className="col-span-full sm:col-span-2">
                 <label htmlFor="state" className="text-sm">
-                  State / Province
+                  State 
                 </label>
                 <input
                   id="state"
                   type="text"
                   placeholder=""
                   value={values.state}
+                  required
                   name="state"
                   onChange={handleInputChange}
                   className="w-full rounded-md focus:ring focus:ri focus:ri border-gray-300 dark:text-gray-900"

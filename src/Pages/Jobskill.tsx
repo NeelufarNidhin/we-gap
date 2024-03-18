@@ -111,6 +111,7 @@ function Jobskill() {
                       </label>
                       <input
                         id="jobSkill"
+                        required
                         type="text"
                         placeholder=""
                         value={jobSkill}
