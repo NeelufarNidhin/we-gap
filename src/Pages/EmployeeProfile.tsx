@@ -54,6 +54,8 @@ function EmployeeProfile() {
     content = (
       <div className="bg-white p-4 shadow-sm rounded-lg">
         <div className="flex justify-between items-center mb-4">
+          <img src = {data.imageName} alt= "profileImage"/>
+         
           <h1 className="text-gray-900 font-bold text-2xl">
             {data.applicationUser.firstName} {data.applicationUser.lastName}
           </h1>

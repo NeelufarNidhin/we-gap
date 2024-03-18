@@ -26,13 +26,14 @@ function EmployeeForm() {
     mobileNumber: "",
     bio: "",
     imageName: "",
-    imageSrc: defaultImageSrc,
+   
     imageFile: null,
   };
 
   const [values, setValues] = useState(initialValues);
   const [error, setErrors] = useState({});
-  const [isFilled, setIsFilled] = useState(false);
+  const [imageToStore,setImageToStore] = useState<any>();
+  const [imageToDisplay,setImageToDisplay] = useState<string>("");
   const navigate = useNavigate();
   const userData: userModel = useSelector(
     (state: RootState) => state.userAuthStore
@@ -47,47 +48,76 @@ function EmployeeForm() {
     });
   };
 
-  const showPreview = (e: any) => {
-    if (e.target.files && e.target.files[0]) {
-      let imageFile = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (x: any) => {
-        setValues({
-          ...values,
-          imageFile,
-          imageSrc: x.target.result,
-        });
-      };
+  const showPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0] ;
 
-      reader.readAsDataURL(imageFile);
-    } else {
-      setValues({
-        ...values,
-        imageFile: null,
-        imageSrc: defaultImageSrc,
-      });
+      if(file){
+        const imgType = file.type.split("/")[1];
+        const validImgTypes = ["jpg","jpeg","png"];
+        const isImageTypeValid = validImgTypes.filter((e) =>{
+          return e == imgType;
+        });
+
+        if(file.size > 1000 * 1024){
+          setImageToStore("")
+          ToastNotify("file must be less than 1 MB");
+          return ;
+        }
+
+        else if(isImageTypeValid.length === 0){
+          setImageToStore("")
+          ToastNotify("file must be in jpg,jpeg or png format" ,"error");
+          return;
+        }
+        const reader =  new FileReader();
+        reader.readAsDataURL(file);
+        setImageToStore(file);
+        reader.onload = (e) =>{
+          const imgUrl = e.target?.result as string;
+          setImageToDisplay(imgUrl);
+        }
+
+      }
     }
-  };
 
   //const [isFilled, setIsFilled] = useState(false); // state to check if the form is filled
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!imageToStore){
+      ToastNotify("pleease upload an image")
+      return;
+    }
 
-    const response: apiResponse = await createEmployee({
-      applicationUserId: userData.id,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      dob: values.dob,
-      gender: values.gender,
-      address: values.address,
-      state: values.state,
-      city: values.city,
-      pincode: values.pincode,
-      bio: values.bio,
-      imageName: values.imageName,
-    });
- 
+    const formData = new FormData();
+    formData.append("ApplicationUserId",userData.id);
+    formData.append("DOB",values.dob);
+    formData.append("Gender",values.dob);
+    formData.append("Address",values.address);
+    formData.append("State",values.state);
+    formData.append("City",values.city);
+    
+    formData.append("Pincode",values.pincode);
+    formData.append("MobileNumber",values.mobileNumber);
+    formData.append("Bio",values.bio);
+    formData.append("Imagefile",imageToStore);
+   
+    const response :apiResponse = await createEmployee(formData);
+
+    // const response: apiResponse = await createEmployee({
+    //   applicationUserId: userData.id,
+    //   firstName: values.firstName,
+    //   lastName: values.lastName,
+    //   email: values.email,
+    //   dob: values.dob,
+    //   gender: values.gender,
+    //   address: values.address,
+    //   state: values.state,
+    //   city: values.city,
+    //   pincode: values.pincode,
+    //   bio: values.bio,
+    //   imageName: values.imageName,
+    // });
+ console.log(response)
     console.log(response.data);
   
     if (response.data) {
@@ -102,6 +132,7 @@ function EmployeeForm() {
       <section className="p-6 bg-violet-300 text-gray-900">
         <form
           method="post"
+          encType="multipart/form-data"
           onSubmit={handleSubmit}
           className="container flex flex-col mx-auto space-y-12"
         >
@@ -238,7 +269,7 @@ function EmployeeForm() {
                   Photo
                 </label>
                 <img
-                  src={values.imageSrc}
+                  src={imageToDisplay}
                   alt=""
                   className="w-20 h-20 rounded-full bg-gray-500 bg-gray-300"
                 />

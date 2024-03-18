@@ -13,9 +13,7 @@ const employeeApi = createApi({
             query : (employeeData) =>({
                 url : "employee",
               method : "POST",
-              headers:{
-                "Content-type" : "application/json",
-              },
+             
               body : employeeData
             }),
         }),
