@@ -5,7 +5,7 @@ const experienceApi = createApi({
 
     reducerPath : "experienceApi",
     baseQuery : fetchBaseQuery({
-        baseUrl : "http://localhost:8000/api/",
+        baseUrl :  `${process.env.REACT_APP_API_URL}/`,
     }),
     tagTypes : ["Experience"],
     endpoints:(builder) =>({

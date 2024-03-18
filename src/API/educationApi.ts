@@ -5,7 +5,7 @@ const educationApi = createApi({
 
     reducerPath : "educationApi",
     baseQuery : fetchBaseQuery({
-        baseUrl : "http://localhost:8000/api/",
+        baseUrl : `${process.env.REACT_APP_API_URL}/`,
     }),
     tagTypes : ["Education"],
     endpoints:(builder) =>({

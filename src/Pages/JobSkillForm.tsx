@@ -25,7 +25,7 @@ function JobSkillForm() {
 			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 				<div className="col-span-full sm:col-span-3">
 					<label htmlFor="currentJobTitle" className="text-sm">Current Job Title </label>
-					<input id="currentJobTitle" type="text" placeholder="Title"  value="" name='currentJobTitle' onChange={handleInputChange}
+					<input id="currentJobTitle" type="text" placeholder="Title"  required value="" name='currentJobTitle' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
                 </div>

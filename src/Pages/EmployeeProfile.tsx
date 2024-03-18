@@ -4,13 +4,18 @@ import { useGetEmployeeByIdQuery } from "../API/employeeApi";
 import axios from "axios";
 import ExperienceForm from "./ExperienceForm";
 import EducationForm from "./EducationForm";
+import { useGetEducationByIdQuery } from "../API/educationApi";
 
 function EmployeeProfile() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { id } = useParams();
+  //const{data,isLoading} = useGetEducationByIdQuery(id);
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isEducationFormOpen, setIsEducationFormOpen] = useState(false);
   const [education, setEducation] = useState([]);
   const [experience, setExperience] = useState([]);
+  const [filteredExperience,setFilteredExperience]  = useState([])
+  const [filteredEducation,setFilteredEducation]  = useState([])
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,8 +25,11 @@ function EmployeeProfile() {
 
   const fetchEducation = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/education");
-      setEducation(response.data);
+      {
+        const response = await axios.get(`${apiUrl}/education`);
+        setEducation(response.data);
+        
+      }
     } catch (error) {
       console.error("Error fetching education:", error);
     }
@@ -29,12 +37,28 @@ function EmployeeProfile() {
 
   const fetchExperience = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/experience");
+      {
+      const response = await axios.get(`${apiUrl}/experience`);
       setExperience(response.data);
-    } catch (error) {
-      console.error("Error fetching experience:", error);
+     
     }
+   } catch (error) {
+      console.error("Error fetching experience:", error);
+    
+  }
   };
+  useEffect(() => {
+    const filterEducationAndExperience = () => {
+      const edu = education.filter((exp :any) => exp.employeeId === id);
+      setFilteredEducation(edu);
+  
+      const exper = experience.filter((exp :any) => exp.employeeId === id);
+      setFilteredExperience(exper);
+    };
+  
+    filterEducationAndExperience();
+  }, [education, experience, id]);
+  
 
   const toggleExperienceForm = () => {
     setIsExperienceFormOpen(!isExperienceFormOpen);
@@ -54,7 +78,7 @@ function EmployeeProfile() {
     content = (
       <div className="bg-white p-4 shadow-sm rounded-lg">
         <div className="flex justify-between items-center mb-4">
-          <img src = {data.imageName} alt= "profileImage"/>
+          <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"  src = {data.imageName} alt= "profileImage"/>
          
           <h1 className="text-gray-900 font-bold text-2xl">
             {data.applicationUser.firstName} {data.applicationUser.lastName}
@@ -90,12 +114,15 @@ function EmployeeProfile() {
           <h2 className="text-lg font-semibold">Experience</h2>
           <button
             onClick={toggleExperienceForm}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
           >
             {isExperienceFormOpen ? "Close" : "Add Experience"}
           </button>
           {isExperienceFormOpen && <ExperienceForm />}
-          {experience.map((exp:any) => (
+          
+          {
+          filteredExperience.map((exp:any) => (
+            
             <div key={exp.id} className="bg-gray-100 p-4 rounded-lg mt-2">
               <p>Job Title: {exp.currentJobTitle}</p>
               <p>Company: {exp.companyName}</p>
@@ -103,17 +130,20 @@ function EmployeeProfile() {
               <p>Status: {exp.isWorking ? "Working" : "Not Working"}</p>
             </div>
           ))}
+          <div>
+           
+          </div>
         </div>
         <div>
           <h2 className="text-lg font-semibold">Education</h2>
           <button
             onClick={toggleEducationForm}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
           >
             {isEducationFormOpen ? "Close" : "Add Education"}
           </button>
           {isEducationFormOpen && <EducationForm />}
-          {education.map((edu:any) => (
+          {filteredEducation.map((edu:any) => (
             <div key={edu.id} className="bg-gray-100 p-4 rounded-lg mt-2">
               <p>Degree: {edu.degree}</p>
               <p>Subject: {edu.subject}</p>

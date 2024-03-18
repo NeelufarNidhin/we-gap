@@ -120,7 +120,7 @@ const handleSubmit = async (e: any) => {
 			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 				<div className="col-span-full sm:col-span-3">
 					<label htmlFor="jobTitle" className="text-sm">Job Title </label>
-					<input id="jobTitle" type="text" placeholder="Job Title"  value={values.jobTitle}
+					<input id="jobTitle" type="text" placeholder="Job Title" required  value={values.jobTitle}
                      name='jobTitle' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
@@ -137,6 +137,7 @@ const handleSubmit = async (e: any) => {
                             <input
                                 type="checkbox"
                                 value={skill.id}
+								required
                                 onChange={handleJobSkillChange}
                                 checked={values.jobSkill.includes(skill.id)}
                             />
@@ -147,10 +148,10 @@ const handleSubmit = async (e: any) => {
 				</div>
                 <div className="col-span-full">
 				<label htmlFor="jobTypeId">Job Type:</label>
-      <select id="jobTypeId" value={selectedJobType} onChange={ handleJobTypeChange}>
+      <select id="jobTypeId" value={selectedJobType} required onChange={ handleJobTypeChange}>
         <option value="">Select Job Type...</option>
         {jobTypeOptions.map((jobtype:any) => (
-          <option key={jobtype.id} value={jobtype.id}>{jobtype.jobTypeName}</option>
+          <option key={jobtype.id}  value={jobtype.id}>{jobtype.jobTypeName}</option>
         ))}
       </select>
 				</div>
