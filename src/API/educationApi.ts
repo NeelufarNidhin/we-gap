@@ -6,6 +6,13 @@ const educationApi = createApi({
     reducerPath : "educationApi",
     baseQuery : fetchBaseQuery({
         baseUrl : `${process.env.REACT_APP_API_URL}/`,
+        prepareHeaders : (headers) => {
+            const token = localStorage.getItem("token");
+            if(token){
+              headers.set('Authorization' , `Bearer ${token}`);
+            }
+            return headers;
+        }
     }),
     tagTypes : ["Education"],
     endpoints:(builder) =>({
@@ -50,15 +57,23 @@ const educationApi = createApi({
             providesTags:  ["Education"]
         }),
         getEducationById:builder.query({
-            query:({id}) =>({
+            query:(id) =>({
                 url : `education/${id}`,
                 method:"GET"
             }),
+            providesTags:  ["Education"]
+        }),
+        getEmployeeEducation:builder.query({
+            query:(id) =>({
+                url : `education/employee/${id}`,
+                method:"GET"
+            }),
+            providesTags:  ["Education"]
         })
     })
 
 })
 
 
-export const {useGetEducationByIdQuery,useLazyGetAllEducationQuery, useGetAllEducationQuery,useAddEducationMutation,useUpdateEducationMutation,useDeleteEducationMutation} = educationApi
+export const {useGetEducationByIdQuery,useGetEmployeeEducationQuery,useLazyGetAllEducationQuery, useGetAllEducationQuery,useAddEducationMutation,useUpdateEducationMutation,useDeleteEducationMutation} = educationApi
 export default educationApi

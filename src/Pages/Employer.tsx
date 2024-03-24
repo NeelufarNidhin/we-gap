@@ -49,4 +49,4 @@ console.log(userData)
   )
 }
 
-export default withEmployerRole( Employer) ;
+export default  Employer ;

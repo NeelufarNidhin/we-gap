@@ -40,16 +40,16 @@ function EmployeeList() {
 
               <div className="mt-5 flex flex-col space-y-3 text-sm font-medium text-gray-500 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
                 <div className="">
-                  {/* Experience: */}
+                 
                   <span className="ml-2 mr-3 rounded-full bg-green-100 px-2 py-0.5 text-green-900">
                     {" "}
                    {employee.state}{" "}
                   </span>
                 </div>
                 <div className="">
-                  {/* Salary: */}
+                 
                   <span className="ml-2 mr-3 rounded-full bg-blue-100 px-2 py-0.5 text-blue-900">
-                    {/* 180-250k */}
+                  
                   </span>
                 </div>
               </div>

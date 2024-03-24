@@ -6,6 +6,13 @@ const experienceApi = createApi({
     reducerPath : "experienceApi",
     baseQuery : fetchBaseQuery({
         baseUrl :  `${process.env.REACT_APP_API_URL}/`,
+        prepareHeaders : (headers) => {
+            const token = localStorage.getItem("token");
+            if(token){
+              headers.set('Authorization' , `Bearer ${token}`);
+            }
+            return headers;
+        }
     }),
     tagTypes : ["Experience"],
     endpoints:(builder) =>({
@@ -50,15 +57,25 @@ const experienceApi = createApi({
             providesTags:  ["Experience"]
         }),
         getExperienceById:builder.query({
-            query:({id}) =>({
+            query:(id) =>({
                 url : `experience/${id}`,
                 method:"GET"
             }),
-        })
+            providesTags:  ["Experience"]
+        }),
+        getEmployeeExperience:builder.query({
+            query:(id) =>({
+                url : `experience/employee/${id}`,
+                method:"GET"
+            }),
+            providesTags:  ["Experience"]
+        }),
     })
 
 })
 
 
-export const {useGetExperienceByIdQuery, useGetAllExperienceQuery,useAddExperienceMutation,useUpdateExperienceMutation,useDeleteExperienceMutation} = experienceApi
+export const {useGetExperienceByIdQuery, useGetAllExperienceQuery,
+    useAddExperienceMutation,useUpdateExperienceMutation,
+    useDeleteExperienceMutation,useGetEmployeeExperienceQuery} = experienceApi
 export default experienceApi

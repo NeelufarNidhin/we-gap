@@ -1,7 +1,7 @@
 import { toast , TypeOptions} from "react-toastify";
 
 const ToastNotify = (message: string,type: TypeOptions = "success") => {
-    toast.error(message, {
+    toast(message, {
         type:type,
         position: "top-right",
         autoClose: 5000,

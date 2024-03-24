@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetEmployeeByIdQuery } from "../API/employeeApi";
-import axios from "axios";
+
 import ExperienceForm from "./ExperienceForm";
 import EducationForm from "./EducationForm";
-import { useGetEducationByIdQuery } from "../API/educationApi";
+import {
+ 
+  useGetEmployeeEducationQuery,
+} from "../API/educationApi";
+import userModel from "../Interfaces/userModel";
+import { useSelector } from "react-redux";
+import { RootState } from "../Storage/Redux/store";
+import {
+ 
+  useGetEmployeeExperienceQuery,
+} from "../API/experienceApi";
+import { useGetEmployeeSkillQuery } from "../API/skillApi";
+import SkillForm from "./SkillForm";
 
 function EmployeeProfile() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -12,53 +24,61 @@ function EmployeeProfile() {
   //const{data,isLoading} = useGetEducationByIdQuery(id);
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isEducationFormOpen, setIsEducationFormOpen] = useState(false);
-  const [education, setEducation] = useState([]);
-  const [experience, setExperience] = useState([]);
-  const [filteredExperience,setFilteredExperience]  = useState([])
-  const [filteredEducation,setFilteredEducation]  = useState([])
+  const [isSkillFormOpen, setIsSkillFormOpen] = useState(false);
+
   const navigate = useNavigate();
+  const userData: userModel = useSelector(
+    (state: RootState) => state.userAuthStore
+  );
+
+  const [education, setEducation] = useState([]);
+
+  const {
+    data: educationData,
+    isLoading: educationLoading,
+    isError: educationIsError,
+    error: educationError,
+  } = useGetEmployeeEducationQuery(id);
+
+  const [experience, setExperience] = useState([]);
+  const {
+    data: experienceData,
+    isLoading: experienceLoading,
+    isError: experienceIsError,
+    error: experienceError,
+  } = useGetEmployeeExperienceQuery(id);
+ const [skills,setSkills] = useState([])
+ const {
+  data: skillData,
+  isLoading: skillLoading,
+  isError: skillIsError,
+  error: skillError,
+} = useGetEmployeeSkillQuery(id);
+
 
   useEffect(() => {
-    fetchEducation();
-    fetchExperience();
-  }, []);
-
-  const fetchEducation = async () => {
-    try {
-      {
-        const response = await axios.get(`${apiUrl}/education`);
-        setEducation(response.data);
-        
-      }
-    } catch (error) {
-      console.error("Error fetching education:", error);
+    if (!experienceLoading && !experienceIsError && experienceData) {
+      setExperience(experienceData);
     }
-  };
 
-  const fetchExperience = async () => {
-    try {
-      {
-      const response = await axios.get(`${apiUrl}/experience`);
-      setExperience(response.data);
-     
+    if (!educationLoading && !educationIsError && educationData) {
+      setEducation(educationData);
     }
-   } catch (error) {
-      console.error("Error fetching experience:", error);
-    
-  }
-  };
-  useEffect(() => {
-    const filterEducationAndExperience = () => {
-      const edu = education.filter((exp :any) => exp.employeeId === id);
-      setFilteredEducation(edu);
-  
-      const exper = experience.filter((exp :any) => exp.employeeId === id);
-      setFilteredExperience(exper);
-    };
-  
-    filterEducationAndExperience();
-  }, [education, experience, id]);
-  
+
+    if(!skillLoading && !skillIsError && skillData){
+      setSkills(skillData)
+    }
+  }, [
+    experienceData,
+    experienceLoading,
+    experienceIsError,
+    educationData,
+    educationLoading,
+    educationError,
+    skillData,
+    skillLoading,
+    skillIsError
+  ]);
 
   const toggleExperienceForm = () => {
     setIsExperienceFormOpen(!isExperienceFormOpen);
@@ -68,89 +88,88 @@ function EmployeeProfile() {
     setIsEducationFormOpen(!isEducationFormOpen);
   };
 
+  const toggleSkillform = () =>{
+    setIsSkillFormOpen(!isSkillFormOpen);
+  }
 
   const { data, isLoading, isSuccess, isError } = useGetEmployeeByIdQuery(id);
-
+  console.log(data);
   let content;
   if (isLoading) {
-    content = <p>Loading....</p>;
+    content = <p>Loading...</p>;
   } else if (isSuccess) {
     content = (
-      <div className="bg-white p-4 shadow-sm rounded-lg">
-        <div className="flex justify-between items-center mb-4">
-          <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"  src = {data.imageName} alt= "profileImage"/>
-         
-          <h1 className="text-gray-900 font-bold text-2xl">
-            {data.applicationUser.firstName} {data.applicationUser.lastName}
-          </h1>
-          <button
-            onClick={() => navigate(-1)}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>{" "}
-            Back
-          </button>
-        </div>
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold">Contact Information</h2>
-          <p>Email: {data.applicationUser.userName}</p>
-          <p>Address: {data.address}, {data.city}, {data.state} - {data.pincode}</p>
+      <div className="container mx-auto p-4 flex">
+        <div className="mr-8">
+          <img
+            className="w-32 h-32 rounded-full mb-4 border border-gray-200"
+            src={data.imageName}
+            alt="Profile"
+          />
+          <h1 className="text-2xl font-bold">{userData.firstName}</h1>
+          <p>Email: {userData.email}</p>
+          <p>
+            Address: {data.address}, {data.city}, {data.state} - {data.pincode}
+          </p>
           <p>Mobile Number: {data.mobileNumber}</p>
         </div>
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold">Experience</h2>
-          <button
-            onClick={toggleExperienceForm}
-            className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
-          >
-            {isExperienceFormOpen ? "Close" : "Add Experience"}
-          </button>
-          {isExperienceFormOpen && <ExperienceForm />}
-          
-          {
-          filteredExperience.map((exp:any) => (
-            
-            <div key={exp.id} className="bg-gray-100 p-4 rounded-lg mt-2">
-              <p>Job Title: {exp.currentJobTitle}</p>
-              <p>Company: {exp.companyName}</p>
-              <p>Description: {exp.description}</p>
-              <p>Status: {exp.isWorking ? "Working" : "Not Working"}</p>
-            </div>
-          ))}
-          <div>
-           
+
+        <div className="flex-grow">
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold mb-4">Experience</h2>
+            <button
+              onClick={toggleExperienceForm}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded"
+            >
+              {isExperienceFormOpen
+                ? "Close Experience Form"
+                : "Add Experience"}
+            </button>
+            {isExperienceFormOpen && <ExperienceForm />}
+            {experience.map((exp: any) => (
+              <div key={exp.id} className="bg-gray-100 p-4 rounded-lg mt-2">
+                <p>Job Title: {exp.currentJobTitle}</p>
+                <p>Company: {exp.companyName}</p>
+                <p>Description: {exp.description}</p>
+                <p>Status: {exp.isWorking ? "Working" : "Not Working"}</p>
+              </div>
+            ))}
           </div>
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold">Education</h2>
-          <button
-            onClick={toggleEducationForm}
-            className="px-8 py-3 font-semibold rounded bg-violet-800 text-gray-100"
-          >
-            {isEducationFormOpen ? "Close" : "Add Education"}
-          </button>
-          {isEducationFormOpen && <EducationForm />}
-          {filteredEducation.map((edu:any) => (
-            <div key={edu.id} className="bg-gray-100 p-4 rounded-lg mt-2">
-              <p>Degree: {edu.degree}</p>
-              <p>Subject: {edu.subject}</p>
-              <p>University: {edu.university}</p>
-              <p>Percentage: {edu.percentage}</p>
-            </div>
-          ))}
+          {/* Education section */}
+          <div>
+            <h2 className="text-lg font-semibold mb-4">Education</h2>
+            <button
+              onClick={toggleEducationForm}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded"
+            >
+              {isEducationFormOpen ? "Close Education Form" : "Add Education"}
+            </button>
+            {isEducationFormOpen && <EducationForm />}
+            {education.map((edu: any) => (
+              <div key={edu.id} className="bg-gray-100 p-4 rounded-lg mt-2">
+                <p>Degree: {edu.degree}</p>
+                <p>Subject: {edu.subject}</p>
+                <p>University: {edu.university}</p>
+                <p>Percentage: {edu.percentage}</p>
+              </div>
+            ))}
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold mb-4">Job Skill</h2>
+            <button
+              onClick={toggleSkillform}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded"
+            >
+              {isSkillFormOpen ? "Close Skill Form" : "Add skill"}
+            </button>
+            {isSkillFormOpen && <SkillForm/>}
+            {skills.map((skill: any) => (
+              <div key={skill.id} className="bg-gray-100 p-4 rounded-lg mt-2">
+                <p> {skill.skillName}</p>
+                
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

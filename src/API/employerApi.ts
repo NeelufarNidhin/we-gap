@@ -6,6 +6,13 @@ const employerApi = createApi({
     reducerPath : "employerApi",
     baseQuery : fetchBaseQuery({
         baseUrl :  `${process.env.REACT_APP_API_URL}/`,
+        prepareHeaders : (headers) => {
+          const token = localStorage.getItem("token");
+          if(token){
+            headers.set('Authorization' , `Bearer ${token}`);
+          }
+          return headers;
+        }
     }),
     tagTypes :["employers"],
     endpoints : (builder) =>({
@@ -13,12 +20,32 @@ const employerApi = createApi({
             query : (employerData) =>({
                 url : "employer",
               method : "POST",
-              headers:{
-                "Content-type" : "application/json",
-              },
+              // headers:{
+              //   "Content-type" : "application/json",
+              // },
               body : employerData
             }),
+            invalidatesTags:["employers"],
         }),
+        updateEmployer : builder.mutation({
+          query : (employerData) =>({
+              url : `employer/${employerData.id}`,
+            method : "POST",
+           
+            body : employerData
+          }),
+          invalidatesTags : ["employers"]
+      }),
+      deleteEmployer : builder.mutation({
+          query : (id) =>({
+              url : `employer/${id}`,
+            method : "DELETE",
+           
+            body : id
+          }),
+          invalidatesTags : ["employers"]
+      }),
+
         getEmployers : builder.query({
             query : () =>({
                 url : "employer",

@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useOtpLoginUserMutation, useResendOtpMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
-import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
-import userModel from "../Interfaces/userModel";
-import { setLoggedInUser } from "../Storage/Redux/userAuthSlice";
-import { useGetUserByIdQuery } from "../API/userApi";
-import axios from "axios";
 import ToastNotify from "../Helper/ToastNotify";
 
 function OTP() {
   const [email, setEmail] = useState("");
+// const {email} = useParams()
   const navigate = useNavigate();
   const [otpLoginUser] = useOtpLoginUserMutation();
   const [otpResend] = useResendOtpMutation();
@@ -34,19 +30,19 @@ function OTP() {
     return () => clearInterval(interval);
   }, [isTimerRunning, timer]);
 
-  const handleResendOTP =async () => {
-    // Implement resend OTP logic here
- { !email && ToastNotify("Email required") }
+  const handleResendOTP =async (e: any) => {
+    e.preventDefault();
+    //  resend OTP 
+    { !email && ToastNotify("Email required") }
     const response: apiResponse = await otpResend({
-      Email: email,
+      Email: {email},
     });
     if(response.data){
-      console.log(email)
+      console.log(response.data)
     
-    // For example, you can send a new OTP to the user's email and reset the timer
     setTimer(60); // Reset the timer
     setIsTimerRunning(true);
-    } // Start the timer
+    } 
   };
 
 
@@ -66,30 +62,8 @@ function OTP() {
     if (response.data) {
       if (response.data.isSuccess) {
         console.log(response.data.isSuccess);
-        const { token } = response.data.result;
-        const { id, firstName, email, role }: userModel = jwtDecode(token);
-        localStorage.setItem("token", token);
-        dispatch(setLoggedInUser({ id, firstName, email, role }));
-       
-
-        switch (role) {
-          case "employer":
-           
-            navigate("/Employer");
-
-            break;
-          case "employee":
-          
-            navigate("/Employee");
-            break;
-          case "admin":
-            navigate("/AdminPanel");
-            break;
-          default:
-            // Handle any unexpected roles
-            console.error("Unexpected role:", role);
-            navigate("/"); // Redirect to default page as a fallback
-        }
+       navigate("/Login");
+      ToastNotify("Please Login to continue");
       } else if (response.error) {
         console.log(response.error);
       }
@@ -102,7 +76,7 @@ function OTP() {
     <div className="h-screen flex items-center justify-center">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-violet-900 text-gray-100 ">
         <div className="mb-8 text-center">
-          <h1 className="my-3 text-4xl font-bold">Sign in</h1>
+          <h1 className="my-3 text-4xl font-bold">OTP Verification</h1>
           <p className="text-sm dark:text-gray-400">Please Verify OTP</p>
           {/* {error && <p className='text-red-300'>{error}</p>} */}
         </div>
@@ -144,34 +118,9 @@ function OTP() {
                 
                 className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
               />
-            </div>
-          </div>
-          <div className="space-y-2">
+            </div> 
             <div>
-            {isTimerRunning &&
-              <p>Time Remaining :{timer}</p>
-           
-            }
-             </div>
-            <div>
-            <div>
-            {!email &&
-             <span className="text-red-300">Email is required!!! </span>
-           
-            }
-             </div>
-              <button
-             
-                type="submit"
-                className="w-full px-8 py-3 font-semibold rounded-md bg-violet-400 text-white"
-              >
-                Sign in
-              </button>
-            
-              <div>
                 {!isTimerRunning && (
-                 
-                 
                   <button
                     onClick={handleResendOTP}
                     className="text-sm text-violet-400 focus:outline-none"
@@ -181,6 +130,32 @@ function OTP() {
                   
                 )}
             </div>
+          </div>
+          <div className="space-y-2">
+            <div>
+            {isTimerRunning &&
+              <p>Time Remaining :{timer}</p>
+           
+            }
+             </div>
+             
+            <div>
+            <div>
+            {!email &&
+             <span className="text-red-300">Email is required!!! </span>
+           
+            }
+            
+             </div>
+              <button
+             
+                type="submit"
+                className="w-full px-8 py-3 font-semibold rounded-md bg-violet-400 text-white"
+              >
+                Sign in
+              </button>
+            
+             
             </div>
             <p className="px-6 text-sm text-center text-white">
               Don't have an account yet?

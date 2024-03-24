@@ -1,8 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import auth from "../../API/auth";
 import { userAuthReducer } from "./userAuthSlice";
-import { employeeAuthReducer } from "./employeeAuthSlice";
-import { usersReducer } from "./userSlice";
 import { userApi } from "../../API/userApi";
 import  employeeApi from "../../API/employeeApi"
 import  employerApi from "../../API/employerApi"
@@ -11,13 +9,15 @@ import jobSkillApi from "../../API/jobskillApi";
 import jobTypeApi from "../../API/jobTypeApi";
 import experienceApi from "../../API/experienceApi";
 import educationApi from "../../API/educationApi";
+import { authReducer } from "./authSlice";
+import skillApi from "../../API/skillApi";
 
 
 const store = configureStore({
     reducer :{
         userAuthStore : userAuthReducer,
-        usersStore : usersReducer,
-        employeeStore : employeeAuthReducer,
+       authStore : authReducer,
+      
         [userApi.reducerPath] : userApi.reducer,
         [employeeApi.reducerPath] : employeeApi.reducer,
         [employerApi.reducerPath] : employerApi.reducer,
@@ -26,6 +26,7 @@ const store = configureStore({
         [jobSkillApi.reducerPath] : jobSkillApi.reducer,
         [jobTypeApi.reducerPath] : jobTypeApi.reducer,
         [jobApi.reducerPath] : jobApi.reducer,
+        [skillApi.reducerPath] : skillApi.reducer,
         [auth.reducerPath]: auth.reducer
     },
     middleware: (getDefaultMiddleware)=>
@@ -39,6 +40,7 @@ const store = configureStore({
         .concat(jobApi.middleware)
         .concat(jobSkillApi.middleware)
         .concat(jobTypeApi.middleware)
+        .concat(skillApi.middleware)
       
 });
 

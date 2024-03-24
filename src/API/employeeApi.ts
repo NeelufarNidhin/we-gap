@@ -6,6 +6,13 @@ const employeeApi = createApi({
     reducerPath : "employeeApi",
     baseQuery : fetchBaseQuery({
         baseUrl :  `${process.env.REACT_APP_API_URL}/`,
+        prepareHeaders : (headers) => {
+            const token = localStorage.getItem("token");
+            if(token){
+              headers.set('Authorization' , `Bearer ${token}`);
+            }
+            return headers;
+        }
     }),
     tagTypes :["Employees"],
     endpoints : (builder) =>({
@@ -16,6 +23,25 @@ const employeeApi = createApi({
              
               body : employeeData
             }),
+            invalidatesTags : ["Employees"]
+        }),
+        updateEmployee : builder.mutation({
+            query : (employeeData) =>({
+                url : `employee/${employeeData.id}`,
+              method : "POST",
+             
+              body : employeeData
+            }),
+            invalidatesTags : ["Employees"]
+        }),
+        deleteEmployee : builder.mutation({
+            query : (id) =>({
+                url : `employee/${id}`,
+              method : "DELETE",
+             
+              body : id
+            }),
+            invalidatesTags : ["Employees"]
         }),
         getEmployees : builder.query({
             query : () =>({

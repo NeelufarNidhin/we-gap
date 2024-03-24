@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
 import ToastNotify from "../Helper/ToastNotify";
 import { useGetUserByIdQuery } from "../API/userApi";
+import userModel from "../Interfaces/userModel";
+import { useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { setLoggedInUser } from "../Storage/Redux/userAuthSlice";
+import { toast } from "react-toastify";
+import Loader from "../Components/Loader";
 
 function Login() {
  const [loginUser] = useLoginUserMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //const dispatch = useDispatch();
+  const [errorMsg ,setErrMsg] = useState("");
+
+  useEffect(()=>{
+    setErrMsg('')
+  },[email,password])
+  const dispatch = useDispatch()
  
   const [loading, setLoading] = useState(false);
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
    
     setLoading(true);
@@ -22,20 +33,43 @@ function Login() {
       email: email,
       password: password,
     });
-    if (response.error && response.error.status === 404) {
-      // Display Toastify message for 404 errors
-      ToastNotify(`User not found/Blocked", ${response.error.status}`);
-    } else if (response.data && response.data.isSuccess) {
-      navigate("/OTP");
-      ToastNotify("Otp send to your mail id");
-    } else if (response.error) {
-      ToastNotify(response.error, "error");
-    }
+    if (response.data && response.data.isSuccess) {
+      
+      const { token } = response.data.result;
+      const { id, firstName, email, role }: userModel = jwtDecode(token);
+      localStorage.setItem("token", token);
+      dispatch(setLoggedInUser({ id, firstName, email, role }));
+     
+
+      switch (role) {
+        case "employer":
+         
+          navigate("/Employer");
+
+          break;
+        case "employee":
+        
+          navigate("/Employee");
+          break;
+        case "admin":
+          navigate("/AdminPanel");
+          break;
+        default:
+          // Handle any unexpected roles
+          console.error("Unexpected role:", role);
+          navigate("/"); 
+      }
+    } else if (response.error ) {
+      ToastNotify(response.error.data.errorMessages,"error");
+     
+    } 
+    setLoading(false)
 }
 
   
   return (
     <div className="h-screen flex items-center justify-center">
+      {loading && <Loader/>}
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-violet-900 text-gray-100 ">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Sign in</h1>
@@ -67,13 +101,13 @@ function Login() {
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
-                <Link
+                {/* <Link
                   rel="noopener noreferrer"
                   to="#"
                   className="text-xs hover:underline dark:text-gray-400"
                 >
                   Forgot password?
-                </Link>
+                </Link> */}
               </div>
               <input
                 type="password"

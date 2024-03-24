@@ -64,7 +64,7 @@ function ExperienceForm() {
       employeeId: ""
   });
 	// 	if (response.data) {
-	 ToastNotify("Experience Added");
+	 //ToastNotify("Experience Added");
 	// 	  navigate(`/EmployerProfile/${response.data.id}`);
 	// }
 }
@@ -80,18 +80,18 @@ function ExperienceForm() {
 			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 				<div className="col-span-full sm:col-span-3">
 					<label htmlFor="currentJobTitle" className="text-sm">Current Job Title </label>
-					<input id="currentJobTitle" type="text" placeholder="Title"  value={values.currentJobTitle} name='currentJobTitle' onChange={handleInputChange}
+					<input id="currentJobTitle" type="text" placeholder="Title" required  value={values.currentJobTitle} name='currentJobTitle' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				{/* <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3"> */}
 				<div className="col-span-full sm:col-span-3">
 					<label htmlFor="companyName" className="text-sm">Company Name </label>
-					<input id="companyName" type="text" placeholder="Company name"  value={values.companyName} name='companyName' onChange={handleInputChange}
+					<input id="companyName" type="text" placeholder="Company name"  required value={values.companyName} name='companyName' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
         <div className="col-span-full sm:col-span-3">
 					<label htmlFor="isWorking" className="text-sm">Current Work Status </label>
-					<input id="isWorking" type="text" placeholder="Status"  value={values.isWorking} name='isWorking' onChange={handleInputChange}
+					<input id="isWorking" type="text" placeholder="Status"  required value={values.isWorking} name='isWorking' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				{/* </div> */}

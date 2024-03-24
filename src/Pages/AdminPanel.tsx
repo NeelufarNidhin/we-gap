@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import withAdminRole from "../HOC/withAdminRole";
-// import { useGetAllUsersQuery } from '../API/userApi'
-import axios from "axios";
-// import { confirmAlert } from 'react-confirm-alert';
-import { Link } from "react-router-dom";
+import { useGetAllUsersQuery } from '../API/userApi'
 import { useBlockUserMutation, useDeleteUserMutation, useUpdateUserMutation } from "../API/userApi";
+import userModel from "../Interfaces/userModel";
+import ToastNotify from "../Helper/ToastNotify";
 
 function AdminPanel() {
-  //const { data  } = useGetAllUsersQuery("");
+  const { data, isLoading,error  } = useGetAllUsersQuery({});
   const [updatedUser, setUpdatedUser] = useState({
     id: "",
     email: "",
@@ -16,49 +14,36 @@ function AdminPanel() {
     role: "",
   });
 
-  const [userDetail, setUserDetail] = useState<any[]>([]);
+ 
   const [deleteUser] = useDeleteUserMutation()
   const [blockUser] = useBlockUserMutation()
   const [isUpdating,setIsUpdating] = useState(false)
-  useEffect(() => {
-    let usertoken = localStorage.getItem("token");
-    axios
-      .get("http://localhost:8000/api/User/getall", {
-        headers: {
-          Authorization: "bearer " + usertoken,
-        },
-      })
-      .then((res) => setUserDetail(res.data));
-  });
-  
+
+
 
   const handleUpdateUser = (id:string) => {
-     // Toggle user's block status
-     const updatedUser = userDetail.find((user) => user.id === id);
-     updatedUser.isBlocked = !updatedUser.isBlocked;
+     
+     const userToUpdate = data.result.find((user :userModel) => user.id === id);
+  if (userToUpdate) {
+   
+    const updatedUser = { ...userToUpdate, isBlocked: !userToUpdate.isBlocked };
  
-     // Send update request to the server
+    
      blockUser(updatedUser)
        .unwrap()
        .then((response) => {
-         console.log("User Blocked successfully:", response);
+        //ToastNotify("User Blocked successfully:", response);
          if(response)
-         // Toggle updating state
+       
          setIsUpdating(false);
        })
        .catch((error) => {
          console.error("Error updating user:", error);
        });
+      }
   };
 
-  // //const [values ,setValues] = useState(initialValues);
-  // const handleInputChange = (e : any) => {
-	// 	const {name , value} = e.target;
-	// 	setValues ({
-	// 		...values,
-	// 		[name] : value
-	// 	})
-	// }
+ 
 
   return (
     <div>
@@ -85,14 +70,14 @@ function AdminPanel() {
                 <th className="p-3">Last Name</th>
                 <th className="p-3">Role</th>
                 {/* <th className="p-3"></th> */}
-                {/* <th className="p-3">Actions</th> */}
+                <th className="p-3">Actions</th>
 			
 			
               </tr>
             </thead>
             <tbody className="border-b bg-violet-300 border-gray-700">
-              {userDetail &&
-                userDetail.map((item) => (
+            {data && !isLoading && data.result && Array.isArray(data.result) && (
+                data.result.map((item : userModel) => (
                   <tr key={item.id}>
                     {/* <td className="px-3 text-2xl font-medium dark:text-gray-400">A</td> */}
                     <td className="px-3 py-2">
@@ -125,7 +110,7 @@ function AdminPanel() {
                       
                     </td>
                   </tr>
-                ))}
+                )))}
             </tbody>
           </table>
         </div>
@@ -134,4 +119,4 @@ function AdminPanel() {
   );
 }
 
-export default withAdminRole(AdminPanel);
+export default AdminPanel;

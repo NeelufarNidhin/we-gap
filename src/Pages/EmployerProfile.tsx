@@ -5,6 +5,7 @@ import { useGetEmployerByIdQuery } from "../API/employerApi";
 import JobForm from "./JobForm";
 import JobCard from "./JobCard";
 import axios from "axios";
+import { useGetJobsQuery } from "../API/jobApi";
 
 interface Props {
   employerItem?: employerModel;
@@ -18,33 +19,22 @@ function EmployerProfile(props: Props) {
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
-  const [jobs, setJobs] = useState([]);
-  useEffect(() => {
-    fetchJobs();
-  }, []);
+ 
+  
 
-  const fetchJobs = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/job');
-      setJobs(response.data);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-    }
-  };
-
-  // const handleInputChange = (e: any) => {
-  //   // setJobSkill(e.target.value);
-  // };
+  const { data:jobs, isLoading:jobLoading,
+     isSuccess:jobSuccess, isError :JobIsError, error:jobError } = useGetJobsQuery({});
+  
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-//     addJobskill({
-//         skillName : jobSkill
-//     })
-//    ToastNotify("Skill Added");
-//     setJobSkill("")
-  };
+//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+// //     addJobskill({
+// //         skillName : jobSkill
+// //     })
+// //    ToastNotify("Skill Added");
+// //     setJobSkill("")
+//   };
   const { data, isLoading, isSuccess, isError, error } =
     useGetEmployerByIdQuery(id);
   let content;
@@ -95,7 +85,7 @@ function EmployerProfile(props: Props) {
           className="bg-violet-500 hover:bg--700 text-white font-bold py-2 px-4 rounded"
           onClick={toggleForm}
         >
-          {isFormOpen ? "" : "Add JobSkill"}
+          {isFormOpen ? "" : "Add Job"}
         </button>
         {isFormOpen && (
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4">
@@ -118,7 +108,8 @@ function EmployerProfile(props: Props) {
 
 
            <div className="container flex flex-col mx-auto space-y-12">
-          {jobs.map((job:any) => (
+          { (!jobLoading) &&
+          jobs.map((job:any) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div> 
