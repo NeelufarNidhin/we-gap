@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
 import ToastNotify from "../Helper/ToastNotify";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -41,14 +42,14 @@ function SignUp() {
       role: selectedRole,
     });
     
-    console.log(selectedRole, email);
-    console.log(response.data);
-    if (response.data) {
-      ToastNotify("User Registration done , Please sign in to continue");
-      navigate("/Login");
-    } else if (response.error) {
-
-       ToastNotify(response.error, "error");
+   console.log(response)
+    if (response.data && response.data.isSuccess) {
+      ToastNotify("User Registration done ,Otp send to your mail id, ");
+      console.log(response.data.result)
+      navigate(`/Otp`);
+    } else if (response.error || !response.data?.isSuccess) {
+      console.log(response.error)
+       ToastNotify(response.error.data.errorMessages,"error");
     }
 
     setLoading(false);
@@ -148,13 +149,13 @@ function SignUp() {
                     <label htmlFor="password" className="text-sm">
                       Password
                     </label>
-                    <Link
+                    {/* <Link
                       rel="noopener noreferrer"
                       to="#"
                       className="text-xs hover:underline dark:text-gray-400"
                     >
                       Forgot password?
-                    </Link>
+                    </Link> */}
                   </div>
                   <input
                     type="password"

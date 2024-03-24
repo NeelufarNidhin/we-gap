@@ -3,6 +3,7 @@ export default interface employeeModel{
         firstName : string,
         lastName : string,
         email : string,
+       
         applicationUserId : string,
         dob: string,
          gender: string,

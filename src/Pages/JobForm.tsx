@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useCreateJobMutation } from '../API/jobApi';
 import JobList from './JobList';
 import JobCard from './JobCard';
+import { useGetJobSkillQuery } from '../API/jobskillApi';
+import { useGetJobTypeQuery } from '../API/jobTypeApi';
 
 
 function JobForm() {
@@ -24,40 +26,18 @@ const {id } = useParams()
 const [values ,setValues] = useState(initialValues);
 const navigate = useNavigate();
 const [ createJob] = useCreateJobMutation();
-const [jobSkills, setJobSkills] = useState([]);
+
 
 const [selectedJobType,setSelectedJobType] = useState("")
-const [jobTypeOptions, setJobTypeOptions] = useState([]);
 
 
-useEffect(() => {
-	// Fetch job skills data from the API when the component mounts
-	
-	fetchJobSkills();
-	fetchJobType();
-}, []);
 
-const fetchJobSkills = async () => {
-	try {
-		const response = await axios.get('http://localhost:8000/api/jobSkill'); // Replace '/api/jobSkills' with your actual API endpoint
-		setJobSkills(response.data);
-		console.log(response.data)
 
-	} catch (error) {
-		console.error('Error fetching job skills:', error);
-	}
-};
-const fetchJobType = async () => {
-	try {
-		const response = await axios.get('http://localhost:8000/api/jobType'); // Replace '/api/jobSkills' with your actual API endpoint
-		setJobTypeOptions(response.data);
-		console.log(response.data)
-//
-	} catch (error) {
-		console.error('Error fetching job type:', error);
-	}
-};
+const{data:jobSkills,isLoading:jobSkillLoading ,
+	isError :jobSkillIsError ,error:jobSkillError} = useGetJobSkillQuery({})
 
+	const{data:jobTypes,isLoading:jobTypeLoading ,
+		isError :jobTypIsError ,error:jobTypeError} = useGetJobTypeQuery({})
 const handleJobSkillChange = (event:any) => {
 	const { value } = event.target;
 	const isChecked = event.target.checked;
@@ -70,7 +50,7 @@ const handleJobSkillChange = (event:any) => {
 		}));
 	}
 };
-const handleInputChange = (e : any) => {
+const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const {name , value} = e.target;
     setValues ({
         ...values,
@@ -78,16 +58,16 @@ const handleInputChange = (e : any) => {
     })
 }
 
-const handleJobTypeChange = (event:any) => {
-    setSelectedJobType(event.target.value); // Update selected JobType Id in state
+const handleJobTypeChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedJobType(event.target.value); 
   };
-
-const handleSubmit = async (e: any) => {
+const [addJob] = useCreateJobMutation()
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 	try{
     e.preventDefault();
 	console.log(id)
 	console.log(values)
-	const response: apiResponse = await axios.post('http://localhost:8000/api/job',{
+	const response: apiResponse = await createJob({
 		jobTitle : values.jobTitle,
     description:values.description,
     employerId:id,
@@ -131,13 +111,14 @@ const handleSubmit = async (e: any) => {
 				</div>
 				<div className="col-span-full">
 				<h3>Job Skills</h3>
-                {jobSkills.map((skill:any) => (
+                {(!jobSkillLoading ) &&
+				jobSkills.map((skill:any) => (
                     <div key={skill.id}>
                         <label>
                             <input
                                 type="checkbox"
                                 value={skill.id}
-								required
+								
                                 onChange={handleJobSkillChange}
                                 checked={values.jobSkill.includes(skill.id)}
                             />
@@ -150,7 +131,8 @@ const handleSubmit = async (e: any) => {
 				<label htmlFor="jobTypeId">Job Type:</label>
       <select id="jobTypeId" value={selectedJobType} required onChange={ handleJobTypeChange}>
         <option value="">Select Job Type...</option>
-        {jobTypeOptions.map((jobtype:any) => (
+        {(!jobTypeLoading) &&
+		 jobTypes.map((jobtype:any) => (
           <option key={jobtype.id}  value={jobtype.id}>{jobtype.jobTypeName}</option>
         ))}
       </select>

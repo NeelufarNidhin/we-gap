@@ -10,7 +10,7 @@ import EmployerProfile from "./EmployerProfile";
 import Dashboard from "./Dashboard";
 import Employer from "./Employer";
 import AccessDenied from "./AccessDenied";
-import GetEmployers from "./GetEmployers"
+
 import EmployerCard from "./EmployerCard";
 import EmployeeCard from "./EmployeeCard";
 import JobList from '../Pages/JobList';
@@ -23,7 +23,9 @@ import EmployerForm from "./EmployerForm";
 import ProfileCard from "./ProfileCard";
 import JobForm from "./JobForm";
 import JobCard from "./JobCard";
+import UserBlock from "./UserBlock";
+import SkillForm from "./SkillForm";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
-    ,EmployeeProfile,EmployerProfile ,GetEmployers , Dashboard, Employer , AccessDenied,JobList,Jobskill,
-    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm}
+    ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,
+    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm}

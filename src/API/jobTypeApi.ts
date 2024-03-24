@@ -6,6 +6,13 @@ const jobTypeApi = createApi({
     reducerPath : "jobTypeApi",
     baseQuery : fetchBaseQuery({
         baseUrl :  `${process.env.REACT_APP_API_URL}/`,
+        prepareHeaders : (headers) => {
+            const token = localStorage.getItem("token");
+            if(token){
+              headers.set('Authorization' , `Bearer ${token}`);
+            }
+            return headers;
+        }
         
     }),
     tagTypes :["JobTypes"],

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import layout1 from "../Assets/Images/Layout1.png";
 import { useNavigate } from 'react-router-dom';
 import {  useSelector } from 'react-redux';
 import userModel from '../Interfaces/userModel';
 import { RootState } from '../Storage/Redux/store';
 import { useGetEmployeeExistsQuery } from '../API/employeeApi';
+import { useGetUserByIdQuery } from '../API/userApi';
 
 
 
@@ -16,7 +17,21 @@ function Employee() {
 	  );
 	
 	console.log(userData)
+	
+	
 	const {data,isLoading} = useGetEmployeeExistsQuery(userData.id)
+
+	//const {data : usrData , isLoading : userDataLoading} = useGetUserByIdQuery(userData.id)
+
+	useEffect(() =>{
+		// if(!userDataLoading && usrData ){
+		// 	console.log(usrData)
+		// 	if(usrData.isBlocked){
+		// 		navigate ('/userblock')
+		// 	}		
+			
+		// }
+	},[])
 const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 	if(data){
