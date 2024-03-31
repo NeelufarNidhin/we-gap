@@ -19,7 +19,7 @@ function Employee() {
 	console.log(userData)
 	
 	
-	const {data,isLoading} = useGetEmployeeExistsQuery(userData.id)
+	const {data,isLoading,isSuccess,isError} = useGetEmployeeExistsQuery(userData.id)
 
 	//const {data : usrData , isLoading : userDataLoading} = useGetUserByIdQuery(userData.id)
 
@@ -34,9 +34,9 @@ function Employee() {
 	},[])
 const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-	if(data){
-		console.log(data)
-		navigate(`/EmployeeProfile/${data.id}`)
+	if(!isLoading &&  !isError ){
+		console.log(data.result)
+		navigate(`/EmployeeProfile/${data.result.id}`)
 	}else if(!data){
 		navigate('/EmployeeForm')
 	}	

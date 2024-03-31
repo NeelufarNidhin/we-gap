@@ -1,4 +1,4 @@
-import React from "react";
+
 import image1 from "../Assets/Images/Image1.jpg";
 import image2 from "../Assets/Images/Image2.png";
 import { Link } from "react-router-dom";

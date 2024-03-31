@@ -47,9 +47,9 @@ function SignUp() {
       ToastNotify("User Registration done ,Otp send to your mail id, ");
       console.log(response.data.result)
       navigate(`/Otp`);
-    } else if (response.error || !response.data?.isSuccess) {
+    } else if (response.error ) {
       console.log(response.error)
-       ToastNotify(response.error.data.errorMessages,"error");
+      ToastNotify(response.error.data.errorMessages[0],"error");
     }
 
     setLoading(false);

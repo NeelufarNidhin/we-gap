@@ -1,7 +1,7 @@
 
 import { RootState } from '../Storage/Redux/store';
 import { useNavigate } from 'react-router-dom';
-import withEmployerRole from '../HOC/withEmployerRole';
+
 import layout from "../Assets/Images/Layout.png";
 import { useGetEmployerExistsQuery } from '../API/employerApi';
 import userModel from '../Interfaces/userModel';
@@ -17,7 +17,7 @@ console.log(userData)
  const {data,isLoading} = useGetEmployerExistsQuery(userData.id)
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-	  if(data){
+	  if(!isLoading && data){
 		console.log(data)
 		navigate(`/EmployerProfile/${data.id}`)
 	  }

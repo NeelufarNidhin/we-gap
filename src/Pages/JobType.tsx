@@ -11,7 +11,11 @@ function JobType() {
  
   const [jobType, setJobType] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const recordsPerPage = 5;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  
+  //const [pageSize, setPageSize] = useState(5);
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
@@ -30,24 +34,33 @@ function JobType() {
   };
   
   const {data,isLoading,isSuccess,isError ,error} = useGetJobTypeQuery({})
+
+  // if(!isLoading){
+  //   const records = data.Slice(firstIndex,lastIndex)
+  //   const nPage = Math.ceil(data.length/ recordsPerPage)
+  //   const numbers = [...Array(nPage + 1).keys()].slice(1);
+  // }
  let content 
  if(isLoading){
     content = <p>Loading....</p>
  }
- else if (isSuccess){
-  
-  data.length > 0  ?(
-    content = data.map ((type : any) =>{
+ else if (!isLoading && data.result){
+  console.log(data)
+  data.result.length > 0  ?(
+    
+    content = data.result.map ((type : any) =>{
         return (
            <JType type = {type}
            key = {type.id}
             ></JType>
         )
-    })) : (content = <h4> Table is Empty</h4>)
+        
+    })) 
+    : (content = <h4> Table is Empty</h4>)
  }
- const handlePageChange = (pageNumber: number) => {
-  setCurrentPage(pageNumber);
-};
+//  const handlePageChange = (pageNumber: number) => {
+//   setCurrentPage(pageNumber);
+// };
   return (
     <div>
 
@@ -91,10 +104,10 @@ function JobType() {
             </table>
           </div>
           {/* Pagination */}
-          <div className="flex items-center justify-end mt-4">
+          {/* <div className="flex items-center justify-end mt-4">
             <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="mr-2 px-4 py-2 bg-gray-200 text-gray-600 rounded">Previous</button>
             <button onClick={() => handlePageChange(currentPage + 1)} disabled={data.length < pageSize} className="px-4 py-2 bg-gray-200 text-gray-600 rounded">Next</button>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

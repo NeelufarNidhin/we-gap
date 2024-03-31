@@ -43,7 +43,7 @@ const jobTypeApi = createApi({
                 url : `jobType/${id}`,
                 method:"GET"
             }),
-         
+            providesTags : ["JobTypes"]
         }),
 
         updateJobType : builder.mutation({
@@ -58,7 +58,7 @@ const jobTypeApi = createApi({
             invalidatesTags : ["JobTypes"]
         }),
         deleteJobType : builder.mutation({
-            query: ({id}) =>({
+            query: (id) =>({
                 url : `jobType/${id}`,
                 method : "DELETE",
                 headers : {
@@ -75,4 +75,5 @@ const jobTypeApi = createApi({
 
 export default  jobTypeApi
 
-export const { useCreateJobTypeMutation ,useUpdateJobTypeMutation,useDeleteJobTypeMutation, useGetJobTypeQuery, useGetJobTypeByIdQuery } = jobTypeApi
+export const { useCreateJobTypeMutation ,useUpdateJobTypeMutation,
+    useDeleteJobTypeMutation, useGetJobTypeQuery, useGetJobTypeByIdQuery } = jobTypeApi

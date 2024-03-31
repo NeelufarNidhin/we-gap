@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 import { createApi , fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
@@ -7,6 +7,7 @@ export const  userApi =  createApi({
   baseQuery : fetchBaseQuery({
     baseUrl :  `${process.env.REACT_APP_API_URL}/`,
     prepareHeaders : (headers) => {
+      
       const token = localStorage.getItem("token");
       if(token){
         headers.set('Authorization' , `Bearer ${token}`);
@@ -25,7 +26,7 @@ endpoints : (builder) =>  ({
     providesTags : ["users"]
   }),
     getUserById : builder.query({
-      query : ({id})=> ({
+      query : (id)=> ({
         url : `user/${id}`,
         
       }),
@@ -55,7 +56,7 @@ deleteUser: builder.mutation({
 }), 
 
     blockUser : builder.mutation({
-      query : ({id})=>({
+      query : (id)=>({
         url : `/user/block/${id}`,
         method : "POST",
         headers : {

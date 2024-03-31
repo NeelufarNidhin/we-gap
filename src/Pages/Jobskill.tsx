@@ -31,14 +31,13 @@ function Jobskill() {
    
   };
   
-  const {data,isLoading,isSuccess,isError ,error} = useGetJobSkillQuery({page: currentPage,
-    pageSize: pageSize})
+  const {data,isLoading,isSuccess,isError ,error} = useGetJobSkillQuery({})
  let content 
  if(isLoading){
     content = <p>Loading....</p>
  }
- else if (isSuccess){
-    content = data.map ((skill :any) =>{
+ else if (!isLoading){
+    content = data.result.map ((skill :any) =>{
         return (
            <Skill skill = {skill}
            key = {skill.id}

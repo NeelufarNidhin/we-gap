@@ -76,7 +76,7 @@ function JType({type}:any) {
        </button>
          {isUpdating ? <button className="items-center py-2 px-4 m-1 bg-gray-400 text-black"onClick={handleUpdate} >Update</button> : ""}
        <button
-         type="button" onClick={()=> deleteJobType({id:type.id})}
+         type="button" onClick={()=> deleteJobType(type.id)}
          data-modal-target="deleteModal"
          data-modal-toggle="deleteModal"
          className="flex w-full items-center py-2 px-4 bg-gray-200 text-red-500"

@@ -32,7 +32,14 @@ const jobSkillApi = createApi({
                 url : `jobSkill/${id}`,
                 method:"GET"
             }),
-            // providesTags : ["JobSkills"]
+            providesTags : ["JobSkills"]
+        }),
+        getJobSkillByName : builder.query({
+            query : (jobSkill) => ({
+                url : `jobSkill?jobIds=${jobSkill}`,
+                method:"GET"
+            }),
+            providesTags : ["JobSkills"]
         }),
         createJobSkill : builder.mutation({
             query: (jobskillData) =>({
@@ -57,7 +64,7 @@ const jobSkillApi = createApi({
             invalidatesTags : ["JobSkills"]
         }),
         deleteJobSkill : builder.mutation({
-            query: ({id}) =>({
+            query: (id) =>({
                 url : `jobSkill/${id}`,
                 method : "DELETE",
                 // headers : {
@@ -76,4 +83,5 @@ const jobSkillApi = createApi({
 
 export default  jobSkillApi
 
-export const { useCreateJobSkillMutation ,useDeleteJobSkillMutation ,useUpdateJobSkillMutation , useGetJobSkillQuery, useGetJobSkillByIdQuery } = jobSkillApi
+export const { useCreateJobSkillMutation ,useDeleteJobSkillMutation ,useUpdateJobSkillMutation ,
+     useGetJobSkillQuery, useGetJobSkillByIdQuery } = jobSkillApi

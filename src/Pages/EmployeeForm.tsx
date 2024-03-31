@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import defaultImageSrc from "../Assets/Images/profil-pic2.jpeg";
-import withAuthRole from "../HOC/withAdminRole";
-import { useCreateEmployeeMutation } from "../API/employeeApi";
+
+import { useCreateEmployeeMutation, useGetEmployeeByIdQuery, useUpdateEmployeeMutation } from "../API/employeeApi";
 import apiResponse from "../Interfaces/apiResponse";
 import ToastNotify from "../Helper/ToastNotify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import userModel from "../Interfaces/userModel";
 import { useSelector } from "react-redux";
 import { RootState } from "../Storage/Redux/store";
+import inputHelper from "../Helper/inputHelper";
 
 
 //const defaultImageSrc = "../"
 
-function EmployeeForm() {
+function EmployeeForm(empId:any ) {
   const initialValues = {
+   
     firstName: "",
     lastName: "",
     email: "",
@@ -29,7 +31,7 @@ function EmployeeForm() {
   };
 
   const [values, setValues] = useState(initialValues);
-  const [error, setErrors] = useState({});
+  //const [error, setErrors] = useState({});
   const [imageToStore,setImageToStore] = useState<any>();
   const [imageToDisplay,setImageToDisplay] = useState<string>(defaultImageSrc);
   const navigate = useNavigate();
@@ -37,14 +39,41 @@ function EmployeeForm() {
     (state: RootState) => state.userAuthStore
   );
   const [createEmployee] = useCreateEmployeeMutation();
-
+    const [updateEmployee] = useUpdateEmployeeMutation();
+    
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
+    const tempData = inputHelper(e,values);
+    setValues(tempData);
+   
   };
+  const {id}= useParams();
+
+  const {employeeId} = useParams();
+  const {data,isLoading } = useGetEmployeeByIdQuery(employeeId);
+  //const {employeeId}= useParams();
+
+useEffect(() => {
+if(!isLoading && data && data.result) {
+  console.log(data.result)
+  const tempData = {
+   
+    firstName : userData.firstName,
+    lastName : userData.lastName,
+   email : userData.email,
+    dob: data.result.dob,
+    gender : data.result.gender,
+    address : data.result.address,
+    state : data.result.state,
+    city : data.result.city,
+    pincode : data.result.pincode,
+    mobileNumber : data.result.mobileNumber,
+    bio : data.result.bio,
+    applicationUserId : data.result.applicationUserId
+  };
+  setValues(tempData);
+  setImageToDisplay(data.result.imageName)
+}
+},[data,isLoading,userData])
 
   const showPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0] ;
@@ -53,7 +82,7 @@ function EmployeeForm() {
         const imgType = file.type.split("/")[1];
         const validImgTypes = ["jpg","jpeg","png"];
         const isImageTypeValid = validImgTypes.filter((e) =>{
-          return e == imgType;
+          return e === imgType;
         });
 
         if(file.size > 1000 * 1024){
@@ -81,7 +110,7 @@ function EmployeeForm() {
   //const [isFilled, setIsFilled] = useState(false); // state to check if the form is filled
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(!imageToStore){
+    if(!imageToStore && !id){
       ToastNotify("please upload an image")
       return;
     }
@@ -93,25 +122,41 @@ function EmployeeForm() {
     formData.append("Address",values.address);
     formData.append("State",values.state);
     formData.append("City",values.city);
-    
     formData.append("Pincode",values.pincode);
     formData.append("MobileNumber",values.mobileNumber);
     formData.append("Bio",values.bio);
-    formData.append("Imagefile",imageToStore);
+    if(imageToDisplay) formData.append("Imagefile",imageToStore);
    
-    const response :apiResponse = await createEmployee(formData);
-
+    let response :apiResponse | any 
+    if(employeeId){
+      formData.append("Id", employeeId);
+      response = await updateEmployee(formData)
+      if (response.data ){
+        setValues(initialValues)
+         console.log(response.data);
+         navigate(`/EmployeeProfile/${response.data.result.id}`);
+       }
+       else if (response.error || !response.data?.isSuccess) {
+         console.log(response.error)
+         ToastNotify(response.error.data.errorMessages[0],"error");
+       }
+    }
+    else{
+     response = await createEmployee(formData);
     
+   
 
-    console.log(response.data);
-  
-    if (response.data) {
-      setValues(initialValues)
-
+    if (response.data ){
+     setValues(initialValues)
+      console.log(response.data);
       navigate(`/EmployeeProfile/${response.data.result.id}`);
     }
+    else if (response.error || !response.data?.isSuccess) {
+      console.log(response.error)
+      ToastNotify(response.error.data.errorMessages[0],"error");
+    }
   };
-
+  }
   return (
     <div>
       <section className="p-6 bg-violet-300 text-gray-900">
@@ -259,7 +304,7 @@ function EmployeeForm() {
                 <img
                   src={imageToDisplay}
                   alt=""
-                  className="w-20 h-20 rounded-full bg-gray-500 bg-gray-300"
+                  className="w-20 h-20 rounded-full  bg-gray-300"
                 />
                 <div className="flex items-center space-x-2">
                   <input
@@ -281,7 +326,7 @@ function EmployeeForm() {
               Next
             </button>
             <button
-            
+            onClick={() =>navigate(-1) }
               className="float-right w-100 px-8 py-3 font-semibold rounded-md bg-violet-500 text-white "
             >
               Back

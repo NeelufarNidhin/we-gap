@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import userModel from '../Interfaces/userModel';
 import { RootState } from '../Storage/Redux/store';
-import { useCreateEmployerMutation } from '../API/employerApi';
+import { useCreateEmployerMutation, useGetEmployerByIdQuery, useUpdateEmployerMutation } from '../API/employerApi';
 import apiResponse from '../Interfaces/apiResponse';
 import ToastNotify from '../Helper/ToastNotify';
+import inputHelper from '../Helper/inputHelper';
 
-function EmployerForm() {
+function EmployerForm(emplyerId : any) {
     const initialValues = {
 		companyName : "",
 		location : "",
@@ -22,33 +23,64 @@ function EmployerForm() {
 	const userData: userModel = useSelector(
 		(state: RootState) => state.userAuthStore
 	  );
+
+	  const {id}= useParams();
 	const [createEmployer] = useCreateEmployerMutation();
+	const [ updateEmployer]= useUpdateEmployerMutation();
+	const {employerId} = useParams();
+	const {data,isLoading,isError } = useGetEmployerByIdQuery(employerId);
 
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => {
+		const tempData = inputHelper(e,values);
+		setValues(tempData);
+	   
+	  };
 
-	const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-		const {name , value} = e.target;
-		setValues ({
-			...values,
-			[name] : value
-		})
-	}
+	useEffect(() =>{
+		if(!isLoading && data){
+			console.log(data)
+			const tempData = {
+				companyName : data.companyName,
+				location : data.location,
+				description : data.description,
+				website: data.website,
+			}
+			setValues(tempData)
+		}
+	},[data])
+
+	
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		
-		const response: apiResponse = await createEmployer({
-		  applicationUserId : userData.id,
+		let response: apiResponse;
+		if(employerId){
+			response = await updateEmployer({
+				id: id,
+				applicationUserId : userData.id,
 		  companyName : values.companyName,
 		  location : values.location,
 		  description : values.description,
 		  website : values.website
-		  
-		});
+			})
+		}
+		else{
+			response= await createEmployer({
+				applicationUserId : userData.id,
+				companyName : values.companyName,
+				location : values.location,
+				description : values.description,
+				website : values.website
+				
+			  });
+		}
+		
 		console.log(response.data);
 		if (response.data) {
 		// ToastNotify("User Registration done , Please sign in to continue");
 		setValues(initialValues)
-		  navigate(`/EmployerProfile/${response.data.id}`);
+		  navigate(`/EmployerProfile/${response.data.result.id}`);
 	}}
 
   return (
@@ -92,6 +124,12 @@ function EmployerForm() {
               >
                Submit
               </button>
+			  <button
+            onClick={() =>navigate(-1) }
+              className="float-right w-100 px-8 py-3 font-semibold rounded-md bg-violet-500 text-white "
+            >
+              Back
+            </button>
 
             </div>
 	</form>

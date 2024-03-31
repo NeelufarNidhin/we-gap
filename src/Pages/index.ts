@@ -10,6 +10,8 @@ import EmployerProfile from "./EmployerProfile";
 import Dashboard from "./Dashboard";
 import Employer from "./Employer";
 import AccessDenied from "./AccessDenied";
+import ExperienceForm from "./ExperienceForm";
+import EducationForm from "./EducationForm";
 
 import EmployerCard from "./EmployerCard";
 import EmployeeCard from "./EmployeeCard";
@@ -28,4 +30,4 @@ import SkillForm from "./SkillForm";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
     ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,
-    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm}
+    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm,ExperienceForm,EducationForm}
