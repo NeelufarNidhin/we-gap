@@ -20,9 +20,9 @@ const educationApi = createApi({
             query: (educationData) =>({
                 url : "education",
                 method:"POST",
-                headers:{
-                    "Content-type" : "application/json"
-                },
+                // headers:{
+                //     "Content-type" : "application/json"
+                // },
                 body : educationData
             }),
             invalidatesTags: ["Education"]
@@ -31,15 +31,13 @@ const educationApi = createApi({
             query: (educationData) =>({
                 url : `education/${educationData.id}`,
                 method:"PUT",
-                headers:{
-                    "Content-type" : "application/json"
-                },
+                
                 body : educationData
             }),
             invalidatesTags: ["Education"]
         }),
         deleteEducation : builder.mutation({
-            query: ({id}) =>({
+            query: (id) =>({
                 url : `education/${id}`,
                 method:"DELETE",
                 headers:{
@@ -75,5 +73,6 @@ const educationApi = createApi({
 })
 
 
-export const {useGetEducationByIdQuery,useGetEmployeeEducationQuery,useLazyGetAllEducationQuery, useGetAllEducationQuery,useAddEducationMutation,useUpdateEducationMutation,useDeleteEducationMutation} = educationApi
+export const {useGetEducationByIdQuery,useGetEmployeeEducationQuery,useGetAllEducationQuery
+     ,useAddEducationMutation,useUpdateEducationMutation,useDeleteEducationMutation} = educationApi
 export default educationApi

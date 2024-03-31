@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import  {  useState } from "react";
 import { useGetAllUsersQuery } from '../API/userApi'
 import { useBlockUserMutation, useDeleteUserMutation, useUpdateUserMutation } from "../API/userApi";
 import userModel from "../Interfaces/userModel";
-import ToastNotify from "../Helper/ToastNotify";
+
 
 function AdminPanel() {
-  const { data, isLoading,error  } = useGetAllUsersQuery({});
+  const { data, isLoading,error,isSuccess } = useGetAllUsersQuery({});
+ 
   const [updatedUser, setUpdatedUser] = useState({
     id: "",
     email: "",
@@ -76,8 +77,12 @@ function AdminPanel() {
               </tr>
             </thead>
             <tbody className="border-b bg-violet-300 border-gray-700">
-            {data && !isLoading && data.result && Array.isArray(data.result) && (
-                data.result.map((item : userModel) => (
+            {/* {data && !isLoading && data.result && Array.isArray(data.result.result) && (
+                data.result.result.map((item: userModel) => ( */}
+                {isLoading && <h2>...Loading</h2>}
+                {error && <h2>Something went wrong</h2>}
+                {isSuccess && (
+                  data.result.map((item : userModel) =>(
                   <tr key={item.id}>
                     {/* <td className="px-3 text-2xl font-medium dark:text-gray-400">A</td> */}
                     <td className="px-3 py-2">
@@ -109,8 +114,11 @@ function AdminPanel() {
                     <td className="d-flex justify-content-around gap-1">
                       
                     </td>
-                  </tr>
-                )))}
+                  </tr> 
+                  ))
+                )}
+                  
+                {/* )))} */}
             </tbody>
           </table>
         </div>

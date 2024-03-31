@@ -60,7 +60,7 @@ function Login() {
           navigate("/"); 
       }
     } else if (response.error ) {
-      ToastNotify(response.error.data.errorMessages,"error");
+      ToastNotify(response.error.data.errorMessages[0],"error");
      
     } 
     setLoading(false)

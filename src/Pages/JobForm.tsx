@@ -3,15 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import apiResponse from '../Interfaces/apiResponse';
 import ToastNotify from '../Helper/ToastNotify';
-import axios from 'axios';
-import { useCreateJobMutation } from '../API/jobApi';
-import JobList from './JobList';
-import JobCard from './JobCard';
+
+import { useCreateJobMutation, useGetJobByIdQuery, useUpdateJobMutation } from '../API/jobApi';
+
 import { useGetJobSkillQuery } from '../API/jobskillApi';
 import { useGetJobTypeQuery } from '../API/jobTypeApi';
+import inputHelper from '../Helper/inputHelper';
 
 
-function JobForm() {
+function JobForm(jId:any) {
 const initialValues = {
    
     jobTitle : "",
@@ -22,11 +22,32 @@ const initialValues = {
     jobSkill:[] as string[],
     jobTypeId:""
 }
-const {id } = useParams()
+const {id } = useParams();
 const [values ,setValues] = useState(initialValues);
 const navigate = useNavigate();
 const [ createJob] = useCreateJobMutation();
+const [updateJob] =  useUpdateJobMutation();
 
+const {jobId} = useParams();
+
+const{data,isLoading} = useGetJobByIdQuery(jobId)
+
+useEffect(() =>{
+	if(!isLoading && data && data.result){
+		console.log(data.result)
+		const tempData = {
+   
+			jobTitle : data.result.jobTitle,
+			description : data.result.description,
+			employerId : data.result.employerId,
+			experience : data.result.experience,
+			salary : data.result.salary,
+			jobSkill : [] as string[],
+			jobTypeId:data.result.jobTypeId
+		};
+		setValues(tempData)
+	}
+},[data ,isLoading])
 
 const [selectedJobType,setSelectedJobType] = useState("")
 
@@ -34,40 +55,51 @@ const [selectedJobType,setSelectedJobType] = useState("")
 
 
 const{data:jobSkills,isLoading:jobSkillLoading ,
-	isError :jobSkillIsError ,error:jobSkillError} = useGetJobSkillQuery({})
+	error:jobSkillError} = useGetJobSkillQuery({})
 
 	const{data:jobTypes,isLoading:jobTypeLoading ,
-		isError :jobTypIsError ,error:jobTypeError} = useGetJobTypeQuery({})
-const handleJobSkillChange = (event:any) => {
-	const { value } = event.target;
-	const isChecked = event.target.checked;
-	if (isChecked) {
-		setValues((prevValue:any) => ({ ...prevValue, jobSkill: [...prevValue.jobSkill, value] }));
-	} else {
-		setValues((prevValue:any) => ({
-			...prevValue,
-			jobSkill: prevValue.jobSkill.filter((skill:any) => skill !== parseInt(value))
-		}));
-	}
-};
-const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const {name , value} = e.target;
-    setValues ({
-        ...values,
-        [name] : value
-    })
-}
+		 error:jobTypeError} = useGetJobTypeQuery({})
+		const handleJobSkillChange = (event:any) => {
+			const { value } = event.target;
+			const isChecked = event.target.checked;
+			
+			setValues((prevValue:any) => ({
+				...prevValue,
+				jobSkill: prevValue.jobSkill ? 
+					(isChecked ? [...prevValue.jobSkill, value] : prevValue.jobSkill.filter((skill:any) => skill !== parseInt(value))) : 
+					(isChecked ? [value] : [])
+			}));
+		};
+// 
+
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const tempData = inputHelper(e, values);
+    setValues(tempData);
+  };
 
 const handleJobTypeChange = (event:React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedJobType(event.target.value); 
   };
-const [addJob] = useCreateJobMutation()
+
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 	try{
     e.preventDefault();
 	console.log(id)
 	console.log(values)
-	const response: apiResponse = await createJob({
+	let response: apiResponse ;
+	if(jobId){
+		response = await updateJob({
+			id : jobId,
+			jobTitle : values.jobTitle,
+			description:values.description,
+			employerId:id,
+			experience:values.experience,
+			salary:values.salary,
+			jobSkill:values.jobSkill,
+			jobTypeId:selectedJobType
+		})
+	}
+	response= await createJob({
 		jobTitle : values.jobTitle,
     description:values.description,
     employerId:id,
@@ -110,36 +142,47 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				<div className="col-span-full">
-				<h3>Job Skills</h3>
-                {(!jobSkillLoading ) &&
-				jobSkills.map((skill:any) => (
-                    <div key={skill.id}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                value={skill.id}
-								
-                                onChange={handleJobSkillChange}
-                                checked={values.jobSkill.includes(skill.id)}
-                            />
-                            {skill.skillName}
-                        </label>
-                    </div>
-                ))}
-				</div>
-                <div className="col-span-full">
-				<label htmlFor="jobTypeId">Job Type:</label>
-      <select id="jobTypeId" value={selectedJobType} required onChange={ handleJobTypeChange}>
+    <h3>Job Skills</h3>
+    {jobSkillLoading ? (
+        <p>Loading job skills...</p>
+    ) : jobSkills.result ? (
+        jobSkills.result.map((skill:any) => (
+            <div key={skill.id}>
+                <label>
+                    <input
+                        type="checkbox"
+                        value={skill.id}
+                        onChange={handleJobSkillChange}
+                        checked={values.jobSkill.includes(skill.id)}
+                    />
+                    {skill.skillName}
+                </label>
+            </div>
+        ))
+    ) : (
+        <p>No job skills found.</p>
+    )}
+</div>
+<div className="col-span-full">
+    <label htmlFor="jobTypeId">Job Type:</label>
+    <select id="jobTypeId" value={selectedJobType} required onChange={handleJobTypeChange}>
         <option value="">Select Job Type...</option>
-        {(!jobTypeLoading) &&
-		 jobTypes.map((jobtype:any) => (
-          <option key={jobtype.id}  value={jobtype.id}>{jobtype.jobTypeName}</option>
-        ))}
-      </select>
-				</div>
+        {jobTypeLoading ? (
+            <option disabled>Loading job types...</option>
+        ) : jobTypes.result ?? [] ? (
+            jobTypes.result.map((jobtype : any) => (
+                <option key={jobtype.id} value={jobtype.id}>
+                    {jobtype.jobTypeName}
+                </option>
+            ))
+        ) : (
+            <option disabled>No job types found</option>
+        )}
+    </select>
+</div>
 				<div className="col-span-full">
 					<label htmlFor="description" className="text-sm">Description</label>
-					<input id="description" type="text" placeholder=""  value={values.description} name='description' onChange={handleInputChange}
+					<textarea id="description" rows={4}  placeholder=""  value={values.description} name='description' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				<div className="col-span-full sm:col-span-2">
@@ -150,13 +193,19 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 				
 			</div>
 		</fieldset>
-		<div>
+		<div className="flex justify-between">
               <button
                 type="submit"
                 className="w-full px-8 py-3 font-semibold rounded-md bg-violet-400 text-white"
               >
                Submit
               </button>
+			  <button
+              onClick={() => navigate(-1)}
+              className="w-full px-8 py-3  mx-4 font-semibold rounded-md bg-violet-400 text-white"
+            >
+              Back
+            </button>
             </div>
 	</form>
 	

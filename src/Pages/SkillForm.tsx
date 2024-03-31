@@ -1,26 +1,70 @@
-import React, { useState } from 'react'
-import { useCreateSkillMutation } from '../API/skillApi';
+import React, { useEffect, useState } from 'react'
+import { useCreateSkillMutation, useGetSkillByIdQuery, useUpdateSkillMutation } from '../API/skillApi';
 import apiResponse from '../Interfaces/apiResponse';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import ToastNotify from '../Helper/ToastNotify';
+import inputHelper from '../Helper/inputHelper';
 
-function SkillForm() {
+function SkillForm(skillid : any) {
+
+  const initialValues = {
+    skillName : "",
+    employeeId:""
+  }
     const {id} = useParams()
-    const [skillName,setSkillName] = useState("");
+   // const [skillName,setSkillName] = useState("");
+   const [values ,setValues] = useState(initialValues);
     const [addSkill] = useCreateSkillMutation()
+
+    const {skillId} = useParams()
+    const {data,isLoading,isError} = useGetSkillByIdQuery(skillId)
+    const navigate = useNavigate();
+    useEffect(() => {
+      if(!isLoading && data && data.result){
+        console.log(data.result)
+        const tempData = {
+          skillName : data.result.skillName,
+          employeeId : data.result.employeeId
+        }
+        setValues(tempData)
+      }
+
+    },[data])
+
+    const [updateSkill] = useUpdateSkillMutation();
     const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-       
-       setSkillName(e.target.value)
+      const tempData = inputHelper(e,values);
+      setValues(tempData);
+      // setSkillName(e.target.value)
     }
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-        const response :apiResponse = await addSkill(
-            {skillName : skillName,
+       let response :apiResponse ;
+        if(skillId) {
+          response = await  updateSkill({
+            id :skillId,
+            skillName : values.skillName,
+            employeeId : values.employeeId
+          })
+        }
+        else {
+       response = await addSkill(
+            {skillName : values.skillName,
             employeeId : id
         }
+      
         )
-        console.log(response.data);
-        setSkillName("")
+      }
+         if (response.data && response.data.isSuccess){
+          console.log(response.data.result);
+         setValues({skillName : "",
+        employeeId : ""})
+         }
+         else if (response.error || !response.data?.isSuccess) {
+          console.log(response.error)
+          ToastNotify(response.error?.data?.errorMessages[0],"error");
+         }
     }
   return (
     <div>
@@ -35,18 +79,25 @@ function SkillForm() {
 			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
 				<div className="col-span-full sm:col-span-3">
 					<label htmlFor="skillName" className="text-sm">Skill </label>
-					<input id="skillName" type="text" placeholder="Skill" required  value={skillName} name='skillName' onChange={handleInputChange}
+					<input id="skillName" type="text" placeholder="Skill" required  value={values.skillName} name='skillName' onChange={handleInputChange}
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
             </div>
             </fieldset>
-            <div>
-              <button
-                type="submit"
-                className="w-full px-8 py-3 font-semibold rounded-md bg-violet-400 text-white"
-              >
-               Submit
-              </button>
+            <div className="flex justify-between">
+            <button
+              type="submit"
+              className="w-full px-8 mx-4 py-3 font-semibold rounded-md bg-violet-400 text-white"
+            >
+              Submit
+            </button>
+
+            <button
+              onClick={() => navigate(-1)}
+              className="w-full px-8 py-3  mx-4 font-semibold rounded-md bg-violet-400 text-white"
+            >
+              Back
+            </button>
             </div>
             </form>
             </section>

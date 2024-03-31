@@ -31,15 +31,15 @@ const experienceApi = createApi({
             query: (experienceData) =>({
                 url : `experience/${experienceData.id}`,
                 method:"PUT",
-                headers:{
-                    "Content-type" : "application/json"
-                },
+                // headers:{
+                //     "Content-type" : "application/json"
+                // },
                 body : experienceData
             }),
             invalidatesTags: ["Experience"]
         }),
         deleteExperience : builder.mutation({
-            query: ({id}) =>({
+            query: (id) =>({
                 url : `experience/${id}`,
                 method:"DELETE",
                 headers:{

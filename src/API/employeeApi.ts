@@ -28,7 +28,7 @@ const employeeApi = createApi({
         updateEmployee : builder.mutation({
             query : (employeeData) =>({
                 url : `employee/${employeeData.id}`,
-              method : "POST",
+              method : "PUT",
              
               body : employeeData
             }),
@@ -68,6 +68,7 @@ const employeeApi = createApi({
         }),
     })
 
-    export const {useGetEmployeeByIdQuery,useGetEmployeesQuery,useGetEmployeeExistsQuery }= employeeApi
-export const { useCreateEmployeeMutation} = employeeApi;
+    export const {useGetEmployeeByIdQuery,useGetEmployeesQuery,useGetEmployeeExistsQuery,
+    useCreateEmployeeMutation,useDeleteEmployeeMutation,useUpdateEmployeeMutation }= employeeApi
+
 export default employeeApi

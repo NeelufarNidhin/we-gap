@@ -35,7 +35,7 @@ function OTP() {
     //  resend OTP 
     { !email && ToastNotify("Email required") }
     const response: apiResponse = await otpResend({
-      Email: {email},
+      Email: email,
     });
     if(response.data){
       console.log(response.data)
@@ -50,26 +50,23 @@ function OTP() {
     e.preventDefault();
 
     setLoading(true);
-    console.log(otp, email);
 
     const response: apiResponse = await otpLoginUser({
       Otp: otp,
       Email: email,
     });
-    //  if(response.data?.errorMessages){
-    //   setError(response.data?.errorMessages?);
-    //  }
-    if (response.data) {
-      if (response.data.isSuccess) {
+   
+    if (response.data && response.data.isSuccess) {
+      
         console.log(response.data.isSuccess);
-       navigate("/Login");
-      ToastNotify("Please Login to continue");
-      } else if (response.error) {
-        console.log(response.error);
+        navigate("/Login");
+        ToastNotify("Please Login to continue");
+      } else if (response.error || !response.data?.isSuccess) {
+        console.log(response.error)
+        ToastNotify(response.error.data.errorMessages[0],"error");
       }
-
       setLoading(false);
-    }
+    
   };
 
   return (

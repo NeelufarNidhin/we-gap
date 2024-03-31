@@ -60,7 +60,7 @@ const skillApi = createApi({
             invalidatesTags : ["Skills"]
         }),
         deleteSkill : builder.mutation({
-            query: ({id}) =>({
+            query: (id) =>({
                 url : `skill/${id}`,
                 method : "DELETE",
                 // headers : {

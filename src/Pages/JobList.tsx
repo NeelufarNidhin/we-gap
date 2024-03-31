@@ -10,14 +10,18 @@ function JobList() {
 
   
 
-    const {data , isLoading,isSuccess,isError,error } = useGetJobsQuery({});
+    const {data , isLoading,isSuccess,error } = useGetJobsQuery({});
    
 
     let content = null;
     if (isLoading) {
       content = <p>Loading...</p>;
-    } else if (isSuccess) {
-      content = data.map((job:any) => (
+    } 
+    if (error) { 
+      content = <p>Something went wrong</p>;
+    }
+    else if (isSuccess && data.result) {
+      content = data.result.map((job:any) => (
         <div>
           
        

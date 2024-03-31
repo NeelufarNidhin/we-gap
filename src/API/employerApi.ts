@@ -30,7 +30,7 @@ const employerApi = createApi({
         updateEmployer : builder.mutation({
           query : (employerData) =>({
               url : `employer/${employerData.id}`,
-            method : "POST",
+            method : "PUT",
            
             body : employerData
           }),
@@ -74,6 +74,7 @@ const employerApi = createApi({
        
     })
 
-export const {useGetEmployerByIdQuery,useGetEmployersQuery,useGetEmployerExistsQuery }= employerApi
-export const { useCreateEmployerMutation} = employerApi;
+export const {useGetEmployerByIdQuery,useGetEmployersQuery,useGetEmployerExistsQuery,
+  useCreateEmployerMutation,useUpdateEmployerMutation,useDeleteEmployerMutation }= employerApi
+
 export default employerApi
