@@ -33,7 +33,7 @@ function JobType() {
     setJobType("")
   };
   
-  const {data,isLoading,isSuccess,isError ,error} = useGetJobTypeQuery({})
+  const {data,isLoading,isSuccess ,error} = useGetJobTypeQuery({})
 
   // if(!isLoading){
   //   const records = data.Slice(firstIndex,lastIndex)
@@ -44,11 +44,14 @@ function JobType() {
  if(isLoading){
     content = <p>Loading....</p>
  }
- else if (!isLoading && data.result){
+ if(error){
+   content = <p>Something went wrong </p>
+ }
+ else if (isSuccess && data){
   console.log(data)
-  data.result.length > 0  ?(
+  data.length > 0  ?(
     
-    content = data.result.map ((type : any) =>{
+    content = data.map ((type : any) =>{
         return (
            <JType type = {type}
            key = {type.id}
@@ -83,13 +86,13 @@ function JobType() {
         </div>
       )}
      
-      {/* Job Type Table */}
+    
       {isLoading && <p>Loading...</p>}
       {isSuccess && (
         <div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-700 border-collapse">
-              {/* Table header */}
+             
               <thead>
                 <tr className="bg-gray-200">
                   <th className="px-4 py-2">Job Type ID</th>
@@ -97,7 +100,7 @@ function JobType() {
                   <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
-              {/* Table body */}
+            
               <tbody>
                 {content}
               </tbody>

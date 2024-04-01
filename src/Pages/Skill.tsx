@@ -4,7 +4,7 @@ import {  useDeleteJobSkillMutation, useUpdateJobSkillMutation } from "../API/jo
 import ToastNotify from '../Helper/ToastNotify';
 
 
-function Skill({skill }:any ) {
+function Skill(skill :any ) {
 
     const [updateJobSkill] = useUpdateJobSkillMutation();
     const [ deleteJobSkill] = useDeleteJobSkillMutation();
@@ -78,7 +78,7 @@ function Skill({skill }:any ) {
                       </button>
                         {isUpdating ? <button className="items-center py-2 px-4 m-1 bg-gray-400 text-black"onClick={handleUpdate} >Update</button> : ""}
                       <button
-                        type="button" onClick={()=> deleteJobSkill({id:skill.id})}
+                        type="button" onClick={()=> deleteJobSkill(skill.id)}
                         data-modal-target="deleteModal"
                         data-modal-toggle="deleteModal"
                         className="flex w-full items-center py-2 px-4 bg-gray-200 text-red-500"

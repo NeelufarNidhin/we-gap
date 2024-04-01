@@ -31,20 +31,27 @@ function Jobskill() {
    
   };
   
-  const {data,isLoading,isSuccess,isError ,error} = useGetJobSkillQuery({})
+  const {data,isLoading,isSuccess ,error} = useGetJobSkillQuery({})
  let content 
  if(isLoading){
     content = <p>Loading....</p>
  }
- else if (!isLoading){
-    content = data.result.map ((skill :any) =>{
+ if(error){
+  content = <p>Something went wrong</p>
+ }
+ else if (isSuccess && data){
+  console.log(data)
+  data.length > 0  ?(
+    
+    content = data.map ((skill : any) =>{
         return (
-           <Skill skill = {skill}
+           <Skill skill  = {skill}
            key = {skill.id}
             ></Skill>
         )
-    })
- }
+      })) 
+      : (content = <h4> Table is Empty</h4>)
+   }
  const handlePageChange = (pageNumber: number) => {
   setCurrentPage(pageNumber);
 };

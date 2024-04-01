@@ -49,14 +49,14 @@ function Header() {
             </Link>
             <Link
               rel="noopener noreferrer"
-              to="/Jobskill"
+              to="/JobSkill"
               className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
             >
              JobSkills
             </Link>
             <Link
               rel="noopener noreferrer"
-              to="/Jobtype"
+              to="/JobType"
               className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
             >
             JobTypes
