@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
- 
-import { useGetJobSkillByIdQuery, } from '../API/jobskillApi';
-import { useGetJobTypeByIdQuery } from '../API/jobTypeApi';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
@@ -22,8 +19,7 @@ interface JobCardProps {
 }
 
 function JobCard({ job }: JobCardProps) {
-  // const { data: jobTypeData, error: jobTypeError, isLoading: jobTypeLoading } = useGetJobTypeByIdQuery(job.jobTypeId);
-   // const { data: jobSkillData, error: jobSkillError, isLoading: jobSkillLoading } = useGetJobSkillByIdQuery({ jobId: job.jobSkill } );
+ 
    const [jobSkillNames, setJobSkillNames] = useState([]);
    const [jobTypeName, setJobTypeName] = useState('');
 const navigate = useNavigate();
@@ -32,7 +28,9 @@ const navigate = useNavigate();
       deleteJob(id)
    }
 
-   const fetchJobSkillNames = async () => {
+//    
+
+const fetchJobJobSkills = async () => {
     try {
         const token = localStorage.getItem("token");
         const headers: Record<string, string> = {};
@@ -41,14 +39,13 @@ const navigate = useNavigate();
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const response = await axios.get( `${process.env.REACT_APP_API_URL}/jobSkill?jobIds=${job.jobSkill}`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/job/${job.id}/jobJobSkills`, {
             headers
         });
         
-        setJobSkillNames(response.data.result.map((skill: any) => skill.skillName));
-        console.log(jobSkillNames);
+        setJobSkillNames(response.data.result.map((jobJobSkill: any) => jobJobSkill.skillName));
     } catch (error) {
-        console.error('Error fetching job skill names:', error);
+        console.error('Error fetching job job skills:', error);
     }
 };
 
@@ -73,17 +70,11 @@ const navigate = useNavigate();
 };
 
     useEffect(() => {
-      fetchJobSkillNames();
+        fetchJobJobSkills();
       fetchJobTypeName();
     }, []);
 
-    // if (jobTypeLoading ) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // if (jobTypeError ) {
-    //     return <div>Error fetching data</div>;
-    // }
+   
 
     return (
         <div className="bg-gray-100 p-4 rounded shadow">
@@ -93,7 +84,7 @@ const navigate = useNavigate();
             <p className="text-sm text-gray-600">Salary: {job.salary}</p>
             <p className="text-sm text-gray-600">Job Type: {jobTypeName}</p>
             {/* <p className="text-sm text-gray-600">Job Type: {jobTypeData?.jobTypeName}</p> */}
-            <p className="text-sm text-gray-600">Job Skills: Job Skills: {jobSkillNames.join(', ')}</p>
+            <p className="text-sm text-gray-600">Job Skills:  {jobSkillNames.join(', ')}</p>
 
             <div className="flex mt-2">
                   <button className="mx-2" onClick={() => navigate(`/jobForm/${job.id}`)}>

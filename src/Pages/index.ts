@@ -12,7 +12,7 @@ import Employer from "./Employer";
 import AccessDenied from "./AccessDenied";
 import ExperienceForm from "./ExperienceForm";
 import EducationForm from "./EducationForm";
-
+import JobDetail from "./JobDetail";
 import EmployerCard from "./EmployerCard";
 import EmployeeCard from "./EmployeeCard";
 import JobList from '../Pages/JobList';
@@ -29,5 +29,5 @@ import UserBlock from "./UserBlock";
 import SkillForm from "./SkillForm";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
-    ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,
+    ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,JobDetail,
     JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm,ExperienceForm,EducationForm}

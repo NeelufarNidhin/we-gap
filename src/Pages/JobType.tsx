@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCreateJobTypeMutation,  useGetJobTypeQuery,  } from "../API/jobTypeApi";
-import ToastNotify from "../Helper/ToastNotify";
+
 
 import JType from "./JType";
 
@@ -10,12 +10,15 @@ function JobType() {
   const [addJobtype] = useCreateJobTypeMutation();
  
   const [jobType, setJobType] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 5;
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
+
+  const [totalRecords,setTotalRecords] = useState(0);
+  const [ pageOptions , setPageOptions] = useState({
+   pageNumber : 1,
+   pageSize : 5
+  })
+  const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
+
   
-  //const [pageSize, setPageSize] = useState(5);
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
@@ -33,13 +36,41 @@ function JobType() {
     setJobType("")
   };
   
-  const {data,isLoading,isSuccess ,error} = useGetJobTypeQuery({})
+  const {data,isLoading,isSuccess ,error} = useGetJobTypeQuery({
+    pageNumber : pageOptions.pageNumber,
+    pageSize : pageOptions.pageSize
+  })
 
-  // if(!isLoading){
-  //   const records = data.Slice(firstIndex,lastIndex)
-  //   const nPage = Math.ceil(data.length/ recordsPerPage)
-  //   const numbers = [...Array(nPage + 1).keys()].slice(1);
-  // }
+  useEffect(() => {
+    if (data){
+      const {TotalRecords} = JSON.parse(data?.totalRecords);
+      setTotalRecords(TotalRecords);
+    }
+  },[data]);
+
+  const getPageDetails = () =>{
+    const dataStartNumber = (pageOptions.pageNumber  - 1) * pageOptions.pageSize + 1;
+    const dataEndNumber = pageOptions.pageNumber  * pageOptions.pageSize;
+
+    return `${dataStartNumber}
+            -
+            ${dataEndNumber < totalRecords ? dataEndNumber : totalRecords}
+             of ${totalRecords}`;
+  };
+
+  const handlePaginationClick = (direction : string, pageSize?: number) =>{
+    if(direction === "prev"){
+      setPageOptions({pageSize: 5 , pageNumber: pageOptions.pageNumber - 1});
+    } else if (direction === "next" ){
+      setPageOptions({pageSize:5 , pageNumber: pageOptions.pageNumber + 1});
+    }else if(direction === "change"){
+      setPageOptions({
+        pageSize: pageSize? pageSize : 5 ,
+        pageNumber : 1
+      })
+    }
+  }
+
  let content 
  if(isLoading){
     content = <p>Loading....</p>
@@ -47,11 +78,11 @@ function JobType() {
  if(error){
    content = <p>Something went wrong </p>
  }
- else if (isSuccess && data){
-  console.log(data)
-  data.length > 0  ?(
+ else if (isSuccess && data.apiResponse.result){
+  console.log(data.apiResponse.result)
+  data.apiResponse.result.length > 0   &&(
     
-    content = data.map ((type : any) =>{
+    content = data.apiResponse.result.map ((type : any) =>{
         return (
            <JType type = {type}
            key = {type.id}
@@ -59,11 +90,9 @@ function JobType() {
         )
         
     })) 
-    : (content = <h4> Table is Empty</h4>)
+    // : (content = <h4> Table is Empty</h4>)
  }
-//  const handlePageChange = (pageNumber: number) => {
-//   setCurrentPage(pageNumber);
-// };
+
   return (
     <div>
 
@@ -106,11 +135,35 @@ function JobType() {
               </tbody>
             </table>
           </div>
-          {/* Pagination */}
-          {/* <div className="flex items-center justify-end mt-4">
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="mr-2 px-4 py-2 bg-gray-200 text-gray-600 rounded">Previous</button>
-            <button onClick={() => handlePageChange(currentPage + 1)} disabled={data.length < pageSize} className="px-4 py-2 bg-gray-200 text-gray-600 rounded">Next</button>
-          </div> */}
+          <div className="flex justify-end p-4">
+          <div>Rows per page</div>
+          <div>
+            <select className="mx-2" onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>{
+              handlePaginationClick("change", Number(e.target.value));
+              setCurrentPageSize(Number(e.target.value))
+            }} value={currentPageSize}> 
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+            </select>
+          </div>
+          <div className="mx-2">{getPageDetails()}</div>
+          <button
+            className="px-4 py-2 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            disabled={pageOptions.pageNumber === 1}
+            onClick={() => handlePaginationClick("prev") }
+          >
+            Previous
+          </button>
+          <button
+            className="px-4 py-2 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            disabled={pageOptions.pageNumber * pageOptions.pageSize >= totalRecords}
+            onClick={() =>  handlePaginationClick("next") }
+          >
+            Next
+          </button>
+        </div>
         </div>
       )}
     </div>

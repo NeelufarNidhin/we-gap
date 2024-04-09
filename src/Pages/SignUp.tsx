@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
 import ToastNotify from "../Helper/ToastNotify";
-import { toast } from "react-toastify";
+
 
 function SignUp() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const[error,setError] = useState("")
+  //const[error,setError] = useState("")
   const handleRoleSelection = (role: any) => {
     setSelectedRole(role);
   };

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import '../Container/App'
 import '../index.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {  Route, Routes } from 'react-router-dom';
 import { Footer, Header } from '../Components/Layout';
 import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
   EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,
-  EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP, EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm} from '../Pages';
+  EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP, EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm, JobDetail} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -68,6 +68,7 @@ useEffect(()=>{
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["employer","employee"]}/>}>
       <Route path='/JobList' element= {<JobList/>}/> 
+      <Route path="/Job/:jobId" element= {<JobDetail/>}/> 
       <Route path="/EmployeeList" element= {<EmployeeList/>}/> 
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["admin","employer"]}/>}>

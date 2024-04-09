@@ -30,11 +30,21 @@ const jobTypeApi = createApi({
         }),
 
         getJobType : builder.query({
-            query: () =>({
+            query: ({pageNumber, pageSize}) =>({
                 url : "jobType",
                 method : "GET",
+                params : {
+                    ...(pageNumber && {pageNumber}),
+                    ...(pageSize && {pageSize})
+                }
                 
             }),
+            transformResponse(apiResponse: { result : any}, meta : any){
+                return {
+                  apiResponse,
+                  totalRecords: meta.response.headers.get("X-Pagination"),
+                };
+              },
             providesTags : ["JobTypes"]
         }),
 

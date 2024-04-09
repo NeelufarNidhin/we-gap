@@ -109,9 +109,9 @@ function EmployeeProfile() {
                     <FaTrashAlt />
                   </button>
                 </div>
-                <div> <PDFDownloadLink document={<PdfTest/>}   fileName="FORM" >
+                {/* <div> <PDFDownloadLink document={<PdfTest/>}   fileName="FORM" >
             {({loading }) => (loading ? <button> Loading document..</button> : <button>Download</button> )}
-             </PDFDownloadLink>  </div>
+             </PDFDownloadLink>  </div> */}
         </div>
          
 

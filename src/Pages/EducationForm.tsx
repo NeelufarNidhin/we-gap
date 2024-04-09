@@ -22,10 +22,11 @@ function EducationForm(eduId:any) {
     const [values ,setValues] = useState(initialValues);
 
 	const {educationId} = useParams();
-	const {data,isLoading,isError} = useGetEducationByIdQuery(educationId);
+	const {data,isLoading,error,isSuccess} = useGetEducationByIdQuery(educationId);
 
 
 	useEffect(() =>{
+		
 		if(!isLoading && data && data.result){
 			console.log(data.result);
 			const tempData = {
@@ -40,7 +41,7 @@ function EducationForm(eduId:any) {
 			};
 			setValues(tempData);
 		}
-	},[data])
+	},[data,isLoading])
 
     const navigate = useNavigate();
 	const [addEducation] = useAddEducationMutation();

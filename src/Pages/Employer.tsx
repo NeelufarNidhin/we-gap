@@ -1,6 +1,6 @@
 
 import { RootState } from '../Storage/Redux/store';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import layout from "../Assets/Images/Layout.png";
 import { useGetEmployerExistsQuery } from '../API/employerApi';
@@ -34,9 +34,9 @@ console.log(userData)
 		<img src={layout} alt="" className="w-full h-60 sm:h-96 bg-gray-500" />
 		<div className="p-6 pb-12 m-4 mx-auto -mt-16 space-y-6 lg:max-w-2xl sm:px-10 sm:mx-12 lg:rounded-md bg-gray-50">
 			<div className="space-y-2">
-				<a rel="noopener noreferrer" href="#" className="inline-block text-2xl font-semibold sm:text-3xl">Create a company Profile and and start Posting Jobs</a>
+				<Link rel="noopener noreferrer" to="" className="inline-block text-2xl font-semibold sm:text-3xl">Create a company Profile and and start Posting Jobs</Link>
 				<p className="text-xs text-gray-600">
-					<a rel="noopener noreferrer" href="#" className="text-xs hover:underline"></a>
+					<Link rel="noopener noreferrer" to="" className="text-xs hover:underline"></Link>
 				</p>
 			</div>
 			<div className="text-gray-800">
