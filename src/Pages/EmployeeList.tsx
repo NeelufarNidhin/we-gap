@@ -12,7 +12,7 @@ function EmployeeList() {
   else if (error){
     content = <p> Something went wrong</p>
   }
-  else if (isSuccess) {
+  else if (isSuccess && data.result.length > 0) {
     content = data.result.map((employee: any) => {
       return (
         <div className="m-5">

@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
 import ToastNotify from "../Helper/ToastNotify";
-import { useGetUserByIdQuery } from "../API/userApi";
+
 import userModel from "../Interfaces/userModel";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { setLoggedInUser } from "../Storage/Redux/userAuthSlice";
-import { toast } from "react-toastify";
+
 import Loader from "../Components/Loader";
 
 function Login() {
@@ -16,10 +16,10 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg ,setErrMsg] = useState("");
+ // const [errorMsg ,setErrMsg] = useState("");
 
   useEffect(()=>{
-    setErrMsg('')
+  //  setErrMsg('')
   },[email,password])
   const dispatch = useDispatch()
  
@@ -60,8 +60,8 @@ function Login() {
           navigate("/"); 
       }
     } else if (response.error ) {
-      ToastNotify(response.error.data.errorMessages[0],"error");
-     
+    //  ToastNotify(response.error.data.errorMessages[0],"error");
+    ToastNotify(response.error,"error");
     } 
     setLoading(false)
 }

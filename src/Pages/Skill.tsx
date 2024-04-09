@@ -4,7 +4,7 @@ import {  useDeleteJobSkillMutation, useUpdateJobSkillMutation } from "../API/jo
 import ToastNotify from '../Helper/ToastNotify';
 
 
-function Skill(skill :any ) {
+function Skill({skill} :any ) {
 
     const [updateJobSkill] = useUpdateJobSkillMutation();
     const [ deleteJobSkill] = useDeleteJobSkillMutation();
@@ -13,7 +13,7 @@ function Skill(skill :any ) {
 
     const handleUpdate = () => {
         let skills = ""
-        if(updateSkill == ""){
+        if(updateSkill === ""){
             skills = skill.skillName
         }
         else{

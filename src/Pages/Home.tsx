@@ -60,7 +60,7 @@ function Home() {
               </h3>
               {/* <span className="text-xs dark:text-gray-400">February 19, 2021</span> */}
               <p>We are here to help you</p>
-              <Link to="/EmployerSignUp" className="inline-block text-white font-bold  py-2 px-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-800 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
+              <Link to="/SignUp" className="inline-block text-white font-bold  py-2 px-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-800 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
               Build your Resume
               </Link>
               
@@ -89,7 +89,7 @@ function Home() {
                 Post a Job Today
               </h3>
               <p>Connect with Talents</p>
-              <Link to="/EmployerSignUp" className="inline-block text-white font-bold  py-2 px-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-800 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
+              <Link to="/SignUp" className="inline-block text-white font-bold  py-2 px-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-800 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
               Get Started
               </Link>
               {/* <Link to="/EmployerSignUp" className="btn btn-light">

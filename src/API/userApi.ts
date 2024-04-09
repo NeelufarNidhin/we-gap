@@ -18,11 +18,23 @@ export const  userApi =  createApi({
   tagTypes : ["users"],
 endpoints : (builder) =>  ({
   getAllUsers : builder.query({
-    query : () => ({
+    query : ({searchString , userRole, pageNumber ,pageSize }) => ({
         url : "user",
       method : "GET",
+      params : {
+        ...(searchString && {searchString}),
+        ...(userRole && {userRole}),
+        ...(pageNumber && {pageNumber} ),
+        ...(pageSize && {pageSize})
+      }
              
     }),
+    transformResponse(apiResponse: { result : any}, meta : any){
+      return {
+        apiResponse,
+        totalRecords: meta.response.headers.get("X-Pagination"),
+      };
+    },
     providesTags : ["users"]
   }),
     getUserById : builder.query({

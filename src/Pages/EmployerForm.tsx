@@ -5,7 +5,7 @@ import userModel from '../Interfaces/userModel';
 import { RootState } from '../Storage/Redux/store';
 import { useCreateEmployerMutation, useGetEmployerByIdQuery, useUpdateEmployerMutation } from '../API/employerApi';
 import apiResponse from '../Interfaces/apiResponse';
-import ToastNotify from '../Helper/ToastNotify';
+
 import inputHelper from '../Helper/inputHelper';
 
 function EmployerForm(emplyerId : any) {
@@ -28,7 +28,7 @@ function EmployerForm(emplyerId : any) {
 	const [createEmployer] = useCreateEmployerMutation();
 	const [ updateEmployer]= useUpdateEmployerMutation();
 	const {employerId} = useParams();
-	const {data,isLoading,isError } = useGetEmployerByIdQuery(employerId);
+	const {data,isLoading } = useGetEmployerByIdQuery(employerId);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => {
 		const tempData = inputHelper(e,values);
@@ -47,7 +47,7 @@ function EmployerForm(emplyerId : any) {
 			}
 			setValues(tempData)
 		}
-	},[data])
+	},[data,isLoading])
 
 	
 

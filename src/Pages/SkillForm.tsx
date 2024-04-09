@@ -17,7 +17,7 @@ function SkillForm(skillid : any) {
     const [addSkill] = useCreateSkillMutation()
 
     const {skillId} = useParams()
-    const {data,isLoading,isError} = useGetSkillByIdQuery(skillId)
+    const {data,isLoading,error,isSuccess} = useGetSkillByIdQuery(skillId)
     const navigate = useNavigate();
     useEffect(() => {
       if(!isLoading && data && data.result){
@@ -29,7 +29,7 @@ function SkillForm(skillid : any) {
         setValues(tempData)
       }
 
-    },[data])
+    },[data,isLoading])
 
     const [updateSkill] = useUpdateSkillMutation();
     const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {

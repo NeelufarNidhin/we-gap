@@ -42,7 +42,7 @@ useEffect(() =>{
 			employerId : data.result.employerId,
 			experience : data.result.experience,
 			salary : data.result.salary,
-			jobSkill : [] as string[],
+			jobSkill :values.jobSkill,
 			jobTypeId:data.result.jobTypeId
 		};
 		setValues(tempData)
@@ -55,10 +55,10 @@ const [selectedJobType,setSelectedJobType] = useState("")
 
 
 const{data:jobSkills,isLoading:jobSkillLoading ,
-	error:jobSkillError} = useGetJobSkillQuery({})
+	} = useGetJobSkillQuery({})
 
 	const{data:jobTypes,isLoading:jobTypeLoading ,
-		 error:jobTypeError} = useGetJobTypeQuery({})
+		} = useGetJobTypeQuery({})
 		const handleJobSkillChange = (event:any) => {
 			const { value } = event.target;
 			const isChecked = event.target.checked;
@@ -145,8 +145,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     <h3>Job Skills</h3>
     {jobSkillLoading ? (
         <p>Loading job skills...</p>
-    ) : jobSkills.result ? (
-        jobSkills.result.map((skill:any) => (
+    ) : jobSkills?.apiResponse.result ? (
+        jobSkills.apiResponse.result.map((skill:any) => (
+			
             <div key={skill.id}>
                 <label>
                     <input
@@ -157,7 +158,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                     />
                     {skill.skillName}
                 </label>
-            </div>
+           
+		    </div>
+			
         ))
     ) : (
         <p>No job skills found.</p>
@@ -169,8 +172,8 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         <option value="">Select Job Type...</option>
         {jobTypeLoading ? (
             <option disabled>Loading job types...</option>
-        ) : jobTypes.result ?? [] ? (
-            jobTypes.result.map((jobtype : any) => (
+        ) : jobTypes?.apiResponse.result ?? [] ? (
+            jobTypes?.apiResponse.result.map((jobtype : any) => (
                 <option key={jobtype.id} value={jobtype.id}>
                     {jobtype.jobTypeName}
                 </option>

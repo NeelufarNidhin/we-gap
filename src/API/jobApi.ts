@@ -17,15 +17,36 @@ const jobApi= createApi({
     tagTypes : ["Jobs"],
     endpoints : builder => ({
         getJobs :  builder.query({
-            query : () =>({
-                url :  "job ",
-                method : "GET"
+            query : ({searchString,jobType,jobSkill, pageNumber,pageSize}) =>({
+                url :  "job",
+                method : "GET",
+                params : {
+                    ...(searchString && {searchString}),
+                    ...(jobType && {jobType}),
+                    ...(jobSkill && {jobSkill}),
+                    ...(pageNumber && {pageNumber}),
+                    ...(pageSize && {pageSize})
+                }
             }),
+            transformResponse(apiResponse: { result : any}, meta : any){
+                return {
+                  apiResponse,
+                  totalRecords: meta.response.headers.get("X-Pagination"),
+                };
+              },
             providesTags : ["Jobs"]
         }),
         getJobById : builder.query({
             query :(id) =>({
                 url : `job/${id}`,
+                method : "GET"
+
+            }),
+            providesTags :["Jobs"]
+        }),
+        getJobByEmployerId : builder.query({
+            query :(id) =>({
+                url : `job/employer/${id}`,
                 method : "GET"
 
             }),
@@ -66,7 +87,7 @@ const jobApi= createApi({
 })
 
 
-export const { useGetJobsQuery, useGetJobByIdQuery ,useCreateJobMutation,
+export const { useGetJobsQuery, useGetJobByIdQuery ,useCreateJobMutation,useGetJobByEmployerIdQuery,
     useDeleteJobMutation,useUpdateJobMutation} = jobApi;
 
 export default jobApi;

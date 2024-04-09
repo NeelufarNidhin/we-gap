@@ -18,11 +18,20 @@ const jobSkillApi = createApi({
     tagTypes :["JobSkills"],
     endpoints : (builder) =>({
         getJobSkill : builder.query({
-            query: () =>({
+            query: ({pageNumber, pageSize}) =>({
                 url : "jobSkill",
                 method : "GET",
-               
+               params : {
+                ...(pageNumber && {pageNumber}),
+                ...(pageSize && {pageSize})
+               }
             }),
+            transformResponse(apiResponse: { result : any}, meta : any){
+                return {
+                  apiResponse,
+                  totalRecords: meta.response.headers.get("X-Pagination"),
+                };
+              },
             providesTags : ["JobSkills"]
            
         }),

@@ -24,7 +24,7 @@ function ExperienceForm(expId: any) {
   const { experienceId } = useParams();
 
   const [values, setValues] = useState(initialValues);
-  const { data, isLoading, isError } = useGetExperienceByIdQuery(experienceId);
+  const { data, isLoading } = useGetExperienceByIdQuery(experienceId);
 
   useEffect(() => {
     if (!isLoading && data && data.result) {
@@ -40,14 +40,14 @@ function ExperienceForm(expId: any) {
       };
       setValues(tempData);
     }
-  }, [data]);
+  }, [data,isLoading]);
 
   const navigate = useNavigate();
   const {id} = useParams();
   const [addExperience] = useAddExperienceMutation();
   const [updateExperience] = useUpdateExperienceMutation();
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     const tempData = inputHelper(e, values);
     setValues(tempData);
   };
@@ -164,9 +164,10 @@ function ExperienceForm(expId: any) {
                 <label htmlFor="description" className="text-sm">
                   Description
                 </label>
-                <input
+                <textarea
                   id="description"
-                  type="text"
+                 cols={2}
+                 rows={4}
                   placeholder=""
                   value={values.description}
                   name="description"

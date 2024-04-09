@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useOtpLoginUserMutation, useResendOtpMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
-import { useDispatch } from "react-redux";
+
 import ToastNotify from "../Helper/ToastNotify";
 
 function OTP() {
@@ -11,9 +11,9 @@ function OTP() {
   const navigate = useNavigate();
   const [otpLoginUser] = useOtpLoginUserMutation();
   const [otpResend] = useResendOtpMutation();
-  const dispatch = useDispatch();
+
   const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(false);
+ const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(60); // Timer duration in seconds
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   //const[error,setError] = useState(null);
