@@ -1,12 +1,14 @@
 
 
 import { createApi , fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { RootState } from '../Storage/Redux/store';
 
 export const  userApi =  createApi({
   reducerPath : "userApi",
   baseQuery : fetchBaseQuery({
     baseUrl :  `${process.env.REACT_APP_API_URL}/`,
-    prepareHeaders : (headers) => {
+   
+    prepareHeaders : (headers ) => {
       
       const token = localStorage.getItem("token");
       if(token){
@@ -68,7 +70,7 @@ deleteUser: builder.mutation({
 }), 
 
     blockUser : builder.mutation({
-      query : (id)=>({
+      query : ({id})=>({
         url : `/user/block/${id}`,
         method : "POST",
         headers : {

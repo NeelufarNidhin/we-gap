@@ -5,7 +5,8 @@ import {  Route, Routes } from 'react-router-dom';
 import { Footer, Header } from '../Components/Layout';
 import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
   EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,
-  EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP, EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm, JobDetail} from '../Pages';
+  EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP,
+   EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm, JobDetail, ResumeBuilder} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -17,6 +18,7 @@ import ProtectedRoute from '../Components/ProtectedRoute';
 
 
 
+
 function App() {
 const dispatch = useDispatch();
 
@@ -24,9 +26,10 @@ useEffect(()=>{
   const localToken = localStorage.getItem("token");
   if(localToken){
     const { id, firstName, email, role } : userModel = jwtDecode(localToken);
-   dispatch(setLoggedInUser({ id, firstName, email, role }))
+   dispatch(setLoggedInUser({ id, firstName, email, role }));
+   
   }
-}) 
+},[]) 
 
   return (
     <div>
@@ -56,6 +59,8 @@ useEffect(()=>{
       <Route path="/EducationForm" element= {<EducationForm/>}/> 
       <Route path="/SkillForm/:skillId" element= {<SkillForm/>}/> 
       <Route path="/SkillForm" element= {<SkillForm/>}/> 
+      <Route path="/ResumeBuilder" element= {<ResumeBuilder/>}/> 
+   
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["employer"]}/>}>
       <Route path="/EmployerProfile/:id" element= {<EmployerProfile/>}/> 
