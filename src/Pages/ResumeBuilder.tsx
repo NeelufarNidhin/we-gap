@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useGetEmployeeByIdQuery } from "../API/employeeApi"; // Assuming API call structure
-import "./ResumeBuilder.css"; // Import your CSS file
+import { useGetEmployeeByIdQuery, useGetEmployeeExistsQuery } from "../API/employeeApi"; // Assuming API call structure
 import { useParams } from "react-router-dom";
+import userModel from "../Interfaces/userModel";
+import { useSelector } from "react-redux";
+import { useGetEmployeeExperienceQuery, useGetExperienceByIdQuery } from "../API/experienceApi";
+import axios from "axios";
 
 function ResumeBuilder() {
 
-    const {id} = useParams();
-  const { isLoading, data } = useGetEmployeeByIdQuery(id); // Fetch employee data
+    const userData: userModel = useSelector((state: any) => state.userAuthStore);
+//const {data: employeeData , isLoading : employeeLoading} = useGetEmployeeExistsQuery(userData.id);
+
+  const { isLoading, data } = useGetEmployeeExistsQuery(userData.id); // Fetch employee data
+
+
 
   const [resumeData, setResumeData] = useState({
     // Initial resume data structure
@@ -18,22 +25,64 @@ function ResumeBuilder() {
     education: [],
     skills: [],
   });
-
+  const [experience,setExperience] =  useState([]);
+  
   useEffect(() => {
     if (!isLoading && data) {
       // Extract data upon successful fetch
+       
       setResumeData({
-        name: `${data.result.firstName} ${data.result.lastName}`, // Assuming last name exists
+        name: `${userData.firstName} ${userData.lastName}`, // Assuming last name exists
         email: data.result.email,
         address: `${data.result.address}, ${data.result.city}, ${data.result.state} - ${data.result.pincode}`,
         mobileNumber: data.result.mobileNumber,
-        experiences: data.result.experiences || [], // Handle potential missing experience data
+        experiences: experience || [], // Handle potential missing experience data
         education: data.result.education || [], // Handle potential missing education data
         skills: data.result.skills || [], // Handle potential missing skills data
       });
+
+      fetchExperienceData(data.id);
+    fetchEducationData(data.id);
+    fetchSkillsData(data.id);
     }
   }, [isLoading, data]);
 
+
+  const fetchExperienceData = async (employeeId : string) => {
+    try {
+        const token = localStorage.getItem("token");
+        const headers: Record<string, string> = {};
+        
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+  
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/experience/employee/${employeeId}`,
+            {
+              headers,
+            }
+          );
+      
+          setExperience(response.data.result);
+      
+          // Update resume data after fetching experience data
+          setResumeData((prevResumeData) => ({
+            ...prevResumeData,
+            experiences: response.data.result || [],
+          }));
+        } catch (error) {
+          console.error("Error fetching experience data:", error);
+        }
+  };
+  
+  const fetchEducationData = (employeeId :  string) => {
+    
+  };
+  
+  const fetchSkillsData = (employeeId : string) => {
+    
+  };
   const generateResume = () => {
     // Logic to format and structure resume content (replace with your implementation)
     // Consider using a library like react-pdf for PDF generation
@@ -41,6 +90,7 @@ function ResumeBuilder() {
   };
 
   return (
+    <>
     <div className="resume-container">
       {isLoading ? (
         <p>Loading your profile...</p>
@@ -86,10 +136,15 @@ function ResumeBuilder() {
             ))}
           </ul>
 
-          <button onClick={generateResume}>Generate Resume</button>
+         
         </div>
+       
       )}
+
+
     </div>
+    <button className="bg-purple-500 text-white px-4 py-2  border border-black rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50" onClick={generateResume}>Generate Resume</button>
+    </>
   );
 }
 

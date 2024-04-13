@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '../Storage/Redux/authSlice'
+
 import { Navigate, Outlet } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import userModel from '../Interfaces/userModel'
@@ -13,12 +13,20 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
       );
       let role = userData.role;
       let auth =  localStorage.getItem("token");
-    return  auth &&  allowedRoles.includes(role) ? 
-    <Outlet />
- 
-: (
-    <Navigate to="/login" />
-);
-}
+      if (!auth) {
+        // Redirect to login if authentication token is missing
+        return <Navigate to="/login" />;
+      }
+    
+      
+    
+      if (!role || !allowedRoles.includes(role)) {
+        // Redirect to login if user role is invalid or not allowed
+        return <Navigate to="/login" />;
+      }
+    
+      return <Outlet />;
+    };
+
 
 export default ProtectedRoute

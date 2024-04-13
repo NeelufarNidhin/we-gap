@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const localAuth  = localStorage.getItem("auth");
 const initialState = {
     email : "",
     role : "",
@@ -14,11 +15,13 @@ export const authSlice = createSlice({
             state.email = action.payload;
             state.role = action.payload;
             state.accessToken = action.payload;
+            localStorage.setItem("auth", JSON.stringify(state));
         },
         logOut :(state ) =>{
             state.email = "";
             state.role = "";
             state.accessToken = "";
+            localStorage.setItem("auth", JSON.stringify(state));
         },
     }
 })
@@ -27,4 +30,5 @@ export const authSlice = createSlice({
 export const{ login,logOut} = authSlice.actions
 export const authReducer = authSlice.reducer
 
-export const selectCurrentUser = (state:any) => state.auth;
+export const selectCurrentRole = (state:any) => state.auth.role;
+export const selectCurrentToken = (state:any) => state.auth.accessToken;

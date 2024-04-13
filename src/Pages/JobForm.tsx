@@ -43,9 +43,10 @@ useEffect(() =>{
 			experience : data.result.experience,
 			salary : data.result.salary,
 			jobSkill :values.jobSkill,
-			jobTypeId:data.result.jobTypeId
+			jobTypeId:selectedJobType
 		};
-		setValues(tempData)
+		setValues(tempData);
+		setSelectedJobType(data.result.jobTypeId);
 	}
 },[data ,isLoading])
 
@@ -189,9 +190,23 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				<div className="col-span-full sm:col-span-2">
-					<label htmlFor="experience" className="text-sm">Experience</label>
-					<input id="experience" type="text" placeholder="experience"  value={values.experience} name="experience" onChange={handleInputChange}
-					className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
+					<select
+    id="experience"
+    value={values.experience}
+    name="experience"
+    onChange={handleInputChange}
+    className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900"
+>
+    <option value="">Select Experience...</option>
+    <option value="0-1">0-1 years</option>
+    <option value="1-2">1-2 years</option>
+    <option value="2-3">2-3 years</option>
+    <option value="3-4">3-4 years</option>
+    <option value="4-5">4-5 years</option>
+    <option value="5-6">5-6 years</option>
+    <option value="6-7">6-7 years</option>
+    <option value="8+">8+ years</option>
+</select>
 				</div>
 				
 			</div>

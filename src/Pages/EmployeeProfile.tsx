@@ -9,7 +9,7 @@ import {
 } from "../API/educationApi";
 import userModel from "../Interfaces/userModel";
 import { useSelector } from "react-redux";
-
+import ResumeDocument from "./ResumeDocument";
 import { 
   useDeleteExperienceMutation,
   useGetEmployeeExperienceQuery,
@@ -19,8 +19,8 @@ import SkillForm from "./SkillForm";
 
 // Import icons
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PdfTest from "./PdfTest";
+
+import jsPDF from "jspdf";
 
 function EmployeeProfile() {
   const { id } = useParams();
@@ -87,14 +87,115 @@ function EmployeeProfile() {
   };
 
   const { data, isLoading } = useGetEmployeeByIdQuery(id);
-
+  const generateResume = () => {
+    if (data && experienceData && educationData && skillData) {
+      const employeeInfo = data.result;
+      const experienceInfo = experienceData.result;
+      const educationInfo = educationData.result;
+      const skillInfo = skillData.result;
+  
+      const doc = new jsPDF();
+      let yPos = 10;
+  
+      // Set default font
+      doc.setFont("helvetica");
+  
+      // Add Profile Picture
+      const imgData = employeeInfo.imageName; // Assuming imageName is a URL
+      const imgWidth = 40;
+      const imgHeight = 40;
+      doc.addImage(imgData, 'JPEG', 10, yPos, imgWidth, imgHeight);
+      yPos += imgHeight + 5;
+  
+      // Add Personal Information
+      doc.setFontSize(14);
+      doc.setTextColor("#333333");
+      doc.text(`Personal Information:`, 10, yPos);
+      yPos += 10;
+      doc.setFontSize(12);
+      doc.setTextColor("#666666");
+      doc.text(`Name: ${userData.firstName} ${userData.lastName}`, 10, yPos);
+      yPos += 10;
+      doc.text(`Email: ${userData.email}`, 10, yPos);
+      yPos += 10;
+      doc.text(`Address: ${employeeInfo.address}, ${employeeInfo.city}, ${employeeInfo.state} - ${employeeInfo.pincode}`, 10, yPos);
+      yPos += 10;
+      doc.text(`Mobile Number: ${employeeInfo.mobileNumber}`, 10, yPos);
+      yPos += 15;
+    
+      // Add Experience
+      doc.setFontSize(14);
+      doc.setTextColor("#333333");
+     
+      doc.text(`Experience:`, 10, yPos);
+      yPos += 10;
+      experienceInfo.forEach((exp : any) => {
+        doc.setFontSize(12);
+        doc.setTextColor("#666666");
+        doc.text(`- Job Title: ${exp.currentJobTitle}`, 15, yPos);
+        yPos += 7;
+        doc.text(`  Company: ${exp.companyName}`, 15, yPos);
+        yPos += 7;
+        doc.text(`  Description: ${exp.description}`, 15, yPos);
+        yPos += 7;
+        doc.text(`  Status: ${exp.isWorking ? "Working" : "Not Working"}`, 15, yPos);
+        yPos += 10;
+      });
+  
+      // Add Education
+      doc.setFontSize(14);
+      doc.setTextColor("#333333");
+     
+      doc.text(`Education:`, 10, yPos);
+      yPos += 10;
+      educationInfo.forEach((edu : any) => {
+        doc.setFontSize(12);
+        doc.setTextColor("#666666");
+        doc.text(`- Degree: ${edu.degree}`, 15, yPos);
+        yPos += 7;
+        doc.text(`  Subject: ${edu.subject}`, 15, yPos);
+        yPos += 7;
+        doc.text(`  University: ${edu.university}`, 15, yPos);
+        yPos += 7;
+        doc.text(`  Percentage: ${edu.percentage}%`, 15, yPos);
+        yPos += 10;
+      });
+    
+      // Add Skills
+      doc.setFontSize(14);
+      doc.setTextColor("#333333");
+     
+      doc.text(`Skills:`, 10, yPos);
+      yPos += 10;
+      skillInfo.forEach((skill : any) => {
+        doc.setFontSize(12);
+        doc.setFont("bold")
+        doc.setTextColor("#666666");
+        doc.text(`- ${skill.skillName}`, 15, yPos);
+        yPos += 7;
+      });
+  
+      // Add border
+      doc.setDrawColor("#999999");
+      doc.setLineWidth(0.5);
+   // doc.rect(5, 5, 200, yPos - 5); // Border for content
+    doc.rect(5, 5, 200, 292); // Border for page
+  
+      // Save the PDF
+      doc.save('resume.pdf');
+    } else {
+      console.error("Error: Data is missing for generating resume");
+    }
+  };
+  
   let content;
   if (isLoading) {
     content = <p>Loading...</p>;
   } else if (data && data.result) {
+    // {generateResume()}
     content = (
-      <div className="container mx-auto p-4 flex">
-        <div className="mr-8">
+      <div className="container mx-auto p-4 md:flex">
+        <div className="mr-8 md:w-1/3">
           <img className="w-32 h-32 rounded-full mb-4 border border-gray-200" src={data.result.imageName} alt="Profile" />
           <h1 className="text-2xl font-bold">{userData.firstName}</h1>
           <p>Email: {userData.email}</p>
@@ -109,13 +210,11 @@ function EmployeeProfile() {
                     <FaTrashAlt />
                   </button>
                 </div>
-                {/* <div> <PDFDownloadLink document={<PdfTest/>}   fileName="FORM" >
-            {({loading }) => (loading ? <button> Loading document..</button> : <button>Download</button> )}
-             </PDFDownloadLink>  </div> */}
+               
         </div>
          
 
-        <div className="flex-grow">
+        <div className="flex-grow md:w-2/3">
           <div className="mb-8">
             <h2 className="text-lg font-semibold mb-4">Experience</h2>
             <button onClick={toggleExperienceForm} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded">
@@ -184,7 +283,15 @@ function EmployeeProfile() {
                 </div>
               </div>
             ))}
+            <div>
+          <button onClick={generateResume}>Generate Resume</button>
           </div>
+          </div>
+          {/* Add button to generate resume */}
+          
+       
+
+          
           </div>
   </div>    
     );

@@ -10,19 +10,22 @@ import { jwtDecode } from "jwt-decode";
 import { setLoggedInUser } from "../Storage/Redux/userAuthSlice";
 
 import Loader from "../Components/Loader";
+import { login } from "../Storage/Redux/authSlice";
+
+
 
 function Login() {
  const [loginUser] = useLoginUserMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- // const [errorMsg ,setErrMsg] = useState("");
+  const [errorMsg ,setErrMsg] = useState("");
 
   useEffect(()=>{
   //  setErrMsg('')
   },[email,password])
   const dispatch = useDispatch()
- 
+
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,8 +42,7 @@ function Login() {
       const { id, firstName, email, role }: userModel = jwtDecode(token);
       localStorage.setItem("token", token);
       dispatch(setLoggedInUser({ id, firstName, email, role }));
-     
-
+      
       switch (role) {
         case "employer":
          
@@ -60,8 +62,10 @@ function Login() {
           navigate("/"); 
       }
     } else if (response.error ) {
-    //  ToastNotify(response.error.data.errorMessages[0],"error");
-    ToastNotify(response.error,"error");
+      setErrMsg(response.error.data.errorMessages[0])
+     
+    // ToastNotify(response.error.data.errorMessages[0],"error");
+   // ToastNotify(response.error,"error");
     } 
     setLoading(false)
 }
@@ -123,6 +127,7 @@ function Login() {
             </div>
           </div>
           <div className="space-y-2">
+            <p className="text-red-500">{errorMsg}</p>
             <div>
               <button
                 type="submit"
