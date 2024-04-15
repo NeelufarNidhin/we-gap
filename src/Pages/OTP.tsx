@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate, useParams} from "react-router-dom";
 import { useOtpLoginUserMutation, useResendOtpMutation } from "../API/auth";
 import apiResponse from "../Interfaces/apiResponse";
 
 import ToastNotify from "../Helper/ToastNotify";
 
 function OTP() {
-  const [email, setEmail] = useState("");
-// const {email} = useParams()
+  //const [email, setEmail] = useState("");
+ const {email} = useParams();
   const navigate = useNavigate();
   const [otpLoginUser] = useOtpLoginUserMutation();
   const [otpResend] = useResendOtpMutation();
@@ -33,7 +33,7 @@ function OTP() {
   const handleResendOTP =async (e: any) => {
     e.preventDefault();
     //  resend OTP 
-    { !email && ToastNotify("Email required") }
+    // { !email && ToastNotify("Email required") }
     const response: apiResponse = await otpResend({
       Email: email,
     });
@@ -53,7 +53,7 @@ function OTP() {
 
     const response: apiResponse = await otpLoginUser({
       Otp: otp,
-      Email: email,
+     
     });
    
     if (response.data && response.data.isSuccess) {
@@ -97,7 +97,7 @@ function OTP() {
                 className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
               />
             </div>
-            <div>
+            {/* <div>
               <label htmlFor="email" className="block mb-2 text-sm">
                 Email
               </label>
@@ -115,7 +115,7 @@ function OTP() {
                 
                 className="w-full px-3 py-2 border rounded-md border-gray-700 bg-white text-gray-700"
               />
-            </div> 
+            </div>  */}
             <div>
                 {!isTimerRunning && (
                   <button
@@ -138,10 +138,10 @@ function OTP() {
              
             <div>
             <div>
-            {!email &&
+            {/* {!email &&
              <span className="text-red-300">Email is required!!! </span>
            
-            }
+            } */}
             
              </div>
               <button

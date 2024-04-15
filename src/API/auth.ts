@@ -42,13 +42,13 @@ const auth =  createApi({
             
           }),
           resendOtp :builder.mutation({
-            query : (otpvalue) =>({
-              url : "Auth/resend-otp",
+            query : (email) =>({
+              url :`Auth/resend-otp`,
               method : "POST",
               headers :{
                 "Content-type" : "application/json",
               },
-              body :otpvalue
+             body: email
              
             }),
             
