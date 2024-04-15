@@ -84,7 +84,7 @@ useEffect(()=>{
       </Route>
       <Route path="/" element= {<Home/>}> </Route>
       <Route path='*' element= {<NotFound/>}> </Route>
-      <Route path="/OTP" element= {<OTP/>}> </Route>
+      <Route path="/OTP/:email" element= {<OTP/>}> </Route>
       <Route path="/About" element= {<About/>}> </Route>
       <Route path="/Login" element= {<Login/>}> </Route>
       <Route path="/SignUp" element= {<SignUp/>}> </Route>

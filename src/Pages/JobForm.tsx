@@ -42,10 +42,10 @@ useEffect(() =>{
 			employerId : data.result.employerId,
 			experience : data.result.experience,
 			salary : data.result.salary,
-			jobSkill :values.jobSkill,
-			jobTypeId:selectedJobType
+			jobSkill :data.result.jobSkill.map((skill: any) => skill.id.toString()),
+			jobTypeId:data.result.jobTypeId
 		};
-		setValues(tempData);
+		setValues(tempData)
 		setSelectedJobType(data.result.jobTypeId);
 	}
 },[data ,isLoading])
