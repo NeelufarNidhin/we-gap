@@ -42,7 +42,7 @@ useEffect(() =>{
 			employerId : data.result.employerId,
 			experience : data.result.experience,
 			salary : data.result.salary,
-			jobSkill :data.result.jobSkill.map((skill: any) => skill.id.toString()),
+			jobSkill :values.jobSkill,
 			jobTypeId:data.result.jobTypeId
 		};
 		setValues(tempData)

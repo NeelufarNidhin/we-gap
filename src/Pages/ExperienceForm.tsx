@@ -26,21 +26,36 @@ function ExperienceForm(expId: any) {
   const [values, setValues] = useState(initialValues);
   const { data, isLoading } = useGetExperienceByIdQuery(experienceId);
 
+  //useEffect(() => {
+  //   if (!isLoading && data && data.result) {
+  //     console.log(data.result);
+  //     const tempData = {
+  //       currentJobTitle: data.result.currentJobTitle,
+  //       isWorking: data.result.isWorking,
+  //       description: data.result.description,
+  //       starting_Date: data.result.starting_Date,
+  //       completionDate: data.result.completionDate,
+  //       companyName: data.result.companyName,
+  //       employeeId: data.result.employeeId,
+  //     };
+  //     setValues(tempData);
+  //   }
+  // }, [data,isLoading]);
   useEffect(() => {
     if (!isLoading && data && data.result) {
-      console.log(data.result);
-      const tempData = {
-        currentJobTitle: data.result.currentJobTitle,
-        isWorking: data.result.isWorking,
-        description: data.result.description,
-        starting_Date: data.result.starting_Date,
-        completionDate: data.result.completionDate,
-        companyName: data.result.companyName,
-        employeeId: data.result.employeeId,
-      };
-      setValues(tempData);
+        const { starting_Date, completionDate, ...otherData } = data.result;
+
+        const formattedData = {
+            ...otherData,
+            starting_Date: starting_Date ? starting_Date.split('T')[0] : '', // Extract YYYY-MM-DD part
+            completionDate: completionDate ? completionDate.split('T')[0] : '' // Extract YYYY-MM-DD part
+        };
+
+        console.log("Formatted Data:", formattedData); // Check the formatted data
+
+        setValues(formattedData);
     }
-  }, [data,isLoading]);
+}, [data, isLoading]);
 
   const navigate = useNavigate();
   const {id} = useParams();

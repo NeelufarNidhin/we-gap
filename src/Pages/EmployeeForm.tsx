@@ -60,7 +60,7 @@ if(!isLoading && data && data.result) {
     firstName : userData.firstName,
     lastName : userData.lastName,
    email : userData.email,
-    dob: data.result.dob,
+   dob: data.result.dob ? data.result.dob.split('T')[0] : '',
     gender : data.result.gender,
     address : data.result.address,
     state : data.result.state,

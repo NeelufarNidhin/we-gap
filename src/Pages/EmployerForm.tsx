@@ -57,7 +57,7 @@ function EmployerForm(emplyerId : any) {
 		let response: apiResponse;
 		if(employerId){
 			response = await updateEmployer({
-				id: id,
+				id: employerId,
 				applicationUserId : userData.id,
 		  companyName : values.companyName,
 		  location : values.location,
@@ -80,7 +80,7 @@ function EmployerForm(emplyerId : any) {
 		if (response.data) {
 		// ToastNotify("User Registration done , Please sign in to continue");
 		setValues(initialValues)
-		  navigate(`/EmployerProfile/${response.data.result.id}`);
+		  navigate(-1);
 	}}
 
   return (
