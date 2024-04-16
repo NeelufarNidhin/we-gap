@@ -25,24 +25,38 @@ function EducationForm(eduId:any) {
 	const {data,isLoading,error,isSuccess} = useGetEducationByIdQuery(educationId);
 
 
-	useEffect(() =>{
+	// useEffect(() =>{
 		
-		if(!isLoading && data && data.result){
-			console.log(data.result);
-			const tempData = {
+	// 	if(!isLoading && data && data.result){
+	// 		console.log(data.result);
+	// 		const tempData = {
 				
-			degree : data.result.degree,
-			subject : data.result.subject ,
-			university : data.result.university,
-			percentage : data.result.percentage,
-			starting_Date : data.result.starting_Date,
-			completionDate : data.result.completionDate,
-			employeeId : data.result.employeeId
+	// 		degree : data.result.degree,
+	// 		subject : data.result.subject ,
+	// 		university : data.result.university,
+	// 		percentage : data.result.percentage,
+	// 		starting_Date : data.result.starting_Date,
+	// 		completionDate : data.result.completionDate,
+	// 		employeeId : data.result.employeeId
+	// 		};
+	// 		setValues(tempData);
+	// 	}
+	// },[data,isLoading])
+	useEffect(() => {
+		if (!isLoading && data && data.result) {
+			const { starting_Date, completionDate, ...otherData } = data.result;
+			
+			const formattedData = {
+				...otherData,
+				starting_Date: starting_Date ? starting_Date.split('T')[0] : '', // Extract YYYY-MM-DD part
+				completionDate: completionDate ? completionDate.split('T')[0] : '' // Extract YYYY-MM-DD part
 			};
-			setValues(tempData);
+			
+			setValues(formattedData);
+			
+			console.log("Updated Values:", values); // Check the updated state values
 		}
-	},[data,isLoading])
-
+	}, [data, isLoading]);
     const navigate = useNavigate();
 	const [addEducation] = useAddEducationMutation();
 	const [updateEducation] = useUpdateEducationMutation();
