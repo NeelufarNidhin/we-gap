@@ -28,7 +28,8 @@ import JobCard from "./JobCard";
 import UserBlock from "./UserBlock";
 import SkillForm from "./SkillForm";
 import ResumeBuilder from "./ResumeBuilder";
+import Chat from "./Chat";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
     ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,JobDetail,ResumeBuilder,
-    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm,ExperienceForm,EducationForm}
+    JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm,ExperienceForm,EducationForm , Chat}

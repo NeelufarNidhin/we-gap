@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "@microsoft/signalr": "^8.0.0",
     "@react-pdf/renderer": "^3.4.2",
     "@reduxjs/toolkit": "2.0.1",
     "@testing-library/jest-dom": "^5.17.0",

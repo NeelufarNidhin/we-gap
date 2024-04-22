@@ -42,7 +42,7 @@ function JobType() {
   })
 
   useEffect(() => {
-    if (data){
+    if (data && data.totalRecords){
       const {TotalRecords} = JSON.parse(data?.totalRecords);
       setTotalRecords(TotalRecords);
     }

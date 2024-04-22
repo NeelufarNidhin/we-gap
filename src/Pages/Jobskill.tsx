@@ -11,7 +11,7 @@ function Jobskill() {
   const [totalRecords,setTotalRecords] = useState(0);
   const [ pageOptions , setPageOptions] = useState({
    pageNumber : 1,
-   pageSize : 5
+   pageSize : 10
   })
   const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
   const toggleForm = () => {
@@ -42,7 +42,7 @@ function Jobskill() {
 
 
   useEffect(() => {
-    if (data){
+    if (data  && data.totalRecords){
       const {TotalRecords} = JSON.parse(data?.totalRecords);
       setTotalRecords(TotalRecords);
     }
@@ -60,12 +60,12 @@ function Jobskill() {
 
   const handlePaginationClick = (direction : string, pageSize?: number) =>{
     if(direction === "prev"){
-      setPageOptions({pageSize: 5 , pageNumber: pageOptions.pageNumber - 1});
+      setPageOptions({pageSize: 10 , pageNumber: pageOptions.pageNumber - 1});
     } else if (direction === "next" ){
-      setPageOptions({pageSize:5 , pageNumber: pageOptions.pageNumber + 1});
+      setPageOptions({pageSize:10 , pageNumber: pageOptions.pageNumber + 1});
     }else if(direction === "change"){
       setPageOptions({
-        pageSize: pageSize? pageSize : 5 ,
+        pageSize: pageSize? pageSize : 10 ,
         pageNumber : 1
       })
     }
@@ -142,8 +142,8 @@ function Jobskill() {
               handlePaginationClick("change", Number(e.target.value));
               setCurrentPageSize(Number(e.target.value))
             }} value={currentPageSize}> 
-            <option>5</option>
             <option>10</option>
+            <option>20</option>
             
             </select>
           </div>

@@ -64,6 +64,7 @@ function Header() {
           </li>
      )}
       { (userData.role === "employer" ) && (
+        <>
           <li className="flex">
             <Link
               rel="noopener noreferrer"
@@ -72,6 +73,8 @@ function Header() {
             >
              Profile
             </Link>
+            </li>
+            <li className="flex">
             <Link
               rel="noopener noreferrer"
               to="/EmployeeList"
@@ -80,6 +83,16 @@ function Header() {
              Employees
             </Link>
           </li>
+          <li className="flex">
+           <Link
+             rel="noopener noreferrer"
+             to="/Chat"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+          Chat
+           </Link>
+         </li>
+          </> 
           
      )}
       { (userData.role === "employee" ) && (
@@ -100,6 +113,15 @@ function Header() {
              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
            >
            Jobs
+           </Link>
+         </li>
+         <li className="flex">
+           <Link
+             rel="noopener noreferrer"
+             to="/Chat"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+          Chat
            </Link>
          </li>
          

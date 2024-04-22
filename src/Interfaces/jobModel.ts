@@ -4,7 +4,8 @@ export default interface jobModel{
     description:string,
     employerId:string,
     experience:string,
-    salary:number,
+    salary:string,
+    createdAt: string,
     jobSkills:Array<string>
     jobTypes:Array<string>
 

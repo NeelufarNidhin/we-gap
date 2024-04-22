@@ -49,7 +49,7 @@ function JobList() {
   };
 
   useEffect(() => {
-    if (data) {
+    if ( data  && data.totalRecords) {
       setJobs(data.apiResponse.result);
       const { TotalRecords } = JSON.parse(data?.totalRecords);
       setTotalRecords(TotalRecords);

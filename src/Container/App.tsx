@@ -6,7 +6,8 @@ import { Footer, Header } from '../Components/Layout';
 import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
   EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,
   EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP,
-   EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm, JobDetail, ResumeBuilder} from '../Pages';
+   EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm, JobDetail, ResumeBuilder,
+   Chat} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -75,6 +76,7 @@ useEffect(()=>{
       <Route path='/JobList' element= {<JobList/>}/> 
       <Route path="/Job/:jobId" element= {<JobDetail/>}/> 
       <Route path="/EmployeeList" element= {<EmployeeList/>}/> 
+      <Route path="/Chat" element= {<Chat/>}> </Route>
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["admin","employer"]}/>}>
       <Route path='/JobSkill' element= {<Jobskill  />}/> 
@@ -91,6 +93,7 @@ useEffect(()=>{
       <Route path="/Loader" element= {<Loader/>}> </Route>
       <Route path="/UserBlock" element= {<UserBlock/>}> </Route>
       <Route path="/AccessDenied" element= {<AccessDenied/>}> </Route>
+     
       </Routes>
       {/* <Footer/> */}
      
