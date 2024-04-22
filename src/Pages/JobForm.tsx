@@ -138,9 +138,24 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				<div className="col-span-full sm:col-span-3">
-					<label htmlFor="salary" className="text-sm">Salary</label>
-					<input id="salary" type="text" placeholder="salary"  value={values.salary} name='salary' onChange={handleInputChange}
-					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
+                <label htmlFor="salary" className="text-sm">Salary</label>
+                <select
+    id="salary"
+    value={values.salary}
+    name="salary"
+    onChange={handleInputChange}
+    className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900"
+>
+    <option value="">Select Salary...</option>
+    <option value="Below 100000">Below 100000</option>
+    <option value="100000-200000">100000-200000</option>
+    <option value="200000-400000">200000-400000</option>
+    <option value="400000-600000">400000-600000</option>
+    <option value="600000-800000">600000-800000</option>
+    <option value="800000-100000">800000-100000</option>
+    <option value="Above 100000">Above 100000</option>
+    
+</select>
 				</div>
 				<div className="col-span-full">
     <h3>Job Skills</h3>
@@ -190,6 +205,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
 				</div>
 				<div className="col-span-full sm:col-span-2">
+                <label htmlFor="experience" className="text-sm">Experience</label>
 					<select
     id="experience"
     value={values.experience}
