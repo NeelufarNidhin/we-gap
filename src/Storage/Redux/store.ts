@@ -11,6 +11,8 @@ import experienceApi from "../../API/experienceApi";
 import educationApi from "../../API/educationApi";
 import { authReducer } from "./authSlice";
 import skillApi from "../../API/skillApi";
+import chatApi from "../../API/chatApi";
+import jobApplicationApi from "../../API/jobApplicationApi";
 
 
 const store = configureStore({
@@ -27,6 +29,7 @@ const store = configureStore({
         [jobTypeApi.reducerPath] : jobTypeApi.reducer,
         [jobApi.reducerPath] : jobApi.reducer,
         [skillApi.reducerPath] : skillApi.reducer,
+        [jobApplicationApi.reducerPath] : jobApplicationApi.reducer,
         [auth.reducerPath]: auth.reducer
     },
     middleware: (getDefaultMiddleware)=>
@@ -41,6 +44,7 @@ const store = configureStore({
         .concat(jobSkillApi.middleware)
         .concat(jobTypeApi.middleware)
         .concat(skillApi.middleware)
+        .concat(jobApplicationApi.middleware)
       
 });
 

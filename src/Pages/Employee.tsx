@@ -16,7 +16,7 @@ function Employee() {
 		(state: RootState) => state.userAuthStore
 	  );
 	
-	console.log(userData)
+	//console.log(userData)
 	
 	
 	const {data,isLoading,isError} = useGetEmployeeExistsQuery(userData.id)

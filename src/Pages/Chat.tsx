@@ -57,7 +57,7 @@ const Chat = () => {
             });
 
             newConnection.on('ReceiveMessage', (sender: string, receivedMessage: string, at: string) => {
-                setMessages((prevMessages: any) => [...prevMessages, { sender, message: receivedMessage, timestamp: at }]);
+                setMessages((prevMessages: any) => [...prevMessages, { sender, message: receivedMessage, timestamp: new Date().toISOString() }]);
                 setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type: 'New Message', message: `You received a new message from ${sender}` }]);
             });
         
@@ -72,19 +72,29 @@ const Chat = () => {
        
     }, [userData]);
 
-    const formatDateTime = (timestamp: string) => {
-        const dateTime = new Date(timestamp);
-        return dateTime.toLocaleString(undefined, {
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
+   const formatDateTime = (timestamp: string | undefined) => {
+    if (!timestamp) {
+        return ''; // Handle cases where timestamp is not available
+    }
+    const dateTime = new Date(timestamp);
+    if (isNaN(dateTime.getTime())) {
+        return "Invalid Date"; // Handle invalid dates
+    }
+    return dateTime.toLocaleString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+};
 
     const [message, setMessage] = useState('');
 
     const sendMessage = (sender: string, message: string) => {
+        if (message.trim() === '') {
+        // Do not send empty messages
+        return;
+    }
         if (connection) {
             connection.invoke('SendMessage', sender, receiver, message)
                 .catch(err => console.error(err));
@@ -96,7 +106,7 @@ const Chat = () => {
     const handleEmployeeClick = async (employeeName: string) => {
         setReceiver(employeeName);
         try {
-            const response = await fetch(`http://localhost:8000/api/message/${userData.firstName}/${employeeName}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/message/${userData.firstName}/${employeeName}`);
             const data = await response.json();
             setMessages(data);
             console.log(data)

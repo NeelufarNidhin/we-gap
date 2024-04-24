@@ -7,7 +7,10 @@ import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
   EmployerProfile,Employer,AccessDenied,Dashboard, EmployeeForm ,
   EmployeeCard, NotFound, JobList, EmployeeList, Jobskill, JobType, OTP,
    EmployerForm, Employee, ProfileCard, JobForm, UserBlock, ExperienceForm, EducationForm, SkillForm, JobDetail, ResumeBuilder,
-   Chat} from '../Pages';
+   Chat,
+   Confirmation,
+   JobApplicationList,
+   JobApplicationDetail} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -70,11 +73,14 @@ useEffect(()=>{
       <Route path="/EmployerForm" element= {<EmployerForm/>}/> 
       <Route path="/EmployerForm/:employerId" element= {<EmployerForm/>}/> 
       <Route path="/JobForm" element= {<JobForm/>}/> 
+      <Route path="/Job-Application/:id" element= {<JobApplicationDetail/>}/> 
       <Route path="/JobForm/:jobId" element= {<JobForm/>}/> 
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["employer","employee"]}/>}>
       <Route path='/JobList' element= {<JobList/>}/> 
+      <Route path='/JobApplicationList' element= {<JobApplicationList/>}/> 
       <Route path="/Job/:jobId" element= {<JobDetail/>}/> 
+      <Route path="/Confirmation" element= {<Confirmation/>}/> 
       <Route path="/EmployeeList" element= {<EmployeeList/>}/> 
       <Route path="/Chat" element= {<Chat/>}> </Route>
       </Route>
