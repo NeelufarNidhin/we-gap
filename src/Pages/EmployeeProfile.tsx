@@ -87,106 +87,103 @@ function EmployeeProfile() {
   };
 
   const { data, isLoading } = useGetEmployeeByIdQuery(id);
-  const generateResume = () => {
-    if (data && experienceData && educationData && skillData) {
-      const employeeInfo = data.result;
-      const experienceInfo = experienceData.result;
-      const educationInfo = educationData.result;
-      const skillInfo = skillData.result;
-  
-      const doc = new jsPDF();
-      let yPos = 10;
-  
-      // Set default font
-      doc.setFont("helvetica");
-  
-      // Add Profile Picture
-      const imgData = employeeInfo.imageName; // Assuming imageName is a URL
-      const imgWidth = 40;
-      const imgHeight = 40;
-      doc.addImage(imgData, 'JPEG', 10, yPos, imgWidth, imgHeight);
-      yPos += imgHeight + 5;
-  
-      // Add Personal Information
-      doc.setFontSize(14);
-      doc.setTextColor("#333333");
-      doc.text(`Personal Information:`, 10, yPos);
-      yPos += 10;
+ const generateResume = () => {
+  if (data && experienceData && educationData && skillData) {
+    const employeeInfo = data.result;
+    const experienceInfo = experienceData.result;
+    const educationInfo = educationData.result;
+    const skillInfo = skillData.result;
+
+    const doc = new jsPDF();
+    let yPos = 10;
+
+    // Set default font
+    doc.setFont("helvetica");
+
+    // Add Profile Picture
+    const imgData = employeeInfo.imageName; // Assuming imageName is a URL
+    const imgWidth = 40;
+    const imgHeight = 40;
+    doc.addImage(imgData, 'JPEG', 10, yPos, imgWidth, imgHeight);
+    yPos += imgHeight + 5;
+
+    // Add Personal Information
+    doc.setFontSize(14);
+    doc.setTextColor("#333333");
+    doc.text(`Personal Information:`, 10, yPos);
+    yPos += 10;
+    doc.setFontSize(12);
+    doc.setTextColor("#666666");
+    doc.text(`Name: ${userData.firstName} ${userData.lastName}`, 10, yPos);
+    yPos += 10;
+    doc.text(`Email: ${userData.email}`, 10, yPos);
+    yPos += 10;
+    doc.text(`Address: ${employeeInfo.address}, ${employeeInfo.city}, ${employeeInfo.state} - ${employeeInfo.pincode}`, 10, yPos);
+    yPos += 10;
+    doc.text(`Mobile Number: ${employeeInfo.mobileNumber}`, 10, yPos);
+    yPos += 15;
+
+    // Add Experience
+    doc.setFontSize(14);
+    doc.setTextColor("#333333");
+    doc.text(`Experience:`, 10, yPos);
+    yPos += 10;
+    experienceInfo.forEach((exp: any) => {
       doc.setFontSize(12);
       doc.setTextColor("#666666");
-      doc.text(`Name: ${userData.firstName} ${userData.lastName}`, 10, yPos);
+      doc.text(`- Job Title: ${exp.currentJobTitle}`, 15, yPos);
+      yPos += 7;
+      doc.text(`  Company: ${exp.companyName}`, 15, yPos);
+      yPos += 7;
+      doc.text(`  Description: ${exp.description}`, 15, yPos);
+      yPos += 7;
+      doc.text(`  Status: ${exp.isWorking ? "Working" : "Not Working"}`, 15, yPos);
       yPos += 10;
-      doc.text(`Email: ${userData.email}`, 10, yPos);
+    });
+
+    // Add Education
+    doc.setFontSize(14);
+    doc.setTextColor("#333333");
+    doc.text(`Education:`, 10, yPos);
+    yPos += 10;
+    educationInfo.forEach((edu: any) => {
+      doc.setFontSize(12);
+      doc.setTextColor("#666666");
+      doc.text(`- Degree: ${edu.degree}`, 15, yPos);
+      yPos += 7;
+      doc.text(`  Subject: ${edu.subject}`, 15, yPos);
+      yPos += 7;
+      doc.text(`  University: ${edu.university}`, 15, yPos);
+      yPos += 7;
+      doc.text(`  Percentage: ${edu.percentage}%`, 15, yPos);
       yPos += 10;
-      doc.text(`Address: ${employeeInfo.address}, ${employeeInfo.city}, ${employeeInfo.state} - ${employeeInfo.pincode}`, 10, yPos);
-      yPos += 10;
-      doc.text(`Mobile Number: ${employeeInfo.mobileNumber}`, 10, yPos);
-      yPos += 15;
-    
-      // Add Experience
-      doc.setFontSize(14);
-      doc.setTextColor("#333333");
-     
-      doc.text(`Experience:`, 10, yPos);
-      yPos += 10;
-      experienceInfo.forEach((exp : any) => {
-        doc.setFontSize(12);
-        doc.setTextColor("#666666");
-        doc.text(`- Job Title: ${exp.currentJobTitle}`, 15, yPos);
-        yPos += 7;
-        doc.text(`  Company: ${exp.companyName}`, 15, yPos);
-        yPos += 7;
-        doc.text(`  Description: ${exp.description}`, 15, yPos);
-        yPos += 7;
-        doc.text(`  Status: ${exp.isWorking ? "Working" : "Not Working"}`, 15, yPos);
-        yPos += 10;
-      });
-  
-      // Add Education
-      doc.setFontSize(14);
-      doc.setTextColor("#333333");
-     
-      doc.text(`Education:`, 10, yPos);
-      yPos += 10;
-      educationInfo.forEach((edu : any) => {
-        doc.setFontSize(12);
-        doc.setTextColor("#666666");
-        doc.text(`- Degree: ${edu.degree}`, 15, yPos);
-        yPos += 7;
-        doc.text(`  Subject: ${edu.subject}`, 15, yPos);
-        yPos += 7;
-        doc.text(`  University: ${edu.university}`, 15, yPos);
-        yPos += 7;
-        doc.text(`  Percentage: ${edu.percentage}%`, 15, yPos);
-        yPos += 10;
-      });
-    
-      // Add Skills
-      doc.setFontSize(14);
-      doc.setTextColor("#333333");
-     
-      doc.text(`Skills:`, 10, yPos);
-      yPos += 10;
-      skillInfo.forEach((skill : any) => {
-        doc.setFontSize(12);
-        doc.setFont("bold")
-        doc.setTextColor("#666666");
-        doc.text(`- ${skill.skillName}`, 15, yPos);
-        yPos += 7;
-      });
-  
-      // Add border
-      doc.setDrawColor("#999999");
-      doc.setLineWidth(0.5);
-   // doc.rect(5, 5, 200, yPos - 5); // Border for content
+    });
+
+    // Add Skills
+    doc.setFontSize(14);
+    doc.setTextColor("#333333");
+    doc.text(`Skills:`, 10, yPos);
+    yPos += 10;
+    skillInfo.forEach((skill: any)=> {
+      doc.setFontSize(12);
+      doc.setFont("bold")
+      doc.setTextColor("#666666");
+      doc.text(`- ${skill.skillName}`, 15, yPos);
+      yPos += 7;
+    });
+
+    // Add border
+    doc.setDrawColor("#999999");
+    doc.setLineWidth(0.5);
+    doc.rect(5, 5, 200, yPos - 5); // Border for content
     doc.rect(5, 5, 200, 292); // Border for page
-  
-      // Save the PDF
-      doc.save('resume.pdf');
-    } else {
-      console.error("Error: Data is missing for generating resume");
-    }
-  };
+
+    // Save the PDF
+    doc.save('resume.pdf');
+  } else {
+    console.error("Error: Data is missing for generating resume");
+  }
+};
   
   let content;
   if (isLoading) {

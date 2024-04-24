@@ -1,12 +1,23 @@
-import React from 'react'
+import { LogLevel,HubConnection, HubConnectionBuilder,HttpTransportType } from '@microsoft/signalr';
 
-function MainChat() {
-  
-  return (
-    <div>
-      
-    </div>
-  )
-}
+let connection: HubConnection | null = null;
 
-export default MainChat
+export const setupWebSocketConnection = () => {
+  if (!connection) {
+    connection = new HubConnectionBuilder()
+      .withUrl("http://localhost:8000/chat", { skipNegotiation: true, transport: HttpTransportType.WebSockets })
+      .configureLogging(LogLevel.Information)
+      .build();
+
+    connection.start().catch(error => console.error("WebSocket connection failed:", error));
+  }
+
+  return connection;
+};
+
+export const closeWebSocketConnection = () => {
+  if (connection) {
+    connection.stop().catch(error => console.error("WebSocket connection stopping failed:", error));
+    connection = null;
+  }
+};

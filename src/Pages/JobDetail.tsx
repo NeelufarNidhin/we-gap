@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useGetJobByIdQuery } from "../API/jobApi";
 import axios from "axios";
+import { useCreateJobApplicationMutation } from "../API/jobApplicationApi";
+import userModel from "../Interfaces/userModel";
+import { RootState } from "../Storage/Redux/store";
+import { useSelector } from "react-redux";
+import { useGetEmployeeExistsQuery } from "../API/employeeApi";
 
 function JobDetail() {
   const { jobId } = useParams();
@@ -17,6 +22,17 @@ function JobDetail() {
         day: 'numeric',
     });
 };
+const [buttonText, setButtonText] = useState('Apply Now');
+const userData: userModel = useSelector(
+  (state: RootState) => state.userAuthStore
+  );
+
+
+const {data :employeeData,isLoading :EmployeeLoading,isError :EmployeeError} = useGetEmployeeExistsQuery(userData.id)
+
+const [createJob] = useCreateJobApplicationMutation();
+
+
   const fetchJobJobSkills = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -71,6 +87,55 @@ function JobDetail() {
     fetchJobJobSkills();
   }, []);
 
+
+  useEffect(() => {
+    const isJobApplied = localStorage.getItem(`job_${jobId}_applied`);
+    if (isJobApplied) {
+      setButtonText('Applied');
+    }
+  }, []);
+
+  const handleApplyNow = async () => {
+    try {
+      if(!EmployeeLoading  && employeeData.result && !isLoading && data) {
+      const jobApplicationData = {
+        jobId,
+        employeeId:employeeData.result.id,
+        jobStatus: 'Applied',
+        jobTitle : data.result.jobTitle,
+         employer: data.result.employerId
+      };
+      await createJob(jobApplicationData);
+      navigate('/confirmation');
+      setButtonText('Applied'); // Change button text after applying
+      localStorage.setItem(`job_${jobId}_applied`, 'true');
+    }
+   } catch (error) {
+      console.error('Error applying for job:', error);
+    }
+  };
+
+  // const handleApplyNow = async () => {
+  //   try{
+  //     if(!EmployeeLoading  && employeeData.result && !isLoading && data) {
+  //       const jobApplicationData = {
+  //         jobId,
+  //         employeeId:employeeData.result.id,
+  //         jobStatus : 'Applied',
+  //         jobTitle : data.result.jobTitle,
+  //         employer: data.result.employerId
+  //       };
+  //       await createJob(jobApplicationData);
+  //       navigate('/Confirmation');
+  //     }
+  //   }
+  //     catch (error) {
+  //       console.error('Error applying for job:', error);
+  //     }
+      
+    
+  // }
+
   return (
     <div>
       {!isLoading && isSuccess && data.result && (
@@ -100,8 +165,9 @@ function JobDetail() {
             </div>
 
             <div>
-              <button className="border border-black rounded-md px-3 py-2 mx-2 bg-violet-300">
-                Apply now
+              <button className="border border-black rounded-md px-3 py-2 mx-2 bg-violet-300" disabled={ buttonText === 'Applied'}   onClick={handleApplyNow} >
+           {buttonText}
+             
               </button>
               <button
                 className="border border-black rounded-md px-3 py-2 mx-2 bg-violet-300"
