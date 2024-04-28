@@ -230,12 +230,12 @@ function ExperienceForm(expId: any) {
               Submit
             </button>
 
-            <button
+            {/* <button
               onClick={() => navigate(-1)}
               className="w-full px-8 py-3  mx-4 font-semibold rounded-md bg-violet-400 text-white"
             >
               Back
-            </button>
+            </button> */}
           </div>
         </form>
       </section>

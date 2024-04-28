@@ -7,7 +7,7 @@ import {
 } from "../API/employerApi";
 import JobForm from "./JobForm";
 import JobCard from "./JobCard";
-
+import companyProfile from "../Assets/Images/company-profile.png";
 import { useGetJobByEmployerIdQuery } from "../API/jobApi";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
@@ -62,7 +62,7 @@ function EmployerProfile(props: Props) {
           </div>
           <div className="flex flex-col items-center -mt-20">
             <img
-              src="https://vojislavd.com/ta-template-demo/assets/img/profile.jpg"
+              src={companyProfile}
               alt=""
               className="w-40 border-4 border-white rounded-full"
             />

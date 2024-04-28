@@ -13,12 +13,12 @@ function Employer() {
 const userData : userModel = useSelector(
 	(state: RootState) => state.userAuthStore
 )
-console.log(userData)
+
  const {data,isLoading} = useGetEmployerExistsQuery(userData.id)
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
 	  if(!isLoading && data){
-		console.log(data)
+		
 		navigate(`/EmployerProfile/${data.id}`)
 	  }
 	  else if(!data){

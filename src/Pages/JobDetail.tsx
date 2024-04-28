@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetJobByIdQuery } from "../API/jobApi";
-import axios from "axios";
 import { useCreateJobApplicationMutation } from "../API/jobApplicationApi";
 import userModel from "../Interfaces/userModel";
-import { RootState } from "../Storage/Redux/store";
 import { useSelector } from "react-redux";
+import { RootState } from "../Storage/Redux/store";
 import { useGetEmployeeExistsQuery } from "../API/employeeApi";
 
 function JobDetail() {
   const { jobId } = useParams();
-  const { data, isLoading, isSuccess, error } = useGetJobByIdQuery(jobId);
-  const [jobSkillNames, setJobSkillNames] = useState([]);
-  const [jobTypeName, setJobTypeName] = useState("");
   const navigate = useNavigate();
+  
+  // Fetch job details
+  const { data: jobData, isLoading: jobLoading, isSuccess: jobSuccess, error: jobError } = useGetJobByIdQuery(jobId);
+  
+  // State for job application details
+  const [availability, setAvailability] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+  const [resume, setResume] = useState<File | null>(null);
+  const [buttonText, setButtonText] = useState('Apply Now');
+  const userData: userModel = useSelector(
+		(state: RootState) => state.userAuthStore
+	  );
+  const {data :employeeData,isLoading :EmployeeLoading,isError :EmployeeError} = useGetEmployeeExistsQuery(userData.id)
+  // Mutation for creating job application
+  const [createJobApplication] = useCreateJobApplicationMutation();
   const formatDateTime = (timestamp :string) => {
     const dateTime = new Date(timestamp);
     return dateTime.toLocaleString(undefined, {
@@ -22,163 +33,95 @@ function JobDetail() {
         day: 'numeric',
     });
 };
-const [buttonText, setButtonText] = useState('Apply Now');
-const userData: userModel = useSelector(
-  (state: RootState) => state.userAuthStore
-  );
-
-
-const {data :employeeData,isLoading :EmployeeLoading,isError :EmployeeError} = useGetEmployeeExistsQuery(userData.id)
-
-const [createJob] = useCreateJobApplicationMutation();
-
-
-  const fetchJobJobSkills = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const headers: Record<string, string> = {};
-
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/job/${jobId}/jobJobSkills`,
-        {
-          headers,
-        }
-      );
-
-      setJobSkillNames(
-        response.data.result.map((jobJobSkill: any) => jobJobSkill.skillName)
-      );
-    } catch (error) {
-      console.error("Error fetching job job skills:", error);
-    }
-  };
-
-  const fetchJobTypeName = async (jobTypeId: string) => {
-    try {
-      const token = localStorage.getItem("token");
-      const headers: Record<string, string> = {};
-
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/jobType/${jobTypeId}`,
-        {
-          headers,
-        }
-      );
-
-      setJobTypeName(response.data.result.jobTypeName);
-      //   console.log(jobTypeName);
-    } catch (error) {
-      console.error("Error fetching job type names:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!isLoading && isSuccess && data.result) {
-      fetchJobTypeName(data.result.jobTypeId);
-    }
-    fetchJobJobSkills();
-  }, []);
-
-
   useEffect(() => {
     const isJobApplied = localStorage.getItem(`job_${jobId}_applied`);
     if (isJobApplied) {
       setButtonText('Applied');
     }
   }, []);
-
-  const handleApplyNow = async () => {
-    try {
-      if(!EmployeeLoading  && employeeData.result && !isLoading && data) {
-      const jobApplicationData = {
-        jobId,
-        employeeId:employeeData.result.id,
-        jobStatus: 'Applied',
-        jobTitle : data.result.jobTitle,
-         employer: data.result.employerId
-      };
-      await createJob(jobApplicationData);
-      navigate('/confirmation');
-      setButtonText('Applied'); // Change button text after applying
-      localStorage.setItem(`job_${jobId}_applied`, 'true');
-    }
-   } catch (error) {
-      console.error('Error applying for job:', error);
+  // Function to handle submit button click
+  const handleSubmit = async (e :any) => {
+    e.preventDefault();
+   
+      const formData = new FormData();
+      if (typeof jobId === 'string') {
+        formData.append("JobId", jobId);
+      }
+      if(!EmployeeLoading && employeeData ){
+        formData.append("EmployeeId", employeeData.result.id); 
+      }
+     
+    formData.append("Jobtitle", jobData.result.jobTitle);
+    formData.append("JobStatus", "Applied")
+    formData.append("Employer", jobData.result.employerId);
+      formData.append("Availability", availability);
+      formData.append("CoverLetter", coverLetter);
+      if (resume !== null) {
+        formData.append("Resume", resume);
+      }
+      
+     const response : any = await createJobApplication(formData);
+      
+      // Redirect to confirmation page or any other page
+      if(response.data){
+        navigate('/confirmation');
+        setButtonText('Applied'); // Change button text after applying
+        localStorage.setItem(`job_${jobId}_applied`, 'true');
+      }
+     
+    
+  };
+  
+  if (jobLoading) return <div>Loading...</div>;
+  if (!jobSuccess || !jobData.result) return <div>Error loading job details</div>;
+  
+  const { jobTitle, description, experience, salary, createdAt, jobTypeId, jobSkill, employer } = jobData.result;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setResume(file);
     }
   };
-
-  // const handleApplyNow = async () => {
-  //   try{
-  //     if(!EmployeeLoading  && employeeData.result && !isLoading && data) {
-  //       const jobApplicationData = {
-  //         jobId,
-  //         employeeId:employeeData.result.id,
-  //         jobStatus : 'Applied',
-  //         jobTitle : data.result.jobTitle,
-  //         employer: data.result.employerId
-  //       };
-  //       await createJob(jobApplicationData);
-  //       navigate('/Confirmation');
-  //     }
-  //   }
-  //     catch (error) {
-  //       console.error('Error applying for job:', error);
-  //     }
-      
-    
-  // }
-
+  
   return (
     <div>
-      {!isLoading && isSuccess && data.result && (
-        <div className="container mx-auto mt-8">
-          <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
-            <div className="p-4 mt-4 text-gray-800">
-              <h3 className="text-xl bg-gray-200 font-bold">
-                JobTitle:{data.result.jobTitle}
-              </h3>
-              <p >Salary :{data.result.salary}</p>
-              <p >
-                Experience: {data.result.experience}
-              </p>
-              <p>Job Type: {jobTypeName} </p>
-              <div className="flex items-center gap-2 pt-2 ">
-                <p>Job Skill :</p>
-                {jobSkillNames.map((jskill: any) => (
-                  <p className=" border border-gray-500 py-.5 px-1 mt-1 text-gray-600 rounded-md">
-                    {jskill}{" "}
-                  </p>
-                ))}
-              </div>
-              <h4 >
-                Description:{data.result.description}
-              </h4>
-              <p>Posted Date : {formatDateTime( data.result.createdAt)}</p>
+       <div className="container mx-auto mt-8">
+          <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md p-4">
+            <div className=" text-gray-800"></div>
+            <h2 className="text-2xl font-semibold mb-4">Job Details</h2>
+            <p className="text-xl bg-gray-200 font-bold mb-2">Job Title: {jobTitle}</p>
+      <p className="mb-2">Description: {description}</p>
+      <p className="mb-2">Experience: {experience}</p>
+      <p className="mb-2">Salary: {salary}</p>
+      <p className="mb-4">Posted Date: {formatDateTime(createdAt)}</p>
+      {/* Render other job details */}
+      
+      <h2 className="text-2xl font-semibold mb-4">Apply for Job</h2>
+      <form onSubmit={handleSubmit}  method="post" className="mb-4"
+          encType="multipart/form-data"
+         >
+            <div className="mb-4">
+            <label className="block mb-1">
+        Availability:
+        <input className="border border-gray-300 rounded-md px-3 py-2 w-full" required type="text" value={availability} onChange={(e) => setAvailability(e.target.value)} />
+        
+      </label>
             </div>
-
-            <div>
-              <button className="border border-black rounded-md px-3 py-2 mx-2 bg-violet-300" disabled={ buttonText === 'Applied'}   onClick={handleApplyNow} >
-           {buttonText}
-             
-              </button>
-              <button
-                className="border border-black rounded-md px-3 py-2 mx-2 bg-violet-300"
-                onClick={() => navigate(-1)}
-              >
-                Back
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            <div className="mb-4"> 
+            <label className="block mb-1">
+        Cover Letter:
+        <textarea className="border border-gray-300 rounded-md px-3 py-2 w-full" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
+      </label>  </div>
+      <div className="mb-4">
+      <label className="block mb-1">
+        Resume:
+        <input className="border border-gray-300 rounded-md px-3 py-2 w-full" type="file" onChange={handleFileChange} />
+      </label> </div>
+      
+      <button type="submit" className="border border-black rounded-md px-3 py-2 mx-2 bg-violet-300" disabled={ buttonText === 'Applied'} >  {buttonText}</button>
+      </form>
+    </div>
+    </div>
     </div>
   );
 }
