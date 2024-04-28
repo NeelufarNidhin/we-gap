@@ -10,7 +10,10 @@ import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
    Chat,
    Confirmation,
    JobApplicationList,
-   JobApplicationDetail} from '../Pages';
+   JobApplicationDetail,
+   VideoChat,
+   Video,
+   VideoPage} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -40,16 +43,11 @@ useEffect(()=>{
      
       <Header/>
       <Routes>
-      
-      
       <Route element= {<ProtectedRoute allowedRoles ={["admin"]}/>}>
       <Route path="/AdminPanel" element= {<AdminPanel/>}/> 
       <Route path="/ProfileCard" element= {<ProfileCard/>}/> 
       <Route path="/DashBoard" element= {<Dashboard/>}/> 
-     
       </Route>
-
-     
       <Route element= {<ProtectedRoute allowedRoles ={["employee"]}/>}>
       <Route path="/EmployeeProfile/:id" element= {<EmployeeProfile/>}/> 
       <Route path="/EmployeeProfile" element= {<EmployeeProfile/>}/> 
@@ -73,16 +71,18 @@ useEffect(()=>{
       <Route path="/EmployerForm" element= {<EmployerForm/>}/> 
       <Route path="/EmployerForm/:employerId" element= {<EmployerForm/>}/> 
       <Route path="/JobForm" element= {<JobForm/>}/> 
-      <Route path="/Job-Application/:id" element= {<JobApplicationDetail/>}/> 
+      <Route path="/Job-Application/:jobAppId/:employeeId/:jobId" element= {<JobApplicationDetail/>}/> 
       <Route path="/JobForm/:jobId" element= {<JobForm/>}/> 
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["employer","employee"]}/>}>
       <Route path='/JobList' element= {<JobList/>}/> 
       <Route path='/JobApplicationList' element= {<JobApplicationList/>}/> 
-      <Route path="/Job/:jobId" element= {<JobDetail/>}/> 
+      <Route path="/Job/:jobId/:employerId" element= {<JobDetail/>}/> 
       <Route path="/Confirmation" element= {<Confirmation/>}/> 
       <Route path="/EmployeeList" element= {<EmployeeList/>}/> 
       <Route path="/Chat" element= {<Chat/>}> </Route>
+      <Route path="/Video" element= {<Video/>}> </Route>
+      <Route path="/room/:roomId" element= {<VideoPage/>}> </Route>
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["admin","employer"]}/>}>
       <Route path='/JobSkill' element= {<Jobskill  />}/> 

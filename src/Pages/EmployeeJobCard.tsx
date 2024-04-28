@@ -75,7 +75,7 @@ function EmployeeJobCard({ job }: any) {
   return (
     <div className="flex justify-between items-center bg-zinc-100 px-6 py-6 my-4 border border-black">
       <div className="pb-2">
-        <Link to={`/job/${job.id}`}></Link>
+        <Link to={`/job/${job.id}/${job.employerId}`}></Link>
         <p>
           {job.jobTitle} - {job.employer.companyName}
         </p>
@@ -91,7 +91,7 @@ function EmployeeJobCard({ job }: any) {
       <div>
         <button
           className="border border-black rounded-md px-3 py-2 bg-"
-          onClick={() => navigate(`/job/${job.id}`)}
+          onClick={() => navigate(`/job/${job.id}/${job.employerId}`)}
         >
           Apply now
         </button>

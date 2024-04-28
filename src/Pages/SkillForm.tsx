@@ -1,35 +1,50 @@
 import React, { useEffect, useState } from 'react'
-import { useCreateSkillMutation, useGetSkillByIdQuery, useUpdateSkillMutation } from '../API/skillApi';
+import { useCreateSkillMutation,  useGetSkillByIdQuery, useUpdateSkillMutation } from '../API/skillApi';
 import apiResponse from '../Interfaces/apiResponse';
 import { useNavigate, useParams } from 'react-router-dom';
 import ToastNotify from '../Helper/ToastNotify';
 import inputHelper from '../Helper/inputHelper';
+import { useGetJobSkillQuery } from '../API/jobskillApi';
 
+
+interface SkillData {
+  skillName: string;
+  employeeId: string;
+  otherSkill:string;
+}
 function SkillForm(skillid : any) {
 
   const initialValues = {
     skillName : "",
-    employeeId:""
+    employeeId:"",
+    otherSkill: ''
   }
     const {id} = useParams()
    // const [skillName,setSkillName] = useState("");
    const [values ,setValues] = useState(initialValues);
     const [addSkill] = useCreateSkillMutation()
-
+    const [jobSkills, setJobSkills] = useState([]);
+    const [selectedSkill, setSelectedSkill] = useState("");
     const {skillId} = useParams()
     const {data,isLoading,error,isSuccess} = useGetSkillByIdQuery(skillId)
+
+    const {data:jobSkillData , isLoading:jobSkillLoading , error:jobSkillError} = useGetJobSkillQuery({})
     const navigate = useNavigate();
     useEffect(() => {
       if(!isLoading && data && data.result){
         console.log(data.result)
-        const tempData = {
+        const tempData:SkillData = {
           skillName : data.result.skillName,
-          employeeId : data.result.employeeId
+          employeeId : data.result.employeeId,
+          otherSkill:""
         }
         setValues(tempData)
       }
-
-    },[data,isLoading])
+      if(!jobSkillLoading && jobSkillData){
+        console.log(jobSkillData)
+        setJobSkills(jobSkillData.apiResponse.result)
+      }
+    },[data,isLoading ,jobSkillData,jobSkillLoading])
 
     const [updateSkill] = useUpdateSkillMutation();
     const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -37,29 +52,53 @@ function SkillForm(skillid : any) {
       setValues(tempData);
       // setSkillName(e.target.value)
     }
-    
+    const handleSelectChange = (e :any) => {
+      const selected = e.target.value;
+      setSelectedSkill(selected);
+  
+      if (selected === 'other') {
+        setValues({ ...values, skillName: '', otherSkill: '' });
+      } else {
+        setValues({ ...values, skillName: selected, otherSkill: '' });
+      }
+    };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
        let response :apiResponse ;
-        if(skillId) {
-          response = await  updateSkill({
-            id :skillId,
-            skillName : values.skillName,
-            employeeId : values.employeeId
-          })
+       if (selectedSkill === 'other') {
+        // If the user selects 'other', update the skillName with the otherSkill value
+        const updatedValues = { ...values, skillName: values.otherSkill };
+        
+        if (skillId) {
+          response = await updateSkill({
+            id: skillId,
+            skillName: updatedValues.skillName,
+            employeeId: updatedValues.employeeId
+          });
+        } else {
+          response = await addSkill({
+            skillName: updatedValues.skillName,
+            employeeId: id
+          });
         }
-        else {
-       response = await addSkill(
-            {skillName : values.skillName,
-            employeeId : id
+      } else {
+        // Use the existing values for skillName
+        if (skillId) {
+          response = await updateSkill({
+            id: skillId,
+            skillName: values.skillName,
+            employeeId: values.employeeId
+          });
+        } else {
+          response = await addSkill({
+            skillName: values.skillName,
+            employeeId: id
+          });
         }
-      
-        )
       }
          if (response.data && response.data.isSuccess){
           console.log(response.data.result);
-         setValues({skillName : "",
-        employeeId : ""})
+         setValues(initialValues)
          }
          else if (response.error || !response.data?.isSuccess) {
           console.log(response.error)
@@ -76,12 +115,24 @@ function SkillForm(skillid : any) {
 				<p className="font-medium">Add Skill</p>
 				
 			</div>
-			<div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
-				<div className="col-span-full sm:col-span-3">
-					<label htmlFor="skillName" className="text-sm">Skill </label>
-					<input id="skillName" type="text" placeholder="Skill" required  value={values.skillName} name='skillName' onChange={handleInputChange}
-					 className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900" />
-				</div>
+      <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+              <div className="col-span-3">
+                <label htmlFor="jobSkill" className="text-sm">Select Skill</label>
+                <select id="jobSkill" onChange={handleSelectChange} value={selectedSkill} className="w-full rounded-md focus:ring focus:ring-violet-800 focus:ring-opacity-50 dark:border-gray-700 dark:text-gray-900">
+                  <option value="">Select Skill</option>
+                  {jobSkills.map((skill :any) => (
+                    <option key={skill.id} value={skill.skillName}>{skill.skillName}</option>
+                  ))}
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              {selectedSkill === 'other' && (
+                <div className="col-span-3">
+                  <label htmlFor="otherSkill" className="text-sm">Other Skill</label>
+                  <input id="otherSkill" type="text" placeholder="Other Skill" required value={values.otherSkill} name='otherSkill' onChange={handleInputChange}
+                    className="w-full rounded-md focus:ring focus:ring-violet-800 focus:ring-opacity-50 dark:border-gray-700 dark:text-gray-900" />
+                </div>
+              )}
             </div>
             </fieldset>
             <div className="flex justify-between">
@@ -92,12 +143,12 @@ function SkillForm(skillid : any) {
               Submit
             </button>
 
-            <button
+            {/* <button
               onClick={() => navigate(-1)}
               className="w-full px-8 py-3  mx-4 font-semibold rounded-md bg-violet-400 text-white"
             >
               Back
-            </button>
+            </button> */}
             </div>
             </form>
             </section>

@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Storage/Redux/store';
-import { useGetJobApplicationQuery, useUpdateJobApplicationMutation } from '../API/jobApplicationApi';
+import { useDeleteJobApplicationMutation, useGetJobApplicationQuery, useUpdateJobApplicationMutation } from '../API/jobApplicationApi';
 import { Link } from 'react-router-dom';
 import userModel from '../Interfaces/userModel';
 import { useGetEmployerExistsQuery } from '../API/employerApi';
 import { useGetJobByIdQuery } from '../API/jobApi';
 
-// interface JobDetails {
-//   [jobId: string]: {
-//     title: string;
-//     companyName: string;
-//     jobTypeName: string;
-//   };
-// }
+
 
 function JobApplicationList() {
   const userData: userModel = useSelector(
@@ -24,16 +18,26 @@ function JobApplicationList() {
   const { data, isLoading, isError, error } = useGetJobApplicationQuery({});
   const [jobDetails, setJobDetails] = useState([]);
   const [updateJobApplication] = useUpdateJobApplicationMutation()
-
+  const [deleteJobApplication] = useDeleteJobApplicationMutation();
   const [selectedStatus, setSelectedStatus] = useState('');
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>, jobId: string) => {
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>, jobAppId: string) => {
     const newStatus = e.target.value;
     setSelectedStatus(newStatus);
-
-    // Call an API to update the status of the job application
-    updateJobApplication({id:jobId,jobStatus: newStatus});
   };
 
+  const handleUpdate = (jobAppId: string) => {
+    updateJobApplication({ id: jobAppId,
+      
+      jobStatus: selectedStatus });
+    
+  };
+
+
+  const handleDelete = (jobId: string) => {
+    // Call the deleteJobApplication mutation
+    deleteJobApplication(jobId);
+  };
   if (isLoading || employerLoading ) {
     return <div>Loading...</div>;
   }
@@ -54,6 +58,8 @@ function JobApplicationList() {
             {/* <th className="py-2 px-6 bg-gray-200 border-b">Job Type</th> */}
             <th className="py-2 px-6 bg-gray-200 border-b">Status</th>
             <th className="py-2 px-6 bg-gray-200 border-b">Actions</th>
+            <th  className="py-2 px-6 bg-gray-200 border-b"></th>
+            <th  className="py-2 px-6 bg-gray-200 border-b"></th>
           </tr>
         </thead>
         <tbody>
@@ -73,16 +79,19 @@ function JobApplicationList() {
                       >
                          <option value="applied">Applied</option>
                         <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
+                        <option value="shorlisted">ShortListed</option>
                         <option value="rejected">Rejected</option>
                       </select>
                     </td>
           <td className="py-2 px-6 border-b">
-              <Link to={`/job-application/${jobApp.id}`}>
+              <Link to={`/job-application/${jobApp.id}/${jobApp.employeeId}/${jobApp.jobId}`}>
                     <button className="bg-blue-500 text-white p-2 rounded-md mr-2">View</button>
                   </Link>
-            <button className="bg-orange-500 text-white p-2 rounded-md">Update Status</button>
+           
+          
           </td>
+          <td> <button onClick={() => handleUpdate(jobApp.id)} className="bg-orange-500 text-white p-2 rounded-md">Update </button></td>
+          <td>  <button onClick={() => handleDelete(jobApp.id)} className="bg-red-500 text-white p-2 rounded-md">Delete</button></td>
         </tr>
       );
     } else {

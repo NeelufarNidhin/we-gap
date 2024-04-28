@@ -32,8 +32,11 @@ import Chat from "./Chat";
 import Confirmation from "./Confirmation";
 import JobApplicationList from "./JobApplicationList";
 import JobApplicationDetail from "./JobApplicationDetail";
+import VideoChat from "./VideoChat";
+import Video from "./Video";
+import VideoPage from "./VideoPage";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
     ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,JobDetail,ResumeBuilder,
     JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm,ExperienceForm,EducationForm ,
-     Chat , Confirmation,JobApplicationList,JobApplicationDetail}
+     Chat , Confirmation,JobApplicationList,JobApplicationDetail,VideoChat,Video,VideoPage}

@@ -95,6 +95,15 @@ function Header() {
          <li className="flex">
            <Link
              rel="noopener noreferrer"
+             to="/Video"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+          Video Call
+           </Link>
+         </li>
+         <li className="flex">
+           <Link
+             rel="noopener noreferrer"
              to="/JobApplicationList"
              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
            >
@@ -133,7 +142,15 @@ function Header() {
           Chat
            </Link>
          </li>
-         
+         <li className="flex">
+           <Link
+             rel="noopener noreferrer"
+             to="/Video"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+          Video Call
+           </Link>
+         </li>
          </>
      )}
                  

@@ -20,8 +20,8 @@ function JobList() {
   const [filters, setFilters] = useState({ searchString: "", jobType: "", jobSkill: "" });
   const [apiFilters, setApiFilters] = useState({ searchString: "", jobType: "", jobSkill: "" });
   const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [sortOrder, setSortOrder] = useState("desc");
+  // const [sortBy, setSortBy] = useState("createdAt");
+  // const [sortOrder, setSortOrder] = useState("desc");
   
   const { data, isLoading, isSuccess, error } = useGetJobsQuery({
     ...(apiFilters && {
@@ -30,8 +30,8 @@ function JobList() {
       jobSkill: apiFilters.jobSkill,
       pageNumber: pageOptions.pageNumber,
       pageSize: pageOptions.pageSize,
-      sortBy,
-      sortOrder
+      // sortBy,
+      // sortOrder
     })
   });
 
@@ -76,21 +76,21 @@ function JobList() {
     }
   };
 
-  const handleSort = (sortBy: string) => {
-    if (sortBy === sortBy) {
-      setSortBy(sortBy);
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(sortBy);
-      setSortOrder("desc");
-    }
-  };
+  // const handleSort = (sortBy: string) => {
+  //   if (sortBy === sortBy) {
+  //     setSortBy(sortBy);
+  //     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  //   } else {
+  //     setSortBy(sortBy);
+  //     setSortOrder("desc");
+  //   }
+  // };
 
   const handleClear = () => {
     setFilters({ searchString: "", jobType: "", jobSkill: "" });
     setApiFilters({ searchString: "", jobType: "", jobSkill: "" });
-    setSortBy("createdAt");
-    setSortOrder("desc");
+    // setSortBy("createdAt");
+    // setSortOrder("desc");
   };
    
   return (
@@ -133,12 +133,12 @@ function JobList() {
       </div>
 
       <div className="flex">
-        <div className="flex-grow">
+        {/* <div className="flex-grow">
           <button className="block text-left" onClick={() => handleSort("jobTitle")}>Job Title</button>
         </div>
         <div className="flex-none">
           <button className="block text-left" onClick={() => handleSort("createdAt")}>Created At</button>
-        </div>
+        </div> */}
         {/* Add more headers for other columns */}
       </div>
 

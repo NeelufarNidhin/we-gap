@@ -22,6 +22,8 @@ function JobCard({ job }: JobCardProps) {
  
    const [jobSkillNames, setJobSkillNames] = useState([]);
    const [jobTypeName, setJobTypeName] = useState('');
+   const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 const navigate = useNavigate();
   const [deleteJob] = useDeleteJobMutation();
    const handleJobDelete = async (id: string) =>{
