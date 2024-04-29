@@ -5,7 +5,7 @@ import { useDeleteJobApplicationMutation, useGetJobApplicationQuery, useUpdateJo
 import { Link } from 'react-router-dom';
 import userModel from '../Interfaces/userModel';
 import { useGetEmployerExistsQuery } from '../API/employerApi';
-import { useGetJobByIdQuery } from '../API/jobApi';
+
 
 
 
@@ -15,23 +15,35 @@ function JobApplicationList() {
   );
 
   const { data: employerData, isLoading: employerLoading, isError: employerError } = useGetEmployerExistsQuery(userData.id);
-  const { data, isLoading, isError, error } = useGetJobApplicationQuery({});
-  const [jobDetails, setJobDetails] = useState([]);
+  const { data, isLoading, isError, error } = useGetJobApplicationQuery([]);
+ const [jobDetails,setJobDetails] = useState([]);
   const [updateJobApplication] = useUpdateJobApplicationMutation()
   const [deleteJobApplication] = useDeleteJobApplicationMutation();
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>, jobAppId: string) => {
+  const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>, jobAppId: string) => {
     const newStatus = e.target.value;
-    setSelectedStatus(newStatus);
+   // setSelectedStatus(newStatus);
+   try {
+    await updateJobApplication({ id: jobAppId, jobStatus: newStatus });
+    // Update the job application status in the local state
+    setJobDetails((prevDetails : any) => {
+      const updatedDetails = prevDetails.map((jobApp: any) =>
+        jobApp.id === jobAppId ? { ...jobApp, jobStatus: newStatus } : jobApp
+      );
+      return updatedDetails;
+    });
+  } catch (error) {
+    console.error('Error updating job application status:', error);
+  }
   };
 
-  const handleUpdate = (jobAppId: string) => {
-    updateJobApplication({ id: jobAppId,
+  // const handleUpdate = (jobAppId: string) => {
+  //   updateJobApplication({ id: jobAppId,
       
-      jobStatus: selectedStatus });
+  //     jobStatus: selectedStatus });
     
-  };
+  // };
 
 
   const handleDelete = (jobId: string) => {
@@ -73,7 +85,7 @@ function JobApplicationList() {
           <td className="py-2 px-6 border-b">{jobApp.employeeId}</td>
           <td className="py-2 px-6 border-b">
                       <select
-                        value={selectedStatus}
+                        value={jobApp.jobStatus}
                         onChange={(e) => handleStatusChange(e, jobApp.id)}
                         className="bg-white border rounded-md px-3 py-1"
                       >
@@ -90,7 +102,7 @@ function JobApplicationList() {
            
           
           </td>
-          <td> <button onClick={() => handleUpdate(jobApp.id)} className="bg-orange-500 text-white p-2 rounded-md">Update </button></td>
+          <td> <button  className="bg-orange-500 text-white p-2 rounded-md">Update </button></td>
           <td>  <button onClick={() => handleDelete(jobApp.id)} className="bg-red-500 text-white p-2 rounded-md">Delete</button></td>
         </tr>
       );

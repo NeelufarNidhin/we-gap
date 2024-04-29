@@ -23,6 +23,16 @@ const myMeeting  = async (element:any) => {
 
   zp.joinRoom({
     container:element,
+    sharedLinks: [
+      {
+        name: 'Personal link',
+        url:
+         window.location.protocol + '//' + 
+         window.location.host + window.location.pathname +
+          '?roomID=' +
+          roomId,
+      },
+    ],
     scenario:{
       mode: ZegoUIKitPrebuilt.VideoConference
     }

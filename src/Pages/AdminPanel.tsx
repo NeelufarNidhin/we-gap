@@ -39,6 +39,7 @@ function AdminPanel() {
       userRole: filters.userRole
     });
   };
+  
   const [blockUser] = useBlockUserMutation();
   const [deleteUser] = useDeleteUserMutation();
 
@@ -88,7 +89,11 @@ function AdminPanel() {
       });
     }
   };
-
+  const handleClearAll = () => {
+  
+    setFilters({ searchString: "", userRole: "" });
+    setApiFilters({ searchString: "", userRole: "" });
+  };
   return (
     <div className="container p-2 mx-auto sm:p-4 bg-violet-300 text-gray-900">
       <h2 className="mb-4 text-2xl font-semibold leading text-gray-500">User List</h2>
@@ -99,14 +104,16 @@ function AdminPanel() {
           className="flex-grow block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
           placeholder="Search..."
           name="searchString"
+          value ={filters.searchString}
           onChange={handleChange}
         />
-        <select className="p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" name="userRole" onChange={handleChange}>
+        <select className="p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" value={filters.userRole} name="userRole" onChange={handleChange}>
           {filterOptions.map((item, index) => (
             <option key={index} value={item === "All" ? "" : item}>{item}</option>
           ))}
         </select>
         <button className="px-4 py-2 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={handleFilters}>Filter</button>
+        <button className="px-4 py-2 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={handleClearAll}>Clear All</button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full p-6 text-xs text-left whitespace-nowrap">
