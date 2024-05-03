@@ -6,7 +6,7 @@ import { RootState } from '../Storage/Redux/store';
 export const  userApi =  createApi({
   reducerPath : "userApi",
   baseQuery : fetchBaseQuery({
-    baseUrl :  `${process.env.REACT_APP_API_URL}/`,
+    baseUrl :  `${process.env.REACT_APP_API_URL}/api/`,
    
     prepareHeaders : (headers ) => {
       

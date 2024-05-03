@@ -48,7 +48,7 @@ function JobForm(jId: any) {
         headers["Authorization"] = `Bearer ${token}`;
       }
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/job/${jobId}/jobJobSkills`,
+        `${process.env.REACT_APP_API_URL}/api/job/${jobId}/jobJobSkills`,
         {
           headers,
         }

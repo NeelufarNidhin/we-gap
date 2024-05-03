@@ -1,6 +1,6 @@
 
-import image1 from "../Assets/Images/Image1.jpg";
-import image2 from "../Assets/Images/Image2.png";
+//import image1 from "../Assets/Images/Image1.jpg";
+//import image2 from "../Assets/Images/Image2.png";
 import { Link } from "react-router-dom";
 
 function Home() {
@@ -66,7 +66,7 @@ function Home() {
               
             </div>
             <img
-              src={image2}
+              src="https://wegapwebimages.blob.core.windows.net/wegap/Image2.png"
               alt=""
               className="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500"
             />
@@ -80,7 +80,7 @@ function Home() {
             className="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-violet-900"
           >
             <img
-              src={image1}
+              src="https://wegapwebimages.blob.core.windows.net/wegap/Image1.jpg"
               alt=""
               className="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500"
             />

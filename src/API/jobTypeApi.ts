@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const jobTypeApi = createApi({
     reducerPath : "jobTypeApi",
     baseQuery : fetchBaseQuery({
-        baseUrl :  `${process.env.REACT_APP_API_URL}/`,
+        baseUrl :  `${process.env.REACT_APP_API_URL}/api/`,
         prepareHeaders : (headers) => {
             const token = localStorage.getItem("token");
             if(token){

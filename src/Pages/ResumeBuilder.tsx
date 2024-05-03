@@ -58,7 +58,7 @@ function ResumeBuilder() {
         }
   
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}/experience/employee/${employeeId}`,
+            `${process.env.REACT_APP_API_URL}/api/experience/employee/${employeeId}`,
             {
               headers,
             }

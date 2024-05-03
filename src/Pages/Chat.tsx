@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../Storage/Redux/store';
 import { useGetEmployersQuery } from '../API/employerApi';
 import { useGetEmployeesQuery } from '../API/employeeApi';
+import axios from 'axios';
 
 interface ChatMessage {
     sender: string;
@@ -25,6 +26,7 @@ const Chat = () => {
     const userData: userModel = useSelector(
         (state: RootState) => state.userAuthStore
     );
+    const auth = localStorage.getItem("token");
     const [users, setUsers] = useState([]);
     const [receiver, setReceiver] = useState("");
     const { data, isLoading, isSuccess } = useGetEmployeesQuery({});
@@ -47,7 +49,7 @@ const Chat = () => {
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
-            .withUrl("http://localhost:8000/chat", { skipNegotiation: true, transport: signalR.HttpTransportType.WebSockets })
+            .withUrl( `${process.env.REACT_APP_API_URL}/chat`, { skipNegotiation: true, transport: signalR.HttpTransportType.WebSockets })
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
@@ -58,7 +60,7 @@ const Chat = () => {
 
             newConnection.on('ReceiveMessage', (sender: string, receivedMessage: string, at: string) => {
                 setMessages((prevMessages: any) => [...prevMessages, { sender, message: receivedMessage, timestamp: new Date().toISOString() }]);
-                setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type: 'New Message', message: `You received a new message from ${sender}` }]);
+               // setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type: 'New Message', message: `You received a new message from ${sender}` }]);
             });
         
             newConnection.on('ReceiveNotification', (type: string, message: string) => {
@@ -106,9 +108,18 @@ const Chat = () => {
     const handleEmployeeClick = async (employeeName: string) => {
         setReceiver(employeeName);
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/message/${userData.firstName}/${employeeName}`);
-            const data = await response.json();
-            setMessages(data);
+            const token = localStorage.getItem("token");
+            const headers: Record<string, string> = {};
+            if (token) {
+              headers["Authorization"] = `Bearer ${token}`;
+            }
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/message/${userData.firstName}/${employeeName}`,
+            {
+                headers,
+              }
+            );
+           // const data = await response.json();
+            setMessages(response.data);
             console.log(data)
         } catch (error) {
             console.error('Error fetching messages: ', error);

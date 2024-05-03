@@ -38,7 +38,7 @@ const VideoChat = () => {
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
-            .withUrl("http://localhost:8000/chat", { skipNegotiation: true, transport: signalR.HttpTransportType.WebSockets })
+            .withUrl(`${process.env.REACT_APP_API_URL}/chat`, { skipNegotiation: true, transport: signalR.HttpTransportType.WebSockets })
             .configureLogging(signalR.LogLevel.Information)
             .withAutomaticReconnect()
             .build();
