@@ -7,7 +7,7 @@ import {
 } from "../API/employerApi";
 import JobForm from "./JobForm";
 import JobCard from "./JobCard";
-import companyProfile from "../Assets/Images/company-profile.png";
+//import companyProfile from "../Assets/Images/company-profile.png";
 import { useGetJobByEmployerIdQuery } from "../API/jobApi";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
@@ -62,7 +62,7 @@ function EmployerProfile(props: Props) {
           </div>
           <div className="flex flex-col items-center -mt-20">
             <img
-              src={companyProfile}
+              src="https://wegapwebimages.blob.core.windows.net/wegap/company-profile.png"
               alt=""
               className="w-40 border-4 border-white rounded-full"
             />

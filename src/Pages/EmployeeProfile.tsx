@@ -117,7 +117,7 @@ function EmployeeProfile() {
       doc.setFont("helvetica");
 
       // Add Profile Picture
-      const imgData = employeeInfo.imageName; // Assuming imageName is a URL
+      const imgData = `${employeeInfo.imageName}`; // Assuming imageName is a URL
       const imgWidth = 40;
       const imgHeight = 40;
       doc.addImage(imgData, "JPEG", 10, yPos, imgWidth, imgHeight);

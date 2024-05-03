@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import defaultImageSrc from "../Assets/Images/profil-pic2.jpeg";
+//import defaultImageSrc from "../Assets/Images/profil-pic2.jpeg";
 
 import { useCreateEmployeeMutation, useGetEmployeeByIdQuery, useUpdateEmployeeMutation } from "../API/employeeApi";
 import apiResponse from "../Interfaces/apiResponse";
@@ -11,7 +11,7 @@ import { RootState } from "../Storage/Redux/store";
 import inputHelper from "../Helper/inputHelper";
 
 
-//const defaultImageSrc = "../"
+const defaultImageSrc = "https://wegapwebimages.blob.core.windows.net/wegap/profil-pic2.jpeg"
 
 function EmployeeForm(empId:any ) {
   const initialValues = {
@@ -149,7 +149,8 @@ if(!isLoading && data && data.result) {
     if (response.data ){
      setValues(initialValues)
       console.log(response.data);
-      navigate(`/EmployeeProfile/${response.data.result.id}`);
+     // navigate(`/EmployeeProfile/${response.data.result.id}`);
+     navigate(`/EmployeeProfile/${response.data.result.result.id}`)
     }
     else if (response.error || !response.data?.isSuccess) {
       console.log(response.error)

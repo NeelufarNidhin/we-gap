@@ -41,7 +41,7 @@ const fetchJobJobSkills = async () => {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/job/${job.id}/jobJobSkills`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/job/${job.id}/jobJobSkills`, {
             headers
         });
         
@@ -60,7 +60,7 @@ const fetchJobJobSkills = async () => {
           headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await axios.get( `${process.env.REACT_APP_API_URL}/jobType/${job.jobTypeId}`, {
+      const response = await axios.get( `${process.env.REACT_APP_API_URL}/api/jobType/${job.jobTypeId}`, {
           headers
       });
       

@@ -30,7 +30,7 @@ function EmployeeJobCard({ job }: any) {
       }
 
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/job/${job.id}/jobJobSkills`,
+        `${process.env.REACT_APP_API_URL}/api/job/${job.id}/jobJobSkills`,
         {
           headers,
         }
@@ -54,7 +54,7 @@ function EmployeeJobCard({ job }: any) {
       }
 
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/jobType/${job.jobTypeId}`,
+        `${process.env.REACT_APP_API_URL}/api/jobType/${job.jobTypeId}`,
         {
           headers,
         }
