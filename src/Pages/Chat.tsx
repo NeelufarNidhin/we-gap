@@ -45,7 +45,7 @@ const Chat = () => {
             }
         }
 
-    }, [isLoading, isSuccess, data]);
+    }, [isLoading, isSuccess, data,EmployersList,EmployerIsLoading,EmployersIsSuccess]);
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
