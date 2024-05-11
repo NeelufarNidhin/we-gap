@@ -158,7 +158,7 @@ function EmployeeProfile() {
         doc.text(`  Description: ${exp.description}`, 15, yPos);
         yPos += 7;
         doc.text(
-          `  Status: ${exp.isWorking ? "Working" : "Not Working"}`,
+          `  Status: ${exp.isWorking }`,
           15,
           yPos
         );
@@ -263,7 +263,7 @@ function EmployeeProfile() {
                   <p className="text-gray-600">Company: {exp.companyName}</p>
                   <p className="text-gray-600">Description: {exp.description}</p>
                   <p className="text-gray-600">
-                    Status: {exp.isWorking ? "Working" : "Not Working"}
+                    Status: {exp.isWorking }
                   </p>
                   <div className="flex mt-2">
                     <button
