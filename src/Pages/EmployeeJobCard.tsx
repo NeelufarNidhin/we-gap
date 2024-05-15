@@ -93,7 +93,7 @@ function EmployeeJobCard({ job }: any) {
           className="border border-black rounded-md px-3 py-2 bg-"
           onClick={() => navigate(`/job/${job.id}/${job.employerId}`)}
         >
-          Apply now
+         {job.status ? "Applied" : "Apply now"}
         </button>
       </div>
     </div>

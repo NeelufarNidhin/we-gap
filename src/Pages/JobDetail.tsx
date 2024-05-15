@@ -34,11 +34,15 @@ function JobDetail() {
     });
 };
   useEffect(() => {
-    const isJobApplied = localStorage.getItem(`job_${jobId}_applied`);
-    if (isJobApplied) {
-      setButtonText('Applied');
+   // const isJobApplied = localStorage.getItem(`job_${jobId}_applied`);
+    // if (isJobApplied) {
+    //   setButtonText('Applied');
+    // }
+
+    if(!jobLoading && jobData){
+      jobData.result.status && setButtonText('Applied') 
     }
-  }, []);
+  }, [jobData]);
   // Function to handle submit button click
   const handleSubmit = async (e :any) => {
     e.preventDefault();
@@ -66,7 +70,7 @@ function JobDetail() {
       if(response.data){
         navigate('/confirmation');
         setButtonText('Applied'); // Change button text after applying
-        localStorage.setItem(`job_${jobId}_applied`, 'true');
+       // localStorage.setItem(`job_${jobId}_applied`, 'true');
       }
      
     

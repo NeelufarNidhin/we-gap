@@ -13,7 +13,9 @@ import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
    JobApplicationDetail,
    VideoChat,
    Video,
-   VideoPage} from '../Pages';
+   VideoPage,
+   JobAppEmployeeList,
+   JobAppEmployeeDetail} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -62,7 +64,8 @@ useEffect(()=>{
       <Route path="/SkillForm/:skillId" element= {<SkillForm/>}/> 
       <Route path="/SkillForm" element= {<SkillForm/>}/> 
       <Route path="/ResumeBuilder" element= {<ResumeBuilder/>}/> 
-   
+      <Route path='/JobAppEmployeeList' element= {<JobAppEmployeeList/>}/> 
+      <Route path="/jobEmpApplication/:jobAppId/:employer/:jobId" element= {<JobAppEmployeeDetail/>}/> 
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["employer"]}/>}>
       <Route path="/EmployerProfile/:id" element= {<EmployerProfile/>}/> 
@@ -73,10 +76,11 @@ useEffect(()=>{
       <Route path="/JobForm" element= {<JobForm/>}/> 
       <Route path="/Job-Application/:jobAppId/:employeeId/:jobId" element= {<JobApplicationDetail/>}/> 
       <Route path="/JobForm/:jobId" element= {<JobForm/>}/> 
+      <Route path='/JobApplicationList' element= {<JobApplicationList/>}/> 
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["employer","employee"]}/>}>
       <Route path='/JobList' element= {<JobList/>}/> 
-      <Route path='/JobApplicationList' element= {<JobApplicationList/>}/> 
+      
       <Route path="/Job/:jobId/:employerId" element= {<JobDetail/>}/> 
       <Route path="/Confirmation" element= {<Confirmation/>}/> 
       <Route path="/EmployeeList" element= {<EmployeeList/>}/> 

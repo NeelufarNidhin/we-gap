@@ -1,24 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetJobByIdQuery } from '../API/jobApi';
 import { useGetJobApplicationByIdQuery } from '../API/jobApplicationApi';
 import { useGetEmployeeByIdQuery } from '../API/employeeApi';
 
 
-interface JobApplicationDetails {
-  jobId: string;
-  employeeId: string;
- 
-}
 function JobApplicationDetail() {
   const { jobAppId ,jobId,employeeId } = useParams();
-  const [jobAppDetails, setJobAppDetails] = useState<JobApplicationDetails>({ jobId: '', employeeId: '' });
- 
-  const [jobDetails, setJobDetails] = useState({});
-  const [employeeDetails, setEmployeeDetails] = useState({});
-
- // const{data,isLoading,isSuccess,error} = useGetJobApplicationByIdQuery(id)
-
+  const navigate = useNavigate()
   const { data: jobAppData, isLoading: jobAppLoading, isSuccess: jobAppSuccess, error: jobAppError } = useGetJobApplicationByIdQuery(jobAppId);
   const { data: jobData, isLoading: jobLoading, isSuccess: jobSuccess, error: jobError } = useGetJobByIdQuery(jobId);
   const { data: employeeData, isLoading: employeeLoading, isSuccess: employeeSuccess, error: employeeError } = useGetEmployeeByIdQuery(employeeId);
@@ -76,6 +65,7 @@ function JobApplicationDetail() {
           </dl>
         </div>
       </div>
+      <button  className="px-4 py-2 mt-8 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => navigate(-1)}>Back</button>
     </div>
      ))
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Storage/Redux/store';
-import { useDeleteJobApplicationMutation, useGetJobApplicationQuery, useUpdateJobApplicationMutation } from '../API/jobApplicationApi';
+import { useDeleteJobApplicationMutation, useGetEmployerJobApplicationQuery, useGetJobApplicationQuery, useUpdateJobApplicationMutation } from '../API/jobApplicationApi';
 import { Link } from 'react-router-dom';
 import userModel from '../Interfaces/userModel';
 import { useGetEmployerExistsQuery } from '../API/employerApi';
@@ -15,7 +15,16 @@ function JobApplicationList() {
   );
 
   const { data: employerData, isLoading: employerLoading, isError: employerError } = useGetEmployerExistsQuery(userData.id);
-  const { data, isLoading, isError, error } = useGetJobApplicationQuery([]);
+
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [pageOptions, setPageOptions] = useState({
+    pageNumber: 1,
+    pageSize: 5
+  });
+  const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
+  const { data: jobApplicationData, isLoading, isError } = useGetEmployerJobApplicationQuery({employerId: employerData?.id,pageNumber : pageOptions.pageNumber,
+    pageSize : pageOptions.pageSize});
+  
  const [jobDetails,setJobDetails] = useState([]);
   const [updateJobApplication] = useUpdateJobApplicationMutation()
   const [deleteJobApplication] = useDeleteJobApplicationMutation();
@@ -38,18 +47,41 @@ function JobApplicationList() {
   }
   };
 
-  // const handleUpdate = (jobAppId: string) => {
-  //   updateJobApplication({ id: jobAppId,
-      
-  //     jobStatus: selectedStatus });
-    
-  // };
-
+  
 
   const handleDelete = (jobId: string) => {
     // Call the deleteJobApplication mutation
     deleteJobApplication(jobId);
   };
+  
+  useEffect(() => {
+    if (jobApplicationData && jobApplicationData.totalRecords) {
+      const { TotalRecords } = JSON.parse(jobApplicationData.totalRecords);
+      setTotalRecords(TotalRecords);
+    }
+  }, [jobApplicationData]);
+  const getPageDetails = () =>{
+    const dataStartNumber = (pageOptions.pageNumber  - 1) * pageOptions.pageSize + 1;
+    const dataEndNumber = pageOptions.pageNumber  * pageOptions.pageSize;
+
+    return `${dataStartNumber}
+            -
+            ${dataEndNumber < totalRecords ? dataEndNumber : totalRecords}
+             of ${totalRecords}`;
+  };
+
+  const handlePaginationClick = (direction : string, pageSize?: number) =>{
+    if(direction === "prev"){
+      setPageOptions({pageSize: 5 , pageNumber: pageOptions.pageNumber - 1});
+    } else if (direction === "next" ){
+      setPageOptions({pageSize:5 , pageNumber: pageOptions.pageNumber + 1});
+    }else if(direction === "change"){
+      setPageOptions({
+        pageSize: pageSize? pageSize : 5,
+        pageNumber : 1
+      })
+    }
+  }
   if (isLoading || employerLoading ) {
     return <div>Loading...</div>;
   }
@@ -57,7 +89,6 @@ function JobApplicationList() {
   if (isError || employerError ) {
     return <div>Error: </div>;
   }
-
   return (
     <div className="container mx-auto mt-8">
       <h2 className="text-2xl font-bold mb-4">Job Applications</h2>
@@ -75,10 +106,10 @@ function JobApplicationList() {
           </tr>
         </thead>
         <tbody>
-        {data &&
-  data.result.map((jobApp: any) => {
+        {jobApplicationData &&
+  jobApplicationData.apiResponse.result.map((jobApp: any) => {
     // Check if the employerId of the job application matches employerData.Id
-    if (jobApp.employer === employerData.id) {
+   
       return (
         <tr key={jobApp.id}>
           <td className="py-2 px-6 border-b">{jobApp.jobtitle}</td>
@@ -106,12 +137,40 @@ function JobApplicationList() {
           <td>  <button onClick={() => handleDelete(jobApp.id)} className="bg-red-500 text-white p-2 rounded-md">Delete</button></td>
         </tr>
       );
-    } else {
-      return null; // If employerId doesn't match, don't render this job application
-    }
+   
   })}
         </tbody>
       </table>
+      {/* Pagination */}
+     <div className="flex items-center justify-end mt-4">
+          <div>Rows per page</div>
+          <div>
+            <select className="mx-2" onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>{
+              handlePaginationClick("change", Number(e.target.value));
+              setCurrentPageSize(Number(e.target.value))
+            }} value={currentPageSize}> 
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            </select>
+          </div>
+          <div className="mx-2">{getPageDetails()}</div>
+          <button
+            className="px-4 py-2 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            disabled={pageOptions.pageNumber === 1}
+            onClick={() => handlePaginationClick("prev") }
+          >
+            Previous
+          </button>
+          <button
+            className="px-4 py-2 bg-purple-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            disabled={pageOptions.pageNumber * pageOptions.pageSize >= totalRecords}
+            onClick={() =>  handlePaginationClick("next") }
+          >
+            Next
+          </button>
+          </div>
+       
     </div>
   );
 }
