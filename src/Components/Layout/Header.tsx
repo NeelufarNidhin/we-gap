@@ -86,6 +86,15 @@ function Header() {
           <li className="flex">
            <Link
              rel="noopener noreferrer"
+             to="/JobApplicationList"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+         Job Applications
+           </Link>
+         </li>
+          <li className="flex">
+           <Link
+             rel="noopener noreferrer"
              to="/Chat"
              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
            >
@@ -101,15 +110,7 @@ function Header() {
           Video Call
            </Link>
          </li>
-         <li className="flex">
-           <Link
-             rel="noopener noreferrer"
-             to="/JobApplicationList"
-             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
-           >
-         Job Applications
-           </Link>
-         </li>
+         
           </> 
           
      )}
@@ -131,6 +132,15 @@ function Header() {
              className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
            >
            Jobs
+           </Link>
+         </li>
+         <li className="flex">
+           <Link
+             rel="noopener noreferrer"
+             to="/JobAppEmployeeList"
+             className="flex items-center px-4 -mb-1 border-b-2 border-transparent  "
+           >
+         Job Applications
            </Link>
          </li>
          <li className="flex">

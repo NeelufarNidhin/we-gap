@@ -7,6 +7,7 @@ import { RootState } from '../Storage/Redux/store'
 
 const VideoPage = () => {
 const {roomId} = useParams()
+
 const userData: userModel = useSelector(
   (state: RootState) => state.userAuthStore
   );

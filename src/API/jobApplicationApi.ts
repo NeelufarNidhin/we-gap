@@ -35,7 +35,40 @@ const jobApplicationApi = createApi({
             }),
             providesTags : ["JobApplications"]
         }),
-        
+        getEmployeeJobApplication : builder.query({
+            query : ({employeeId,pageNumber,pageSize}) => ({
+                url : `jobApplication/employee/${employeeId}`,
+                method:"GET",
+                params:{
+                    ...(pageNumber && {pageNumber}),
+                    ...(pageSize && {pageSize})
+                }
+            }),
+            transformResponse(apiResponse: { result : any}, meta : any){
+                return {
+                  apiResponse,
+                  totalRecords: meta.response.headers.get("X-Pagination"),
+                };
+              },
+            providesTags : ["JobApplications"]
+        }),
+        getEmployerJobApplication : builder.query({
+            query : ({employerId,pageNumber,pageSize}) => ({
+                url : `jobApplication/employer/${employerId}`,
+                method:"GET",
+                params:{
+                    ...(pageNumber && {pageNumber}),
+                    ...(pageSize && {pageSize})
+                }
+            }),
+            transformResponse(apiResponse: { result : any}, meta : any){
+                return {
+                  apiResponse,
+                  totalRecords: meta.response.headers.get("X-Pagination"),
+                };
+              },
+            providesTags : ["JobApplications"]
+        }),
         createJobApplication : builder.mutation({
             query: (jobApplicationData) =>({
                 url : "jobApplication",
@@ -79,4 +112,4 @@ const jobApplicationApi = createApi({
 export default  jobApplicationApi
 
 export const { useCreateJobApplicationMutation ,useDeleteJobApplicationMutation ,useUpdateJobApplicationMutation ,
-     useGetJobApplicationQuery, useGetJobApplicationByIdQuery } = jobApplicationApi
+     useGetJobApplicationQuery, useGetJobApplicationByIdQuery ,useGetEmployeeJobApplicationQuery,useGetEmployerJobApplicationQuery} = jobApplicationApi
