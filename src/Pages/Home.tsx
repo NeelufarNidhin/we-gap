@@ -56,12 +56,12 @@ function Home() {
           >
             <div className="p-6 space-y-2 lg:col-span-5 text-white ">
               <h3 className="text-2xl font-semibold sm:text-4xl ">
-                Do u want a resume to start with?
+               Are you searching for job?
               </h3>
               {/* <span className="text-xs dark:text-gray-400">February 19, 2021</span> */}
               <p>We are here to help you</p>
               <Link to="/SignUp" className="inline-block text-white font-bold  py-2 px-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-800 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
-              Build your Resume
+              Find jobs matching your skills.
               </Link>
               
             </div>
