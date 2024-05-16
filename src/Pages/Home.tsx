@@ -30,9 +30,10 @@ function Home() {
                 2
               </div>
               <p className="text-2xl font-semibold text-violet-500">
-                <b>Build a Resume.</b>
+                <b>Search for jobs.</b>
                 <br />
-                Build a resume with our Resume Builder
+                Find jobs matching your skills through our portal.
+              
               </p>
             </div>
             <div className="flex flex-col p-8 space-y-4 rounded-md bg-violet-200">
@@ -61,7 +62,7 @@ function Home() {
               {/* <span className="text-xs dark:text-gray-400">February 19, 2021</span> */}
               <p>We are here to help you</p>
               <Link to="/SignUp" className="inline-block text-white font-bold  py-2 px-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-800 border border-transparent transform hover:scale-110 hover:border-white transition-transform duration-3000 ease-in-out">
-              Find jobs matching your skills.
+              Explore right oppurtunities 
               </Link>
               
             </div>
