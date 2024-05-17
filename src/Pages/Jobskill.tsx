@@ -94,8 +94,8 @@ function Jobskill() {
  
 
   return (
-    <div>
-     <div className="container mx-auto p-4">
+    
+     <div className="container flex-grow mx-auto p-4">
       {/* Add Job Skill Form */}
       <div className="flex items-center justify-between mb-4">
         <button className="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded" onClick={toggleForm}>
@@ -166,7 +166,7 @@ function Jobskill() {
         </div>
       )}
     </div>
-    </div>
+   
   );
 }
 

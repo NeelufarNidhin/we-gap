@@ -94,7 +94,7 @@ function JobList() {
   };
    
   return (
-    <div className="container mx-auto">
+    <div className="container flex-grow mx-auto">
       <div className="mb-4">
         <button
           onClick={() => navigate(-1)}
