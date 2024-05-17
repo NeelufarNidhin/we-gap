@@ -60,11 +60,11 @@ const Chat = () => {
 
             newConnection.on('ReceiveMessage', (sender: string, receivedMessage: string, at: string) => {
                 setMessages((prevMessages: any) => [...prevMessages, { sender, message: receivedMessage, timestamp: new Date().toISOString() }]);
-               // setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type: 'New Message', message: `You received a new message from ${sender}` }]);
+                //setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type: 'New Message', message: `You received a new message from ${sender}`, receiver: userData.firstName }]); // Added receiver
             });
         
             newConnection.on('ReceiveNotification', (type: string, message: string) => {
-                setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type, message }]);
+                //setNotifications((prevNotifications: Notification[]) => [...prevNotifications, { type, message, receiver: userData.firstName }]); // Added receiver
             });
         
             return () => {
@@ -158,7 +158,7 @@ const Chat = () => {
                 </div>
             )}
 
-            <div className="w-1/3 bg-gray-100">
+            {/* <div className="w-1/3 bg-gray-100">
                 <h2 className="p-4 text-lg font-semibold">Notifications:</h2>
                 <ul>
                     {notifications.map((notification, index) => (
@@ -167,7 +167,7 @@ const Chat = () => {
                         </li>
                     ))}
                 </ul>
-            </div>
+            </div> */}
         </div>
     );
 }

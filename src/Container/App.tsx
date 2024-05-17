@@ -11,7 +11,7 @@ import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
    Confirmation,
    JobApplicationList,
    JobApplicationDetail,
-   VideoChat,
+ 
    Video,
    VideoPage,
    JobAppEmployeeList,
@@ -41,7 +41,7 @@ useEffect(()=>{
 },[]) 
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
      
       <Header/>
       <Routes>
@@ -105,7 +105,7 @@ useEffect(()=>{
       <Route path="/AccessDenied" element= {<AccessDenied/>}> </Route>
      
       </Routes>
-      {/* <Footer/> */}
+      <Footer/>
      
     </div>
   );

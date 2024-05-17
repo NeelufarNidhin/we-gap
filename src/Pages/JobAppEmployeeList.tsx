@@ -58,7 +58,7 @@ function JobAppEmployeeList() {
   }
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container flex-grow mx-auto mt-8">
       <h2 className="text-2xl font-bold mb-4">Job Applications</h2>
       <table className="min-w-full border-collapse bg-white">
         <thead>

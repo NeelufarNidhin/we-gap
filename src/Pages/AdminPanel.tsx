@@ -41,7 +41,7 @@ function AdminPanel() {
   };
   
   const [blockUser] = useBlockUserMutation();
-  const [deleteUser] = useDeleteUserMutation();
+  //const [deleteUser] = useDeleteUserMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const tempValue = inputHelper(e, filters);
@@ -95,7 +95,7 @@ function AdminPanel() {
     setApiFilters({ searchString: "", userRole: "" });
   };
   return (
-    <div className="container p-2 mx-auto sm:p-4 bg-violet-300 text-gray-900">
+    <div className="container p-2 mx-auto flex-grow sm:p-4 bg-violet-300 text-gray-900">
       <h2 className="mb-4 text-2xl font-semibold leading text-gray-500">User List</h2>
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <input

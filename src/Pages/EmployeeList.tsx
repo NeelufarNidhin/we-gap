@@ -18,7 +18,8 @@ function EmployeeList() {
       } = employee;
 
       return (
-        <div key={employee.id} className="bg-white shadow rounded-lg p-4 my-8">
+     
+        <div key={employee.id} className="bg-white shadow   rounded-lg p-4 my-8">
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
               {/* Replace with actual employee image */}
@@ -39,11 +40,12 @@ function EmployeeList() {
             </span>
           </div>
         </div>
+        
       );
     });
   }
 
-  return <div className="p-4">{content}</div>;
+  return <div className=" container flex-grow mx-auto mt-8">{content}</div>;
 }
 
 export default EmployeeList;
