@@ -105,13 +105,13 @@ function Login() {
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
-                {/* <Link
+                <Link
                   rel="noopener noreferrer"
-                  to="#"
+                  to="/ForgotPassword"
                   className="text-xs hover:underline dark:text-gray-400"
                 >
                   Forgot password?
-                </Link> */}
+                </Link>
               </div>
               <input
                 type="password"

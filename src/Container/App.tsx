@@ -15,7 +15,9 @@ import { About, AdminPanel, Home, Login, SignUp ,EmployeeProfile,
    Video,
    VideoPage,
    JobAppEmployeeList,
-   JobAppEmployeeDetail} from '../Pages';
+   JobAppEmployeeDetail,
+   ResetPassword,
+   ForgotPassword} from '../Pages';
 import {  useDispatch } from 'react-redux';
 
 import userModel from '../Interfaces/userModel';
@@ -87,6 +89,7 @@ useEffect(()=>{
       <Route path="/Chat" element= {<Chat/>}> </Route>
       <Route path="/Video" element= {<Video/>}> </Route>
       <Route path="/room/:roomId" element= {<VideoPage/>}> </Route>
+      
       </Route>
       <Route element= {<ProtectedRoute allowedRoles ={["admin","employer"]}/>}>
       <Route path='/JobSkill' element= {<Jobskill  />}/> 
@@ -103,7 +106,8 @@ useEffect(()=>{
       <Route path="/Loader" element= {<Loader/>}> </Route>
       <Route path="/UserBlock" element= {<UserBlock/>}> </Route>
       <Route path="/AccessDenied" element= {<AccessDenied/>}> </Route>
-     
+      <Route path='/ForgotPassword' element= {<ForgotPassword/>}></Route>
+      <Route path='/ResetPassword' element= {<ResetPassword/>}></Route>
       </Routes>
       <Footer/>
      

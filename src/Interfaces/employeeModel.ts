@@ -11,7 +11,7 @@ export default interface employeeModel{
         state: string,
         city: string,
         pincode: number,
-        mobileNumber: number,
+        mobileNumber: string,
         bio : string,
         imageName : string
       }

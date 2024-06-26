@@ -1,6 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import userModel from "../Interfaces/userModel";
+import { useSelector } from "react-redux";
+import { RootState } from "../Storage/Redux/store";
+import { useGetEmployeeExistsQuery } from "../API/employeeApi";
 
 interface Job {
   id: string;
@@ -19,7 +23,41 @@ interface JobCardProps {
 function EmployeeJobCard({ job }: any) {
   const [jobSkillNames, setJobSkillNames] = useState([]);
   const [jobTypeName, setJobTypeName] = useState("");
+  const [jobStatus, setJobStatus] = useState(false);
   const navigate = useNavigate();
+
+  const userData: userModel = useSelector(
+    (state: RootState) => state.userAuthStore
+  );
+
+  const {data,isLoading} = useGetEmployeeExistsQuery(userData.id)
+  const fetchJobApplication = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers: Record<string, string> = {};
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+      if(!isLoading){
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/jobApplication/job/${job.id}?employeeId=${data.result.id}`,
+          {
+            headers,
+          }
+        );
+       
+        setJobStatus(
+          response.data.result.status);
+        
+      }
+     
+      console.log(jobStatus)
+    } catch (error) {
+      console.error("Error job application status:", error);
+    }
+  };
+
   const fetchJobJobSkills = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -70,6 +108,7 @@ function EmployeeJobCard({ job }: any) {
   useEffect(() => {
     fetchJobJobSkills();
     fetchJobTypeName();
+    fetchJobApplication();
   }, []);
 
   return (
@@ -92,8 +131,9 @@ function EmployeeJobCard({ job }: any) {
         <button
           className="border border-black rounded-md px-3 py-2 bg-"
           onClick={() => navigate(`/job/${job.id}/${job.employerId}`)}
+          disabled={jobStatus}
         >
-         {job.status ? "Applied" : "Apply now"}
+         {jobStatus ? "Applied" : "Apply now"}
         </button>
       </div>
     </div>

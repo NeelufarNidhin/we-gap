@@ -37,8 +37,11 @@ import Video from "./Video";
 import VideoPage from "./VideoPage";
 import JobAppEmployeeList from "./JobAppEmployeeList";
 import JobAppEmployeeDetail from "./JobAppEmployeeDetail";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 
 export {About,AdminPanel,Login,NotFound,Home,SignUp,EmployeeForm,EmployeeCard,EmployerCard ,EmployeeList
     ,EmployeeProfile,EmployerProfile  , Dashboard, Employer , AccessDenied,JobList,Jobskill,JobDetail,ResumeBuilder,
     JobType,OTP,Employee,EmployerForm,ProfileCard,JobCard,JobForm ,UserBlock,SkillForm,ExperienceForm,EducationForm ,
-     Chat , Confirmation,JobApplicationList,JobApplicationDetail,VideoChat,Video,VideoPage,JobAppEmployeeList,JobAppEmployeeDetail}
+     Chat , Confirmation,JobApplicationList,JobApplicationDetail,VideoChat,Video,VideoPage,JobAppEmployeeList,
+     JobAppEmployeeDetail,ForgotPassword,ResetPassword}
