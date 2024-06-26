@@ -31,7 +31,7 @@ function EmployeeForm(empId:any ) {
   };
 
   const [values, setValues] = useState(initialValues);
-  //const [error, setErrors] = useState({});
+  const [mobileNumberValid, setMobileNumberValid] = useState(true); 
   const [imageToStore,setImageToStore] = useState<any>();
   const [imageToDisplay,setImageToDisplay] = useState<string>(defaultImageSrc);
   const navigate = useNavigate();
@@ -44,7 +44,9 @@ function EmployeeForm(empId:any ) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>  | React.ChangeEvent<HTMLSelectElement>) => {
     const tempData = inputHelper(e,values);
     setValues(tempData);
-   
+    if (e.target.name === "mobileNumber") {
+      setMobileNumberValid(e.target.value.length === 10);
+    }
   };
   const {id}= useParams();
 
@@ -54,7 +56,7 @@ function EmployeeForm(empId:any ) {
 
 useEffect(() => {
 if(!isLoading && data && data.result) {
-  console.log(data.result)
+//  console.log(data.result)
   const tempData = {
    
     firstName : userData.firstName,
@@ -107,7 +109,7 @@ if(!isLoading && data && data.result) {
       }
     }
 
-  //const [isFilled, setIsFilled] = useState(false); // state to check if the form is filled
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(!imageToStore && !id){
@@ -133,7 +135,7 @@ if(!isLoading && data && data.result) {
       response = await updateEmployee(formData)
       if (response.data ){
         setValues(initialValues)
-         console.log(response.data);
+       //  console.log(response.data);
          navigate(`/EmployeeProfile/${response.data.result.id}`);
        }
        else if (response.error || !response.data?.isSuccess) {
@@ -208,13 +210,16 @@ if(!isLoading && data && data.result) {
                 </label>
                 <input
                   id="mobileNumber"
-                  type="mobileNumber"
+                  type="text"
                   placeholder="mobileNumber"
                   value={values.mobileNumber}
                   name="mobileNumber"
                   onChange={handleInputChange}
                   className="w-full rounded-md focus:ring focus:ri focus:ri dark:border-gray-700 dark:text-gray-900"
                 />
+                {!mobileNumberValid && (
+                  <p className="text-red-500 mt-2">Mobile number must be exactly 10 digits.</p>
+                )}
               </div>
               <div className="col-span-full">
                 <label htmlFor="address" className="text-sm">
@@ -289,6 +294,7 @@ if(!isLoading && data && data.result) {
                 {/* <textarea */}
                 <input
                   id="bio"
+                  type="text"
                   placeholder=""
                   value={values.bio}
                   name="bio"

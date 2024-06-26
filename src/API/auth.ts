@@ -53,8 +53,34 @@ const auth =  createApi({
             }),
             
           }),
+
+          forgotpassword : builder.mutation({
+            query : ({email}) => ({
+              url : `Auth/forgotpassword`,
+              method: "POST",
+              headers :{
+                "Content-type" : "application/json",
+              
+              },
+              body :{ email}
+            })
+          }),
+          resetpassword : builder.mutation({
+            query : ({userId,code,newPassword}) => ({
+              url : `Auth/resetpassword`,
+              method: "POST",
+              headers :{
+                "Content-type" : "application/json",
+              
+              },
+              body : { userId, code, newPassword }
+            })
+          }),
+
       }),
   });
   
-export const {useRegisterUserMutation,useOtpLoginUserMutation , useLoginUserMutation ,useResendOtpMutation } = auth;
+export const {useRegisterUserMutation,useOtpLoginUserMutation , useLoginUserMutation ,useResendOtpMutation ,
+  useForgotpasswordMutation,useResetpasswordMutation
+} = auth;
 export default auth;

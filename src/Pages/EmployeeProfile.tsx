@@ -351,7 +351,7 @@ function EmployeeProfile() {
     );
   }
 
-  return <div>{content}</div>;
+  return <div className="container flex-grow mx-auto p-4">{content}</div>;
 }
 
 export default EmployeeProfile;
